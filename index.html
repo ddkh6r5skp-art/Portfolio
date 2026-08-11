@@ -15,7 +15,7 @@
       <div class="flex items-center space-x-3">
         <span class="text-2xl">💼</span>
         <div>
-          <h1 class="text-lg font-bold text-emerald-400 leading-tight">Vageesh's Portfolio Tracker</h1>
+          <h1 class="text-lg font-bold text-emerald-400 leading-tight"> Vageesh's Portfolio Tracker</h1>
           <p id="status-pill" class="text-xs text-amber-400 font-medium">Public Mode (Demo Values)</p>
         </div>
       </div>
@@ -103,7 +103,7 @@
       <div class="bg-gray-900 p-6 rounded-2xl border border-gray-800 space-y-4">
         <div>
           <h2 class="text-lg font-semibold text-gray-100">Personal Growth Projection</h2>
-          <p class="text-xs text-gray-400">Compounded based on your actual net worth and return rate.</p>
+          <p class="text-xs text-gray-400">Compounded based on your actual net worth, return rate, and SIPs.</p>
         </div>
         <div class="h-56">
           <canvas id="projectionChart"></canvas>
@@ -180,7 +180,7 @@
     // ----------------------------------------------------
     // PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL HERE:
     // ----------------------------------------------------
-    const API_URL = "https://script.google.com/macros/s/AKfycbzeuVC1DbCcsMa6mOzABFO4cNOySPvuzoS0dW0aV3mqrjybChk1vpC6Fy7E4l65hHaT/exec";
+    const API_URL = "YOUR_APPS_SCRIPT_WEB_APP_URL";
     // ----------------------------------------------------
 
     let rawTransactions = [];
@@ -291,9 +291,8 @@
 
         renderAssetChart(data.assetBreakdown || []);
         
-        // Smart fallback rate (10% CAGR) if actual return is <= 0
-        const projectionRate = actualRate > 0 ? actualRate : 10.0;
-        renderProjectionChart(netWorth, projectionRate, monthlySIP);
+        // ORIGINAL PROJECTION CALCULATION (Uses actual return rate directly)
+        renderProjectionChart(netWorth, actualRate, monthlySIP);
 
         rawTransactions = data.transactions || [];
         renderTransactionsTable(rawTransactions);
@@ -403,21 +402,21 @@
       document.getElementById("drilldown-card").classList.add("hidden");
     }
 
-    // PROJECTION CHART
+    // ORIGINAL PROJECTION CALCULATION
     function calculateFV(ratePct, years, pmt, pv) {
-      const r = (ratePct / 100) / 12;
-      const n = years * 12;
-      if (r <= 0) return pv + (pmt * n);
+      const r = (ratePct / 100) / 12; // Monthly compounding rate
+      const n = years * 12;           // Total months
+      if (r === 0) return pv + (pmt * n);
       return pv * Math.pow(1 + r, n) + pmt * ((Math.pow(1 + r, n) - 1) / r);
     }
 
-    function renderProjectionChart(currentNetWorth, rateToUse, monthlySIP) {
+    function renderProjectionChart(currentNetWorth, actualRate, monthlySIP) {
       const ctx = document.getElementById('projectionChart').getContext('2d');
       if (projChartInstance) projChartInstance.destroy();
 
-      const val5y  = calculateFV(rateToUse, 5, monthlySIP, currentNetWorth);
-      const val10y = calculateFV(rateToUse, 10, monthlySIP, currentNetWorth);
-      const val15y = calculateFV(rateToUse, 15, monthlySIP, currentNetWorth);
+      const val5y  = calculateFV(actualRate, 5, monthlySIP, currentNetWorth);
+      const val10y = calculateFV(actualRate, 10, monthlySIP, currentNetWorth);
+      const val15y = calculateFV(actualRate, 15, monthlySIP, currentNetWorth);
 
       projChartInstance = new Chart(ctx, {
         type: 'bar',
@@ -438,13 +437,19 @@
             tooltip: {
               callbacks: {
                 label: function(context) {
-                  return ` Projected: ${formatCurrency(context.raw)} (@ ${rateToUse.toFixed(1)}% p.a.)`;
+                  return ` Projected: ${formatCurrency(context.raw)} (@ ${actualRate.toFixed(2)}% p.a.)`;
                 }
               }
             }
           },
           scales: {
-            y: { ticks: { color: '#9CA3AF', callback: v => '₹' + (v/100000).toFixed(0) + 'L' }, grid: { color: '#1F2937' } },
+            y: { 
+              ticks: { 
+                color: '#9CA3AF', 
+                callback: v => '₹' + (v / 100000).toFixed(0) + 'L' 
+              }, 
+              grid: { color: '#1F2937' } 
+            },
             x: { ticks: { color: '#9CA3AF' }, grid: { display: false } }
           }
         }
