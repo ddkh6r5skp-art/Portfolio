@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Personal Wealth Dashboard</title>
+  <!-- Tailwind CSS for styling -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js for projection visualizer -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-900 text-white min-h-screen p-6 font-sans">
+
+  <div class="max-w-5xl mx-auto space-y-6">
+    <!-- Header -->
+    <div class="flex justify-between items-center border-b border-gray-800 pb-4">
+      <h1 class="text-2xl font-bold text-emerald-400">Net Worth & Portfolio Tracker</h1>
+      <span id="last-updated" class="text-xs text-gray-500">Syncing...</span>
+    </div>
+
+    <!-- KPI Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div class="bg-gray-800 p-5 rounded-xl border border-gray-700">
+        <p class="text-xs text-gray-400 uppercase">Total Invested</p>
+        <p id="total-invested" class="text-2xl font-bold mt-1">₹0</p>
+      </div>
+      <div class="bg-gray-800 p-5 rounded-xl border border-gray-700">
+        <p class="text-xs text-gray-400 uppercase">Net Worth</p>
+        <p id="net-worth" class="text-2xl font-bold text-emerald-400 mt-1">₹0</p>
+      </div>
+      <div class="bg-gray-800 p-5 rounded-xl border border-gray-700">
+        <p class="text-xs text-gray-400 uppercase">Total Profit</p>
+        <p id="net-profit" class="text-2xl font-bold mt-1">₹0</p>
+      </div>
+      <div class="bg-gray-800 p-5 rounded-xl border border-gray-700">
+        <p class="text-xs text-gray-400 uppercase">Overall CAGR / XIRR</p>
+        <p id="return-pct" class="text-2xl font-bold mt-1">0.00%</p>
+      </div>
+    </div>
+
+    <!-- Projection Chart Section -->
+    <div class="bg-gray-800 p-6 rounded-xl border border-gray-700">
+      <h2 class="text-lg font-semibold text-gray-200 mb-4">5, 10 & 15 Year Growth Projections</h2>
+      <canvas id="projectionChart" height="100"></canvas>
+    </div>
+  </div>
+
+  <script>
+    // Paste your Google Apps Script Web App URL here
+    const API_URL = "YOUR_APPS_SCRIPT_WEB_APP_URL";
+
+    async function fetchPortfolioData() {
+      try {
+        const res = await fetch(API_URL);
+        const data = await res.json();
+
+        // Update KPI Cards
+        document.getElementById("total-invested").innerText = formatCurrency(data.totalInvested);
+        document.getElementById("net-worth").innerText = formatCurrency(data.netWorth);
+        document.getElementById("net-profit").innerText = formatCurrency(data.netProfit);
+        document.getElementById("return-pct").innerText = (data.returnPct * 100).toFixed(2) + "%";
+        document.getElementById("last-updated").innerText = "Last synced: " + new Date(data.lastUpdated).toLocaleTimeString();
+
+        // Render Projection Chart
+        renderChart(data.netWorth, data.returnPct);
+      } catch (err) {
+        console.error("Failed to load portfolio data", err);
+      }
+    }
+
+    function formatCurrency(val) {
+      return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(val);
+    }
+
+    function calculateFV(rate, years, pmt, pv) {
+      const r = rate / 12;
+      const n = years * 12;
+      return pv * Math.pow(1 + r, n) + pmt * ((Math.pow(1 + r, n) - 1) / r);
+    }
+
+    function renderChart(currentNetWorth, rate) {
+      const monthlySIP = 25000; // Adjust or fetch dynamically from sheet
+      const val5y = calculateFV(rate, 5, monthlySIP, currentNetWorth);
+      const val10y = calculateFV(rate, 10, monthlySIP, currentNetWorth);
+      const val15y = calculateFV(rate, 15, monthlySIP, currentNetWorth);
+
+      const ctx = document.getElementById('projectionChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Today', '5 Years', '10 Years', '15 Years'],
+          datasets: [{
+            label: 'Projected Net Worth (₹)',
+            data: [currentNetWorth, val5y, val10y, val15y],
+            backgroundColor: ['#3B82F6', '#10B981', '#059669', '#047857'],
+            borderRadius: 8
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { display: false } },
+          scales: { y: { ticks: { color: '#9CA3AF' } }, x: { ticks: { color: '#9CA3AF' } } }
+        }
+      });
+    }
+
+    fetchPortfolioData();
+  </script>
+</body>
+</html>
