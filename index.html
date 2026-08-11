@@ -15,21 +15,21 @@
       <div class="flex items-center space-x-3">
         <span class="text-2xl">💼</span>
         <div>
-          <h1 class="text-lg font-bold text-emerald-400 leading-tight">Vageesh's Portfolio Tracker</h1>
+          <h1 class="text-lg font-bold text-emerald-400 leading-tight">Personal Portfolio Tracker</h1>
           <p id="status-pill" class="text-xs text-amber-400 font-medium">Public Mode (Demo Values)</p>
         </div>
       </div>
 
-    
-<div class="flex items-center space-x-2">
-  <input type="password" id="header-passcode" placeholder="Enter Passcode" autocomplete="new-password" name="prevent_autofill_passcode" value=""
-         onkeypress="handleKeyPress(event)"
-         class="bg-gray-950 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-emerald-400 focus:outline-none focus:border-emerald-500 w-36 sm:w-48">
-  <button onclick="handleAuth()" id="auth-btn" 
-          class="bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-semibold px-4 py-1.5 rounded-lg transition-colors flex items-center justify-center min-w-[80px]">
-    <span id="auth-btn-text">Unlock</span>
-  </button>
-</div>
+      <!-- Auth Controls with Enter Key Support -->
+      <div class="flex items-center space-x-2">
+        <input type="password" id="header-passcode" placeholder="Enter Passcode" autocomplete="new-password" name="prevent_autofill_passcode" value=""
+               onkeypress="handleKeyPress(event)"
+               class="bg-gray-950 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-emerald-400 focus:outline-none focus:border-emerald-500 w-36 sm:w-48">
+        <button onclick="handleAuth()" id="auth-btn" 
+                class="bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-semibold px-4 py-1.5 rounded-lg transition-colors flex items-center justify-center min-w-[80px]">
+          <span id="auth-btn-text">Unlock</span>
+        </button>
+      </div>
     </div>
   </header>
 
@@ -130,7 +130,7 @@
               <th class="p-3">Qty / Units</th>
               <th class="p-3">Avg / Buy Price</th>
               <th class="p-3">Total Invested</th>
-              <th class="p-3">Live Price</th>
+              <th class="p-3">Live Price / NAV</th>
               <th class="p-3">Current Value</th>
               <th class="p-3">Profit / Loss</th>
               <th class="p-3">Return (%)</th>
@@ -188,6 +188,7 @@
     let assetChartInstance = null;
     let projChartInstance = null;
 
+    // Clear session and auto-fill input on page load
     window.addEventListener("DOMContentLoaded", () => {
       sessionStorage.clear();
       const inputElem = document.getElementById("header-passcode");
@@ -195,10 +196,15 @@
       renderDemoState();
     });
 
+    // Enter key trigger for passcode field
+    function handleKeyPress(e) {
+      if (e.key === "Enter") handleAuth();
+    }
+
     function renderDemoState() {
       document.getElementById("status-pill").innerText = "Public Mode (Demo Values)";
       document.getElementById("status-pill").className = "text-xs text-amber-400 font-medium";
-      document.getElementById("auth-btn").innerText = "Unlock";
+      document.getElementById("auth-btn-text").innerText = "Unlock";
 
       document.getElementById("total-invested").innerText = "₹0";
       document.getElementById("net-worth").innerText = "₹0";
@@ -213,29 +219,40 @@
     function handleAuth() {
       const pass = document.getElementById("header-passcode").value;
       if (!pass) return;
-      if (sessionStorage.getItem("authenticated_passcode") && document.getElementById("auth-btn").innerText === "Lock") {
+
+      if (sessionStorage.getItem("authenticated_passcode") && document.getElementById("auth-btn-text").innerText === "Lock") {
         sessionStorage.removeItem("authenticated_passcode");
         location.reload();
         return;
       }
+
       fetchPortfolioData(pass);
     }
 
     async function fetchPortfolioData(passcode) {
+      const btnText = document.getElementById("auth-btn-text");
+      const statusPill = document.getElementById("status-pill");
+
+      // Instant loading visual feedback
+      btnText.innerText = "Syncing...";
+      statusPill.innerText = "⏳ Fetching live data from Google Sheets...";
+      statusPill.className = "text-xs text-amber-400 font-medium animate-pulse";
+
       try {
         const res = await fetch(`${API_URL}?passcode=${encodeURIComponent(passcode)}`);
         const data = await res.json();
 
         if (data.error) {
           alert("Invalid Passcode!");
+          btnText.innerText = "Unlock";
           renderDemoState();
           return;
         }
 
         sessionStorage.setItem("authenticated_passcode", passcode);
-        document.getElementById("status-pill").innerText = "● Live Sheet Connected";
-        document.getElementById("status-pill").className = "text-xs text-emerald-400 font-medium";
-        document.getElementById("auth-btn").innerText = "Lock";
+        statusPill.innerText = "● Live Sheet Connected";
+        statusPill.className = "text-xs text-emerald-400 font-medium";
+        btnText.innerText = "Lock";
 
         const m = data.metrics || {};
         const netWorth = m.netWorth || 0;
@@ -251,7 +268,7 @@
 
         document.getElementById("return-pct").innerText = actualRate.toFixed(2) + "%";
 
-        // FD Benchmark
+        // FD Benchmark Verdict
         const fdRate = m.fdBenchmarkRate || 7.0;
         document.getElementById("user-rate-badge").innerText = actualRate.toFixed(2) + "%";
         
@@ -274,7 +291,7 @@
 
         renderAssetChart(data.assetBreakdown || []);
         
-        // Smart fallback rate for projections if actual return <= 0
+        // Smart fallback rate (10% CAGR) if actual return is <= 0
         const projectionRate = actualRate > 0 ? actualRate : 10.0;
         renderProjectionChart(netWorth, projectionRate, monthlySIP);
 
@@ -283,6 +300,9 @@
 
       } catch (err) {
         console.error("API Fetch Error:", err);
+        btnText.innerText = "Unlock";
+        statusPill.innerText = "❌ Connection failed. Check Web App URL.";
+        statusPill.className = "text-xs text-red-400 font-medium";
       }
     }
 
