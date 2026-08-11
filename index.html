@@ -1,36 +1,229 @@
-async function fetchPortfolioData(userPasscode) {
-  try {
-    // Passes the passcode dynamically to Google Apps Script
-    const res = await fetch(`${API_URL}?passcode=${encodeURIComponent(userPasscode)}`);
-    const data = await res.json();
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Personal Wealth Dashboard</title>
+  <!-- Tailwind CSS for styling -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js for growth projections -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-900 text-white min-h-screen font-sans flex flex-col justify-center items-center p-4">
 
-    // If server rejected the passcode
-    if (data.error) {
-      document.getElementById("error-msg").innerText = "Invalid passcode. Access denied by server.";
-      document.getElementById("error-msg").classList.remove("hidden");
-      sessionStorage.removeItem("authenticated");
-      return;
+  <!-- ============================================================ -->
+  <!-- 1. PASSCODE LOCK SCREEN (Shown by default)                  -->
+  <!-- ============================================================ -->
+  <div id="login-modal" class="bg-gray-800 p-8 rounded-2xl border border-gray-700 shadow-2xl max-w-sm w-full space-y-5">
+    <div class="text-center space-y-1">
+      <div class="text-4xl mb-2">🔒</div>
+      <h2 class="text-xl font-bold text-gray-100">Protected Dashboard</h2>
+      <p class="text-xs text-gray-400">Enter your passcode to verify with Google Sheets</p>
+    </div>
+    
+    <div>
+      <input type="password" id="passcode-input" placeholder="Enter Passcode" 
+             class="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-center text-lg text-emerald-400 focus:outline-none focus:border-emerald-500 transition-colors">
+      <p id="error-msg" class="text-xs text-red-400 text-center mt-2 hidden">Incorrect passcode. Access denied.</p>
+    </div>
+
+    <button onclick="handleLogin()" 
+            class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-3 rounded-lg transition-colors shadow-lg shadow-emerald-900/40">
+      Unlock Portfolio
+    </button>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- 2. MAIN DASHBOARD CONTENT (Hidden until server verifies key) -->
+  <!-- ============================================================ -->
+  <div id="dashboard-content" class="max-w-5xl w-full space-y-6 hidden my-auto">
+    <!-- Header -->
+    <div class="flex justify-between items-center border-b border-gray-800 pb-4">
+      <div>
+        <h1 class="text-2xl font-bold text-emerald-400">Net Worth & Portfolio Tracker</h1>
+        <span id="last-updated" class="text-xs text-gray-500">Syncing live data...</span>
+      </div>
+      <button onclick="lockDashboard()" class="bg-gray-800 hover:bg-gray-700 text-xs text-gray-300 px-3 py-2 rounded-lg border border-gray-700 transition-colors">
+        🔒 Lock Dashboard
+      </button>
+    </div>
+
+    <!-- KPI Cards Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div class="bg-gray-800 p-5 rounded-xl border border-gray-700">
+        <p class="text-xs text-gray-400 uppercase tracking-wider">Total Invested</p>
+        <p id="total-invested" class="text-2xl font-bold mt-1">₹0</p>
+      </div>
+      <div class="bg-gray-800 p-5 rounded-xl border border-gray-700">
+        <p class="text-xs text-gray-400 uppercase tracking-wider">Net Worth</p>
+        <p id="net-worth" class="text-2xl font-bold text-emerald-400 mt-1">₹0</p>
+      </div>
+      <div class="bg-gray-800 p-5 rounded-xl border border-gray-700">
+        <p class="text-xs text-gray-400 uppercase tracking-wider">Total Profit</p>
+        <p id="net-profit" class="text-2xl font-bold mt-1">₹0</p>
+      </div>
+      <div class="bg-gray-800 p-5 rounded-xl border border-gray-700">
+        <p class="text-xs text-gray-400 uppercase tracking-wider">Overall Return</p>
+        <p id="return-pct" class="text-2xl font-bold mt-1">0.00%</p>
+      </div>
+    </div>
+
+    <!-- Growth Projection Chart Section -->
+    <div class="bg-gray-800 p-6 rounded-xl border border-gray-700">
+      <h2 class="text-lg font-semibold text-gray-200 mb-4">5, 10 & 15 Year Growth Projections</h2>
+      <canvas id="projectionChart" height="100"></canvas>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- 3. JAVASCRIPT LOGIC                                         -->
+  <!-- ============================================================ -->
+  <script>
+    // Paste your Web App Deployment URL from Apps Script here:
+    const API_URL = "YOUR_APPS_SCRIPT_WEB_APP_URL";
+
+    // Auto-login if a valid session exists in this browser window
+    window.addEventListener("DOMContentLoaded", () => {
+      const savedPasscode = sessionStorage.getItem("authenticated_passcode");
+      if (savedPasscode) {
+        fetchPortfolioData(savedPasscode);
+      }
+    });
+
+    // Enter key support on password field
+    document.getElementById("passcode-input").addEventListener("keypress", function(e) {
+      if (e.key === "Enter") handleLogin();
+    });
+
+    function handleLogin() {
+      const enteredPasscode = document.getElementById("passcode-input").value;
+      if (!enteredPasscode) return;
+      fetchPortfolioData(enteredPasscode);
     }
 
-    // Passcode verified! Store session and display data
-    sessionStorage.setItem("authenticated", userPasscode);
-    showDashboardUI();
+    async function fetchPortfolioData(userPasscode) {
+      const errorMsg = document.getElementById("error-msg");
+      errorMsg.classList.add("hidden");
 
-    // Populate KPIs
-    document.getElementById("total-invested").innerText = formatCurrency(data.totalInvested);
-    document.getElementById("net-worth").innerText = formatCurrency(data.netWorth);
-    
-    const profitElem = document.getElementById("net-profit");
-    profitElem.innerText = formatCurrency(data.netProfit);
-    profitElem.className = data.netProfit >= 0 
-      ? "text-2xl font-bold text-emerald-400 mt-1" 
-      : "text-2xl font-bold text-red-400 mt-1";
+      try {
+        // Send passcode as a URL query parameter to Google Apps Script
+        const res = await fetch(`${API_URL}?passcode=${encodeURIComponent(userPasscode)}`);
+        const data = await res.json();
 
-    document.getElementById("return-pct").innerText = (data.returnPct * 100).toFixed(2) + "%";
-    document.getElementById("last-updated").innerText = "Last synced: " + new Date(data.lastUpdated).toLocaleTimeString();
+        // Server-side check failed
+        if (data.error) {
+          errorMsg.innerText = "Invalid passcode. Access denied by server.";
+          errorMsg.classList.remove("hidden");
+          sessionStorage.removeItem("authenticated_passcode");
+          document.getElementById("passcode-input").value = "";
+          return;
+        }
 
-    renderChart(data.netWorth, data.returnPct);
-  } catch (err) {
-    console.error("Failed to load portfolio data", err);
-  }
-}
+        // Authentication Successful! Store session and load UI
+        sessionStorage.setItem("authenticated_passcode", userPasscode);
+        showDashboardUI();
+
+        // Render KPI metrics
+        document.getElementById("total-invested").innerText = formatCurrency(data.totalInvested);
+        document.getElementById("net-worth").innerText = formatCurrency(data.netWorth);
+        
+        const profitElem = document.getElementById("net-profit");
+        profitElem.innerText = formatCurrency(data.netProfit);
+        profitElem.className = data.netProfit >= 0 
+          ? "text-2xl font-bold text-emerald-400 mt-1" 
+          : "text-2xl font-bold text-red-400 mt-1";
+
+        document.getElementById("return-pct").innerText = (data.returnPct * 100).toFixed(2) + "%";
+        document.getElementById("last-updated").innerText = "Last synced: " + new Date(data.lastUpdated).toLocaleTimeString();
+
+        // Render projections chart
+        renderChart(data.netWorth, data.returnPct);
+
+      } catch (err) {
+        console.error("Failed to connect to Google Sheets API", err);
+        errorMsg.innerText = "Connection error. Verify your Web App URL.";
+        errorMsg.classList.remove("hidden");
+      }
+    }
+
+    function showDashboardUI() {
+      document.getElementById("login-modal").classList.add("hidden");
+      document.getElementById("dashboard-content").classList.remove("hidden");
+      document.body.classList.remove("flex", "items-center", "justify-center");
+    }
+
+    function lockDashboard() {
+      sessionStorage.removeItem("authenticated_passcode");
+      location.reload();
+    }
+
+    function formatCurrency(val) {
+      return new Intl.NumberFormat('en-IN', { 
+        style: 'currency', 
+        currency: 'INR', 
+        maximumFractionDigits: 0 
+      }).format(val || 0);
+    }
+
+    function calculateFV(rate, years, pmt, pv) {
+      const r = rate / 12;
+      const n = years * 12;
+      if (r === 0) return pv + (pmt * n);
+      return pv * Math.pow(1 + r, n) + pmt * ((Math.pow(1 + r, n) - 1) / r);
+    }
+
+    function renderChart(currentNetWorth, rate) {
+      const monthlySIP = 25000; // Update or adjust as needed
+      const val5y = calculateFV(rate, 5, monthlySIP, currentNetWorth);
+      const val10y = calculateFV(rate, 10, monthlySIP, currentNetWorth);
+      const val15y = calculateFV(rate, 15, monthlySIP, currentNetWorth);
+
+      const ctx = document.getElementById('projectionChart').getContext('2d');
+      
+      // Clear old chart instance if re-rendering
+      if (window.myChart) window.myChart.destroy();
+
+      window.myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Today', '5 Years', '10 Years', '15 Years'],
+          datasets: [{
+            label: 'Projected Net Worth (₹)',
+            data: [currentNetWorth, val5y, val10y, val15y],
+            backgroundColor: ['#3B82F6', '#10B981', '#059669', '#047857'],
+            borderRadius: 8
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { 
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  return ' Projected: ' + formatCurrency(context.raw);
+                }
+              }
+            }
+          },
+          scales: { 
+            y: { 
+              ticks: { 
+                color: '#9CA3AF',
+                callback: function(value) {
+                  return '₹' + (value / 100000).toFixed(0) + 'L';
+                } 
+              },
+              grid: { color: '#374151' }
+            }, 
+            x: { 
+              ticks: { color: '#9CA3AF' },
+              grid: { display: false }
+            } 
+          }
+        }
+      });
+    }
+  </script>
+</body>
+</html>
