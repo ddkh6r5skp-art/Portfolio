@@ -204,7 +204,9 @@
 
         const ret = Number(m.returnPct || 0);
         const displayRet = Math.abs(ret) < 1 ? (ret * 100) : ret;
-        document.getElementById("return-pct").innerText = displayRet.toFixed(2) + "%";
+        const ret = Number(m.returnPct || 0);
+const displayRet = Math.abs(ret) < 1 ? (ret * 100) : ret;
+document.getElementById("return-pct").innerText = displayRet.toFixed(2) + "%";
 
         if (displayRet > 0) document.getElementById("rate-slider").value = displayRet.toFixed(1);
         updateSimulator();
