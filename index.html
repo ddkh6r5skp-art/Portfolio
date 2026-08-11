@@ -4,36 +4,60 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Personal Wealth Dashboard</title>
-  <!-- Tailwind CSS for styling -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Chart.js for projection visualizer -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body class="bg-gray-900 text-white min-h-screen p-6 font-sans">
+<body class="bg-gray-900 text-white min-h-screen font-sans flex flex-col justify-center items-center p-4">
 
-  <div class="max-w-5xl mx-auto space-y-6">
+  <!-- 1. LOGIN / PASSWORD LOCK SCREEN -->
+  <div id="login-modal" class="bg-gray-800 p-8 rounded-2xl border border-gray-700 shadow-2xl max-w-sm w-full space-y-5">
+    <div class="text-center space-y-1">
+      <div class="text-3xl">🔒</div>
+      <h2 class="text-xl font-bold text-gray-100">Protected Dashboard</h2>
+      <p class="text-xs text-gray-400">Enter your passcode to access portfolio data</p>
+    </div>
+    
+    <div>
+      <input type="password" id="passcode-input" placeholder="Enter Passcode" 
+             class="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-center text-lg text-emerald-400 focus:outline-none focus:border-emerald-500 transition-colors">
+      <p id="error-msg" class="text-xs text-red-400 text-center mt-2 hidden">Incorrect passcode. Try again.</p>
+    </div>
+
+    <button onclick="checkPasscode()" 
+            class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-3 rounded-lg transition-colors">
+      Unlock Dashboard
+    </button>
+  </div>
+
+  <!-- 2. DASHBOARD CONTENT (Hidden until authenticated) -->
+  <div id="dashboard-content" class="max-w-5xl w-full space-y-6 hidden">
     <!-- Header -->
     <div class="flex justify-between items-center border-b border-gray-800 pb-4">
-      <h1 class="text-2xl font-bold text-emerald-400">Net Worth & Portfolio Tracker</h1>
-      <span id="last-updated" class="text-xs text-gray-500">Syncing...</span>
+      <div>
+        <h1 class="text-2xl font-bold text-emerald-400">Net Worth & Portfolio Tracker</h1>
+        <span id="last-updated" class="text-xs text-gray-500">Syncing live data...</span>
+      </div>
+      <button onclick="lockDashboard()" class="bg-gray-800 hover:bg-gray-700 text-xs text-gray-300 px-3 py-2 rounded-lg border border-gray-700 transition-colors">
+        🔒 Lock Dashboard
+      </button>
     </div>
 
     <!-- KPI Cards -->
     <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
       <div class="bg-gray-800 p-5 rounded-xl border border-gray-700">
-        <p class="text-xs text-gray-400 uppercase">Total Invested</p>
+        <p class="text-xs text-gray-400 uppercase tracking-wider">Total Invested</p>
         <p id="total-invested" class="text-2xl font-bold mt-1">₹0</p>
       </div>
       <div class="bg-gray-800 p-5 rounded-xl border border-gray-700">
-        <p class="text-xs text-gray-400 uppercase">Net Worth</p>
+        <p class="text-xs text-gray-400 uppercase tracking-wider">Net Worth</p>
         <p id="net-worth" class="text-2xl font-bold text-emerald-400 mt-1">₹0</p>
       </div>
       <div class="bg-gray-800 p-5 rounded-xl border border-gray-700">
-        <p class="text-xs text-gray-400 uppercase">Total Profit</p>
+        <p class="text-xs text-gray-400 uppercase tracking-wider">Total Profit</p>
         <p id="net-profit" class="text-2xl font-bold mt-1">₹0</p>
       </div>
       <div class="bg-gray-800 p-5 rounded-xl border border-gray-700">
-        <p class="text-xs text-gray-400 uppercase">Overall CAGR / XIRR</p>
+        <p class="text-xs text-gray-400 uppercase tracking-wider">Overall Return</p>
         <p id="return-pct" class="text-2xl font-bold mt-1">0.00%</p>
       </div>
     </div>
@@ -46,8 +70,48 @@
   </div>
 
   <script>
-    // Paste your Google Apps Script Web App URL here
-    const API_URL = "https://script.google.com/macros/s/AKfycbzeuVC1DbCcsMa6mOzABFO4cNOySPvuzoS0dW0aV3mqrjybChk1vpC6Fy7E4l65hHaT/exec";
+    // ----------------------------------------------------
+    // CONFIGURATION
+    // ----------------------------------------------------
+    const DASHBOARD_PASSCODE = "4521"; // Set your desired password/PIN here
+    const API_URL = "https://script.google.com/macros/s/AKfycbzeuVC1DbCcsMa6mOzABFO4cNOySPvuzoS0dW0aV3mqrjybChk1vpC6Fy7E4l65hHaT/exec"; // Paste your Web App URL here
+    // ----------------------------------------------------
+
+    // Check if already authenticated in this session
+    if (sessionStorage.getItem("authenticated") === "true") {
+      showDashboard();
+    }
+
+    // Allow pressing "Enter" key on input box
+    document.getElementById("passcode-input").addEventListener("keypress", function(e) {
+      if (e.key === "Enter") checkPasscode();
+    });
+
+    function checkPasscode() {
+      const enteredPasscode = document.getElementById("passcode-input").value;
+      const errorMsg = document.getElementById("error-msg");
+
+      if (enteredPasscode === DASHBOARD_PASSCODE) {
+        sessionStorage.setItem("authenticated", "true");
+        errorMsg.classList.add("hidden");
+        showDashboard();
+      } else {
+        errorMsg.classList.remove("hidden");
+        document.getElementById("passcode-input").value = "";
+      }
+    }
+
+    function showDashboard() {
+      document.getElementById("login-modal").classList.add("hidden");
+      document.getElementById("dashboard-content").classList.remove("hidden");
+      document.body.classList.remove("flex", "items-center", "justify-center");
+      fetchPortfolioData();
+    }
+
+    function lockDashboard() {
+      sessionStorage.removeItem("authenticated");
+      location.reload();
+    }
 
     async function fetchPortfolioData() {
       try {
@@ -57,11 +121,14 @@
         // Update KPI Cards
         document.getElementById("total-invested").innerText = formatCurrency(data.totalInvested);
         document.getElementById("net-worth").innerText = formatCurrency(data.netWorth);
-        document.getElementById("net-profit").innerText = formatCurrency(data.netProfit);
+        
+        const profitElem = document.getElementById("net-profit");
+        profitElem.innerText = formatCurrency(data.netProfit);
+        profitElem.className = data.netProfit >= 0 ? "text-2xl font-bold text-emerald-400 mt-1" : "text-2xl font-bold text-red-400 mt-1";
+
         document.getElementById("return-pct").innerText = (data.returnPct * 100).toFixed(2) + "%";
         document.getElementById("last-updated").innerText = "Last synced: " + new Date(data.lastUpdated).toLocaleTimeString();
 
-        // Render Projection Chart
         renderChart(data.netWorth, data.returnPct);
       } catch (err) {
         console.error("Failed to load portfolio data", err);
@@ -79,7 +146,7 @@
     }
 
     function renderChart(currentNetWorth, rate) {
-      const monthlySIP = 25000; // Adjust or fetch dynamically from sheet
+      const monthlySIP = 25000;
       const val5y = calculateFV(rate, 5, monthlySIP, currentNetWorth);
       const val10y = calculateFV(rate, 10, monthlySIP, currentNetWorth);
       const val15y = calculateFV(rate, 15, monthlySIP, currentNetWorth);
@@ -103,8 +170,6 @@
         }
       });
     }
-
-    fetchPortfolioData();
   </script>
 </body>
 </html>
