@@ -152,15 +152,12 @@
     let assetChartInstance = null;
     let projChartInstance = null;
 
-    window.addEventListener("DOMContentLoaded", () => {
-      const savedPass = sessionStorage.getItem("authenticated_passcode");
-      if (savedPass) {
-        document.getElementById("header-passcode").value = savedPass;
-        fetchPortfolioData(savedPass);
-      } else {
-        renderDemoState();
-      }
-    });
+    // Always start in zero/demo state on every fresh page load
+window.addEventListener("DOMContentLoaded", () => {
+  sessionStorage.removeItem("authenticated_passcode"); // Clears any old sessions
+  document.getElementById("header-passcode").value = ""; // Clears the input field
+  renderDemoState();
+});
 
     function renderDemoState() {
       document.getElementById("status-pill").innerText = "Public Mode (Demo Values)";
