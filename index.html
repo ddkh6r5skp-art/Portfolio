@@ -20,15 +20,16 @@
         </div>
       </div>
 
-      <!-- Auth Controls -->
-      <div class="flex items-center space-x-2">
-        <input type="password" id="header-passcode" placeholder="Enter Passcode" autocomplete="new-password" name="prevent_autofill_passcode" value=""
-               class="bg-gray-950 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-emerald-400 focus:outline-none focus:border-emerald-500 w-36 sm:w-48">
-        <button onclick="handleAuth()" id="auth-btn" 
-                class="bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-semibold px-4 py-1.5 rounded-lg transition-colors">
-          Unlock
-        </button>
-      </div>
+    
+<div class="flex items-center space-x-2">
+  <input type="password" id="header-passcode" placeholder="Enter Passcode" autocomplete="new-password" name="prevent_autofill_passcode" value=""
+         onkeypress="handleKeyPress(event)"
+         class="bg-gray-950 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-emerald-400 focus:outline-none focus:border-emerald-500 w-36 sm:w-48">
+  <button onclick="handleAuth()" id="auth-btn" 
+          class="bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-semibold px-4 py-1.5 rounded-lg transition-colors flex items-center justify-center min-w-[80px]">
+    <span id="auth-btn-text">Unlock</span>
+  </button>
+</div>
     </div>
   </header>
 
