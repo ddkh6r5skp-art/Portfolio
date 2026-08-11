@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Portfolio Dashboard</title>
+  <title>Personal Portfolio Dashboard</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -15,14 +15,14 @@
       <div class="flex items-center space-x-3">
         <span class="text-2xl">💼</span>
         <div>
-          <h1 class="text-lg font-bold text-emerald-400 leading-tight">Vageesh's Portfolio Tracker</h1>
+          <h1 class="text-lg font-bold text-emerald-400 leading-tight">Personal Portfolio Tracker</h1>
           <p id="status-pill" class="text-xs text-amber-400 font-medium">Public Mode (Demo Values)</p>
         </div>
       </div>
 
       <!-- Auth Controls -->
       <div class="flex items-center space-x-2">
-        <input type="password" id="header-passcode" placeholder="Enter Passcode" 
+        <input type="password" id="header-passcode" placeholder="Enter Passcode" autocomplete="new-password" name="prevent_autofill_passcode" value=""
                class="bg-gray-950 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-emerald-400 focus:outline-none focus:border-emerald-500 w-36 sm:w-48">
         <button onclick="handleAuth()" id="auth-btn" 
                 class="bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-semibold px-4 py-1.5 rounded-lg transition-colors">
@@ -49,7 +49,7 @@
         <p id="net-profit" class="text-2xl font-bold text-gray-100 mt-1">₹0</p>
       </div>
       <div class="bg-gray-900 p-5 rounded-2xl border border-gray-800 shadow-sm">
-        <p class="text-xs text-gray-400 uppercase tracking-wider font-medium">Actual Annual Return</p>
+        <p class="text-xs text-gray-400 uppercase tracking-wider font-medium">Annual Return Rate</p>
         <p id="return-pct" class="text-2xl font-bold mt-1 text-gray-100">0.00%</p>
       </div>
     </div>
@@ -57,14 +57,17 @@
     <!-- ASSET BREAKDOWN & BENCHMARK COMPARISON ROW -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
       
-      <!-- Asset Allocation Breakdown Chart (MF vs Stocks vs PPF) -->
+      <!-- Asset Allocation Breakdown Chart -->
       <div class="bg-gray-900 p-6 rounded-2xl border border-gray-800 space-y-4">
-        <h2 class="text-lg font-semibold text-gray-100">Asset Allocation</h2>
-        <div class="relative h-56 flex items-center justify-center">
+        <div class="flex justify-between items-center">
+          <h2 class="text-lg font-semibold text-gray-100">Asset Allocation</h2>
+          <span class="text-[10px] text-gray-400 bg-gray-800 px-2 py-0.5 rounded">Click category to inspect</span>
+        </div>
+        <div class="relative h-52 flex items-center justify-center cursor-pointer">
           <canvas id="assetChart"></canvas>
         </div>
         <div id="asset-legend-list" class="space-y-2 text-xs pt-2 border-t border-gray-800/80">
-          <!-- Populated dynamically -->
+          <!-- Interactive Legend -->
         </div>
       </div>
 
@@ -72,7 +75,7 @@
       <div class="bg-gray-900 p-6 rounded-2xl border border-gray-800 flex flex-col justify-between space-y-4">
         <div>
           <h2 class="text-lg font-semibold text-gray-100 mb-1">Performance vs FD Benchmark</h2>
-          <p class="text-xs text-gray-400">Compares your actual return rate against a standard 7% Bank Fixed Deposit.</p>
+          <p class="text-xs text-gray-400">Compares actual return rate against a 7% Bank Fixed Deposit.</p>
         </div>
 
         <div class="bg-gray-950 p-5 rounded-xl border border-gray-800 space-y-4">
@@ -82,7 +85,7 @@
           </div>
           <div class="flex justify-between items-center">
             <span class="text-sm text-gray-400">Bank FD Benchmark:</span>
-            <span class="font-bold text-base text-amber-400">6.85%</span>
+            <span class="font-bold text-base text-amber-400">7.00%</span>
           </div>
           <div class="border-t border-gray-800 pt-3 flex justify-between items-center">
             <span class="text-xs text-gray-400 uppercase font-medium">Verdict:</span>
@@ -106,6 +109,37 @@
         </div>
       </div>
 
+    </div>
+
+    <!-- DYNAMIC CATEGORY DRILL-DOWN CARD -->
+    <div id="drilldown-card" class="bg-gray-900 p-6 rounded-2xl border border-gray-800 hidden space-y-4 transition-all">
+      <div class="flex justify-between items-center border-b border-gray-800 pb-3">
+        <div class="flex items-center space-x-2">
+          <span class="text-emerald-400 text-lg">🔍</span>
+          <h2 id="drilldown-title" class="text-lg font-bold text-gray-100">Category Details</h2>
+        </div>
+        <button onclick="closeDrilldown()" class="text-xs text-gray-400 hover:text-white bg-gray-800 px-3 py-1 rounded-lg">✕ Close Inspection</button>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-sm">
+          <thead class="text-xs text-gray-400 uppercase bg-gray-950/60 border-b border-gray-800">
+            <tr>
+              <th class="p-3">Holding / Ticker</th>
+              <th class="p-3">Qty / Units</th>
+              <th class="p-3">Avg / Buy Price</th>
+              <th class="p-3">Total Invested</th>
+              <th class="p-3">Live Price</th>
+              <th class="p-3">Current Value</th>
+              <th class="p-3">Profit / Loss</th>
+              <th class="p-3">Return (%)</th>
+            </tr>
+          </thead>
+          <tbody id="drilldown-table-body" class="divide-y divide-gray-800/60 text-gray-300">
+            <!-- Populated via JS -->
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <!-- SEARCHABLE TRANSACTION HISTORY TABLE -->
@@ -149,15 +183,16 @@
     // ----------------------------------------------------
 
     let rawTransactions = [];
+    let globalCategoryDetails = {};
     let assetChartInstance = null;
     let projChartInstance = null;
 
-    // Always start in zero/demo state on every fresh page load
-window.addEventListener("DOMContentLoaded", () => {
-  sessionStorage.removeItem("authenticated_passcode"); // Clears any old sessions
-  document.getElementById("header-passcode").value = ""; // Clears the input field
-  renderDemoState();
-});
+    window.addEventListener("DOMContentLoaded", () => {
+      sessionStorage.clear();
+      const inputElem = document.getElementById("header-passcode");
+      if (inputElem) inputElem.value = "";
+      renderDemoState();
+    });
 
     function renderDemoState() {
       document.getElementById("status-pill").innerText = "Public Mode (Demo Values)";
@@ -169,7 +204,8 @@ window.addEventListener("DOMContentLoaded", () => {
       document.getElementById("net-profit").innerText = "₹0";
       document.getElementById("return-pct").innerText = "0.00%";
 
-      renderAssetChart([{ category: "Mutual Funds", amount: 1 }, { category: "Stocks", amount: 1 }, { category: "PPF", amount: 1 }]);
+      closeDrilldown();
+      renderAssetChart([{ category: "Mutual Funds", amount: 1 }, { category: "Stocks", amount: 1 }, { category: "PPF / EPF", amount: 1 }]);
       renderProjectionChart(0, 0, 0);
     }
 
@@ -202,7 +238,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
         const m = data.metrics || {};
         const netWorth = m.netWorth || 0;
-        const actualRate = Number(m.returnPct || 0); // Correct raw percentage without multiplying by 100
+        const actualRate = Number(m.returnPct || 0);
         const monthlySIP = m.monthlySIP || 0;
 
         document.getElementById("total-invested").innerText = formatCurrency(m.totalInvested);
@@ -214,7 +250,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
         document.getElementById("return-pct").innerText = actualRate.toFixed(2) + "%";
 
-        // FD Benchmark Verdict
+        // FD Benchmark
         const fdRate = m.fdBenchmarkRate || 7.0;
         document.getElementById("user-rate-badge").innerText = actualRate.toFixed(2) + "%";
         
@@ -233,11 +269,14 @@ window.addEventListener("DOMContentLoaded", () => {
           alphaMsgElem.innerText = `⚠️ Your current return is lagging fixed deposit rates by ${lag}%.`;
         }
 
-        // Render Asset Breakdown & Projections
-        renderAssetChart(data.assetBreakdown || []);
-        renderProjectionChart(netWorth, actualRate, monthlySIP);
+        globalCategoryDetails = data.categoryDetails || {};
 
-        // Render Transactions Table
+        renderAssetChart(data.assetBreakdown || []);
+        
+        // Smart fallback rate for projections if actual return <= 0
+        const projectionRate = actualRate > 0 ? actualRate : 10.0;
+        renderProjectionChart(netWorth, projectionRate, monthlySIP);
+
         rawTransactions = data.transactions || [];
         renderTransactionsTable(rawTransactions);
 
@@ -246,14 +285,14 @@ window.addEventListener("DOMContentLoaded", () => {
       }
     }
 
-    // ASSET BREAKDOWN DOUGHNUT CHART
+    // INTERACTIVE DOUGHNUT CHART
     function renderAssetChart(assets) {
       const ctx = document.getElementById('assetChart').getContext('2d');
       if (assetChartInstance) assetChartInstance.destroy();
 
       const labels = assets.map(a => a.category);
       const data = assets.map(a => a.amount);
-      const colors = ['#10B981', '#3B82F6', '#F59E0B', '#EC4899', '#8B5CF6'];
+      const colors = ['#10B981', '#3B82F6', '#F59E0B'];
 
       assetChartInstance = new Chart(ctx, {
         type: 'doughnut',
@@ -268,18 +307,23 @@ window.addEventListener("DOMContentLoaded", () => {
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          plugins: { legend: { display: false } }
+          plugins: { legend: { display: false } },
+          onClick: (evt, activeElements) => {
+            if (activeElements.length > 0) {
+              const index = activeElements[0].index;
+              openDrilldown(labels[index]);
+            }
+          }
         }
       });
 
-      // Custom Legend Listing
       const legendList = document.getElementById("asset-legend-list");
       const total = data.reduce((a, b) => a + b, 0) || 1;
 
       legendList.innerHTML = assets.map((a, i) => {
         const pct = ((a.amount / total) * 100).toFixed(1);
         return `
-          <div class="flex justify-between items-center">
+          <div onclick="openDrilldown('${a.category}')" class="flex justify-between items-center p-1.5 rounded-lg hover:bg-gray-800/60 cursor-pointer transition-colors">
             <div class="flex items-center space-x-2">
               <span class="w-2.5 h-2.5 rounded-full" style="background-color: ${colors[i % colors.length]}"></span>
               <span class="text-gray-300 font-medium">${a.category}</span>
@@ -293,7 +337,52 @@ window.addEventListener("DOMContentLoaded", () => {
       }).join('');
     }
 
-    // PERSONAL PROJECTION CHART
+    // DRILLDOWN INSPECTION LOGIC
+    function openDrilldown(category) {
+      const card = document.getElementById("drilldown-card");
+      const title = document.getElementById("drilldown-title");
+      const tbody = document.getElementById("drilldown-table-body");
+
+      const items = globalCategoryDetails[category] || [];
+      title.innerText = category + " Breakdown";
+
+      if (!items.length) {
+        tbody.innerHTML = `<tr><td colspan="8" class="p-4 text-center text-xs text-gray-500">No specific holdings logged under ${category}.</td></tr>`;
+      } else {
+        tbody.innerHTML = items.map(item => {
+          const units = item.units ? item.units.toLocaleString() : "--";
+          const avg = item.avgPrice ? "₹" + item.avgPrice.toFixed(2) : "--";
+          const inv = item.invested || 0;
+          const live = item.livePrice ? "₹" + item.livePrice.toFixed(2) : "--";
+          const curr = item.currentValue || 0;
+          const profit = item.profit || (curr - inv);
+          const retPct = item.returnPct ? item.returnPct.toFixed(2) + "%" : "--";
+          const pClass = profit >= 0 ? "text-emerald-400 font-semibold" : "text-red-400 font-semibold";
+
+          return `
+            <tr class="hover:bg-gray-800/40 transition-colors">
+              <td class="p-3 font-semibold text-emerald-400">${item.name}</td>
+              <td class="p-3 text-gray-300">${units}</td>
+              <td class="p-3 text-gray-400">${avg}</td>
+              <td class="p-3">${formatCurrency(inv)}</td>
+              <td class="p-3 text-gray-300">${live}</td>
+              <td class="p-3 font-semibold text-gray-100">${formatCurrency(curr)}</td>
+              <td class="p-3 ${pClass}">${formatCurrency(profit)}</td>
+              <td class="p-3 ${pClass}">${retPct}</td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      card.classList.remove("hidden");
+      card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function closeDrilldown() {
+      document.getElementById("drilldown-card").classList.add("hidden");
+    }
+
+    // PROJECTION CHART
     function calculateFV(ratePct, years, pmt, pv) {
       const r = (ratePct / 100) / 12;
       const n = years * 12;
@@ -301,13 +390,13 @@ window.addEventListener("DOMContentLoaded", () => {
       return pv * Math.pow(1 + r, n) + pmt * ((Math.pow(1 + r, n) - 1) / r);
     }
 
-    function renderProjectionChart(currentNetWorth, actualRate, monthlySIP) {
+    function renderProjectionChart(currentNetWorth, rateToUse, monthlySIP) {
       const ctx = document.getElementById('projectionChart').getContext('2d');
       if (projChartInstance) projChartInstance.destroy();
 
-      const val5y  = calculateFV(actualRate, 5, monthlySIP, currentNetWorth);
-      const val10y = calculateFV(actualRate, 10, monthlySIP, currentNetWorth);
-      const val15y = calculateFV(actualRate, 15, monthlySIP, currentNetWorth);
+      const val5y  = calculateFV(rateToUse, 5, monthlySIP, currentNetWorth);
+      const val10y = calculateFV(rateToUse, 10, monthlySIP, currentNetWorth);
+      const val15y = calculateFV(rateToUse, 15, monthlySIP, currentNetWorth);
 
       projChartInstance = new Chart(ctx, {
         type: 'bar',
@@ -323,7 +412,16 @@ window.addEventListener("DOMContentLoaded", () => {
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
+          plugins: { 
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  return ` Projected: ${formatCurrency(context.raw)} (@ ${rateToUse.toFixed(1)}% p.a.)`;
+                }
+              }
+            }
+          },
           scales: {
             y: { ticks: { color: '#9CA3AF', callback: v => '₹' + (v/100000).toFixed(0) + 'L' }, grid: { color: '#1F2937' } },
             x: { ticks: { color: '#9CA3AF' }, grid: { display: false } }
