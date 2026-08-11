@@ -133,7 +133,11 @@
           ? "text-2xl font-bold text-emerald-400 mt-1" 
           : "text-2xl font-bold text-red-400 mt-1";
 
-        document.getElementById("return-pct").innerText = Number(data.returnPct).toFixed(2) + "%";
+        // Auto-detects if rate is a decimal (-0.0077) or pre-multiplied (-0.77)
+const rawReturn = Number(data.returnPct || 0);
+const displayReturn = Math.abs(rawReturn) < 1 ? (rawReturn * 100) : rawReturn;
+
+document.getElementById("return-pct").innerText = displayReturn.toFixed(2) + "%";
         document.getElementById("last-updated").innerText = "Last synced: " + new Date(data.lastUpdated).toLocaleTimeString();
 
         // Render projections chart
