@@ -202,13 +202,10 @@
         pElem.innerText = formatCurrency(m.netProfit);
         pElem.className = (m.netProfit || 0) >= 0 ? "text-2xl font-bold text-emerald-400 mt-1" : "text-2xl font-bold text-red-400 mt-1";
 
-        const ret = Number(m.returnPct || 0);
-        const displayRet = Math.abs(ret) < 1 ? (ret * 100) : ret;
-        const ret = Number(m.returnPct || 0);
-const displayRet = Math.abs(ret) < 1 ? (ret * 100) : ret;
-document.getElementById("return-pct").innerText = displayRet.toFixed(2) + "%";
+        document.getElementById("return-pct").innerText = Number(m.returnPct || 0).toFixed(2) + "%";
 
-        if (displayRet > 0) document.getElementById("rate-slider").value = displayRet.toFixed(1);
+const cleanRate = Number(m.returnPct || 0);
+if (cleanRate > 0) document.getElementById("rate-slider").value = cleanRate.toFixed(1);
         updateSimulator();
         renderAllocationChart(data.fundAllocations || []);
 
