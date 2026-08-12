@@ -1,490 +1,4271 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Personal Portfolio Dashboard</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Vageesh's Portfolio</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    margin:0;
+    font-family:"DM Sans",sans-serif;
+    color:white;
+    background:#07111f;
+    overflow-x:hidden;
+}
+
+button,
+input{
+    font-family:inherit;
+}
+
+button{
+    -webkit-tap-highlight-color:transparent;
+}
+
+/* =========================================================
+   BACKGROUND
+========================================================= */
+
+.hero{
+    min-height:100vh;
+    position:relative;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(7,16,29,.05),
+            rgba(7,15,27,.38) 48%,
+            rgba(4,9,18,.96) 100%
+        ),
+        url("https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=2400&q=90")
+        center / cover fixed;
+
+    transition:
+        filter .8s ease,
+        transform .8s ease;
+}
+
+.hero::before{
+    content:"";
+    position:absolute;
+    inset:0;
+
+    background:
+        radial-gradient(
+            circle at 50% 43%,
+            rgba(255,184,95,.20),
+            transparent 28%
+        );
+
+    pointer-events:none;
+}
+
+.hero::after{
+    content:"";
+    position:absolute;
+    inset:0;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(2,8,17,.45),
+            transparent 35%,
+            transparent 65%,
+            rgba(2,8,17,.45)
+        );
+
+    pointer-events:none;
+}
+
+/* =========================================================
+   FLOATING LIGHTS
+========================================================= */
+
+.orb{
+    position:absolute;
+    border-radius:50%;
+    pointer-events:none;
+    filter:blur(3px);
+    opacity:.45;
+    animation:floating 12s ease-in-out infinite;
+}
+
+.orb.one{
+    width:220px;
+    height:220px;
+    left:4%;
+    top:18%;
+    background:rgba(255,175,80,.14);
+}
+
+.orb.two{
+    width:170px;
+    height:170px;
+    right:8%;
+    top:28%;
+    background:rgba(70,160,255,.10);
+    animation-delay:-4s;
+}
+
+.orb.three{
+    width:130px;
+    height:130px;
+    right:27%;
+    bottom:16%;
+    background:rgba(255,110,75,.11);
+    animation-delay:-7s;
+}
+
+@keyframes floating{
+    0%,100%{
+        transform:translate3d(0,0,0);
+    }
+
+    50%{
+        transform:translate3d(0,-28px,0);
+    }
+}
+
+/* =========================================================
+   CONTAINER
+========================================================= */
+
+.container{
+    width:min(1450px,94%);
+    margin:auto;
+    position:relative;
+    z-index:5;
+}
+
+/* =========================================================
+   NAVBAR
+========================================================= */
+
+.navbar{
+    padding:22px 0;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    gap:20px;
+}
+
+.logo{
+    font-family:"Playfair Display",serif;
+    font-size:28px;
+}
+
+.logo span{
+    color:#ffc36d;
+}
+
+/* =========================================================
+   CONNECTION
+========================================================= */
+
+.connection-area{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.connection-status{
+    display:flex;
+    align-items:center;
+    gap:8px;
+
+    padding:9px 13px;
+
+    border-radius:12px;
+
+    background:rgba(8,17,29,.45);
+
+    border:1px solid rgba(255,255,255,.12);
+
+    backdrop-filter:blur(18px);
+
+    font-size:11px;
+    letter-spacing:.8px;
+    font-weight:700;
+
+    text-transform:uppercase;
+
+    white-space:nowrap;
+}
+
+.status-dot{
+    width:8px;
+    height:8px;
+
+    border-radius:50%;
+
+    background:#ffc46b;
+
+    box-shadow:
+        0 0 12px rgba(255,196,107,.7);
+
+    transition:.4s;
+}
+
+.connection-status.live .status-dot{
+    background:#5ff0a5;
+
+    box-shadow:
+        0 0 7px #5ff0a5,
+        0 0 18px rgba(95,240,165,.7);
+
+    animation:livePulse 2s infinite;
+}
+
+.connection-status.live{
+    border-color:rgba(95,240,165,.25);
+}
+
+@keyframes livePulse{
+    0%,100%{
+        opacity:1;
+    }
+
+    50%{
+        opacity:.45;
+    }
+}
+
+/* =========================================================
+   PASSWORD
+========================================================= */
+
+.password-box{
+    display:flex;
+    gap:6px;
+
+    padding:6px;
+
+    border-radius:14px;
+
+    background:rgba(8,16,28,.46);
+
+    border:1px solid rgba(255,255,255,.15);
+
+    backdrop-filter:blur(20px);
+}
+
+.password-box input{
+    width:170px;
+
+    background:transparent;
+
+    border:none;
+    outline:none;
+
+    color:white;
+
+    padding:9px 10px;
+}
+
+.password-box input::placeholder{
+    color:rgba(255,255,255,.45);
+}
+
+.password-box button{
+    border:none;
+
+    padding:9px 15px;
+
+    border-radius:10px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ffb85f,
+            #ff8658
+        );
+
+    color:white;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    transition:.25s;
+}
+
+.password-box button:hover{
+    transform:translateY(-2px);
+
+    box-shadow:
+        0 10px 30px rgba(255,137,88,.3);
+}
+
+.password-box button:disabled{
+    opacity:.6;
+    cursor:wait;
+}
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero-content{
+    padding:70px 0 45px;
+}
+
+.kicker{
+    display:inline-flex;
+
+    align-items:center;
+    gap:9px;
+
+    padding:8px 14px;
+
+    border-radius:100px;
+
+    background:rgba(255,255,255,.10);
+
+    border:1px solid rgba(255,255,255,.15);
+
+    backdrop-filter:blur(15px);
+
+    font-size:12px;
+
+    letter-spacing:1px;
+
+    text-transform:uppercase;
+}
+
+.hero-title{
+    font-family:"Playfair Display",serif;
+
+    font-size:clamp(50px,7vw,100px);
+
+    line-height:.95;
+
+    max-width:900px;
+
+    margin:22px 0;
+
+    letter-spacing:-3px;
+}
+
+.hero-title span{
+    color:#ffc56e;
+}
+
+.hero-subtitle{
+    color:rgba(255,255,255,.72);
+
+    font-size:17px;
+
+    max-width:650px;
+
+    line-height:1.7;
+}
+
+/* =========================================================
+   GLASS
+========================================================= */
+
+.glass{
+    background:rgba(9,19,33,.47);
+
+    border:1px solid rgba(255,255,255,.13);
+
+    box-shadow:
+        0 20px 80px rgba(0,0,0,.24),
+        inset 0 1px 0 rgba(255,255,255,.07);
+
+    backdrop-filter:blur(22px);
+
+    -webkit-backdrop-filter:blur(22px);
+
+    border-radius:24px;
+}
+
+/* =========================================================
+   STATS
+========================================================= */
+
+.stats{
+    display:grid;
+
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap:15px;
+
+    margin:30px 0;
+}
+
+.stat{
+    padding:23px;
+
+    transition:.35s;
+
+    cursor:default;
+}
+
+.stat:hover{
+    transform:translateY(-5px);
+
+    background:rgba(15,28,47,.60);
+}
+
+.stat-label{
+    color:rgba(255,255,255,.50);
+
+    font-size:11px;
+
+    text-transform:uppercase;
+
+    letter-spacing:1px;
+}
+
+.stat-value{
+    font-size:28px;
+
+    font-weight:700;
+
+    margin-top:7px;
+}
+
+.stat-change{
+    margin-top:8px;
+
+    font-size:13px;
+}
+
+.green{
+    color:#63e6a4;
+}
+
+.red{
+    color:#ff8e83;
+}
+
+.orange{
+    color:#ffc46b;
+}
+
+/* =========================================================
+   DASHBOARD
+========================================================= */
+
+.dashboard{
+    padding-bottom:100px;
+}
+
+.grid{
+    display:grid;
+
+    grid-template-columns:
+        1.5fr 1fr;
+
+    gap:18px;
+}
+
+.card{
+    padding:25px;
+}
+
+.card-title{
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:22px;
+}
+
+.card-title h2{
+    margin:0;
+
+    font-size:18px;
+}
+
+.card-title span{
+    color:rgba(255,255,255,.40);
+
+    font-size:11px;
+
+    text-transform:uppercase;
+
+    letter-spacing:.7px;
+}
+
+/* =========================================================
+   CHART
+========================================================= */
+
+.chart-wrap{
+    height:320px;
+}
+
+/* =========================================================
+   ALLOCATION
+========================================================= */
+
+.allocation{
+    display:flex;
+
+    align-items:center;
+
+    gap:25px;
+}
+
+.donut{
+    width:190px;
+    height:190px;
+
+    flex-shrink:0;
+}
+
+.legend{
+    flex:1;
+}
+
+.legend-row{
+    display:flex;
+
+    justify-content:space-between;
+
+    padding:11px 9px;
+
+    border-bottom:
+        1px solid rgba(255,255,255,.07);
+
+    font-size:13px;
+
+    cursor:pointer;
+
+    border-radius:10px;
+
+    transition:.25s;
+}
+
+.legend-row:hover{
+    background:rgba(255,255,255,.06);
+
+    transform:translateX(5px);
+}
+
+.legend-row.selected{
+    background:rgba(255,196,107,.10);
+
+    color:#ffc46b;
+}
+
+.legend-left{
+    display:flex;
+
+    gap:8px;
+
+    align-items:center;
+}
+
+.legend-dot{
+    width:8px;
+    height:8px;
+
+    border-radius:50%;
+}
+
+/* =========================================================
+   ALLOCATION SNAPSHOT
+========================================================= */
+
+.allocation-snapshot{
+    margin-top:22px;
+
+    padding:16px 18px;
+
+    border-radius:16px;
+
+    background:rgba(255,255,255,.035);
+
+    border:1px solid rgba(255,255,255,.07);
+
+    transition:.35s;
+}
+
+.snapshot-top{
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:15px;
+
+    margin-bottom:12px;
+}
+
+.snapshot-title{
+    font-size:13px;
+
+    font-weight:600;
+}
+
+.snapshot-pill{
+    padding:5px 9px;
+
+    border-radius:100px;
+
+    background:rgba(255,196,107,.10);
+
+    color:#ffc46b;
+
+    font-size:10px;
+
+    text-transform:uppercase;
+
+    letter-spacing:.7px;
+}
+
+.snapshot-grid{
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:12px;
+}
+
+.snapshot-item-label{
+    color:rgba(255,255,255,.38);
+
+    font-size:9px;
+
+    text-transform:uppercase;
+
+    letter-spacing:.8px;
+}
+
+.snapshot-item-value{
+    margin-top:5px;
+
+    font-size:14px;
+
+    font-weight:700;
+}
+
+/* =========================================================
+   INSIGHTS
+========================================================= */
+
+.insights{
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:15px;
+
+    margin-top:18px;
+}
+
+.insight{
+    padding:22px;
+
+    transition:.3s;
+
+    cursor:pointer;
+}
+
+.insight:hover{
+    transform:translateY(-5px);
+}
+
+.insight-icon{
+    font-size:27px;
+
+    margin-bottom:15px;
+}
+
+.insight h3{
+    margin:0 0 8px;
+
+    font-size:15px;
+}
+
+.insight p{
+    color:rgba(255,255,255,.55);
+
+    font-size:13px;
+
+    line-height:1.6;
+
+    margin:0;
+}
+
+.insight small{
+    display:inline-block;
+
+    margin-top:8px;
+
+    color:rgba(255,255,255,.35);
+
+    font-size:10px;
+}
+
+/* =========================================================
+   HEALTH SNAPSHOT
+========================================================= */
+
+.health-strip{
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:15px;
+
+    margin-top:18px;
+}
+
+.health-item{
+    padding:17px 19px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:15px;
+}
+
+.health-left{
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+}
+
+.health-icon{
+    font-size:19px;
+}
+
+.health-label{
+    font-size:11px;
+
+    color:rgba(255,255,255,.45);
+
+    text-transform:uppercase;
+
+    letter-spacing:.7px;
+}
+
+.health-value{
+    font-size:15px;
+
+    font-weight:700;
+}
+
+/* =========================================================
+   PORTFOLIO TABLE
+========================================================= */
+
+.table-card{
+    margin-top:18px;
+
+    overflow:hidden;
+}
+
+.table-toolbar{
+    display:flex;
+
+    gap:10px;
+
+    margin-bottom:18px;
+
+    flex-wrap:wrap;
+}
+
+.search-box{
+    flex:1;
+
+    min-width:220px;
+
+    background:rgba(255,255,255,.05);
+
+    border:1px solid rgba(255,255,255,.10);
+
+    border-radius:12px;
+
+    padding:11px 14px;
+
+    color:white;
+
+    outline:none;
+}
+
+.search-box:focus{
+    border-color:
+        rgba(255,196,107,.5);
+}
+
+.filter-btn{
+    border:1px solid rgba(255,255,255,.10);
+
+    background:rgba(255,255,255,.05);
+
+    color:rgba(255,255,255,.7);
+
+    border-radius:12px;
+
+    padding:10px 14px;
+
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+.filter-btn:hover,
+.filter-btn.active{
+    background:rgba(255,196,107,.14);
+
+    border-color:rgba(255,196,107,.35);
+
+    color:#ffc46b;
+}
+
+.table-scroll{
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+
+    border-collapse:collapse;
+}
+
+th{
+    color:rgba(255,255,255,.40);
+
+    font-size:10px;
+
+    text-transform:uppercase;
+
+    letter-spacing:1px;
+
+    text-align:left;
+
+    padding:14px 12px;
+}
+
+td{
+    padding:15px 12px;
+
+    border-top:
+        1px solid rgba(255,255,255,.07);
+
+    font-size:13px;
+}
+
+tbody tr{
+    transition:.25s;
+
+    cursor:pointer;
+}
+
+tbody tr:hover{
+    background:rgba(255,255,255,.055);
+
+    transform:translateX(4px);
+}
+
+.asset-name{
+    font-weight:600;
+}
+
+.badge{
+    padding:5px 9px;
+
+    border-radius:100px;
+
+    font-size:10px;
+
+    background:rgba(255,255,255,.08);
+}
+
+/* =========================================================
+   VIEW HEADER
+========================================================= */
+
+.view-header{
+    display:none;
+
+    align-items:center;
+
+    gap:12px;
+
+    margin-bottom:18px;
+
+    animation:viewHeaderIn .4s ease;
+}
+
+.view-header.active{
+    display:flex;
+}
+
+@keyframes viewHeaderIn{
+    from{
+        opacity:0;
+        transform:translateY(-8px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+.back-button{
+    border:1px solid rgba(255,255,255,.13);
+
+    background:rgba(255,255,255,.06);
+
+    color:white;
+
+    border-radius:12px;
+
+    padding:10px 15px;
+
+    cursor:pointer;
+
+    transition:.25s;
+}
+
+.back-button:hover{
+    background:rgba(255,255,255,.11);
+
+    transform:translateX(-3px);
+}
+
+.view-title{
+    font-family:"Playfair Display",serif;
+
+    font-size:27px;
+
+    margin:0;
+}
+
+.view-subtitle{
+    color:rgba(255,255,255,.4);
+
+    font-size:11px;
+
+    text-transform:uppercase;
+
+    letter-spacing:1px;
+}
+
+/* =========================================================
+   DETAIL OVERLAY
+========================================================= */
+
+.detail-overlay{
+    position:fixed;
+
+    inset:0;
+
+    z-index:200;
+
+    display:flex;
+
+    align-items:flex-end;
+
+    justify-content:center;
+
+    padding:25px;
+
+    background:rgba(2,7,14,.68);
+
+    backdrop-filter:blur(14px);
+
+    opacity:0;
+
+    visibility:hidden;
+
+    transition:
+        opacity .45s ease,
+        visibility .45s ease;
+}
+
+.detail-overlay.open{
+    opacity:1;
+
+    visibility:visible;
+}
+
+.detail-panel{
+    width:min(1000px,100%);
+
+    max-height:90vh;
+
+    overflow:auto;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(19,34,54,.94),
+            rgba(7,16,28,.96)
+        );
+
+    border:
+        1px solid rgba(255,255,255,.15);
+
+    border-radius:30px;
+
+    box-shadow:
+        0 40px 120px rgba(0,0,0,.55);
+
+    padding:32px;
+
+    transform:
+        translateY(100px)
+        scale(.96);
+
+    transition:
+        transform .55s cubic-bezier(.2,.8,.2,1);
+}
+
+.detail-overlay.open .detail-panel{
+    transform:
+        translateY(0)
+        scale(1);
+}
+
+.detail-top{
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:flex-start;
+
+    gap:20px;
+}
+
+.detail-category{
+    color:#ffc46b;
+
+    font-size:11px;
+
+    text-transform:uppercase;
+
+    letter-spacing:1.3px;
+
+    margin-bottom:8px;
+}
+
+.detail-name{
+    font-family:"Playfair Display",serif;
+
+    font-size:clamp(30px,5vw,52px);
+
+    margin:0;
+
+    line-height:1;
+}
+
+.close-detail{
+    width:42px;
+    height:42px;
+
+    border-radius:50%;
+
+    border:
+        1px solid rgba(255,255,255,.13);
+
+    background:
+        rgba(255,255,255,.06);
+
+    color:white;
+
+    cursor:pointer;
+
+    font-size:18px;
+
+    transition:.25s;
+}
+
+.close-detail:hover{
+    transform:rotate(90deg);
+
+    background:rgba(255,255,255,.12);
+}
+
+.detail-main-stat{
+    margin-top:30px;
+
+    padding:25px;
+
+    border-radius:22px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,188,99,.12),
+            rgba(255,255,255,.025)
+        );
+
+    border:
+        1px solid rgba(255,255,255,.10);
+}
+
+.detail-current-label{
+    color:rgba(255,255,255,.45);
+
+    font-size:11px;
+
+    text-transform:uppercase;
+
+    letter-spacing:1px;
+}
+
+.detail-current{
+    font-size:44px;
+
+    font-weight:700;
+
+    margin:6px 0;
+}
+
+.detail-return{
+    font-size:15px;
+}
+
+.detail-grid{
+    display:grid;
+
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap:12px;
+
+    margin-top:15px;
+}
+
+.detail-box{
+    padding:19px;
+
+    border-radius:18px;
+
+    background:
+        rgba(255,255,255,.045);
+
+    border:
+        1px solid rgba(255,255,255,.07);
+}
+
+.detail-box-label{
+    color:rgba(255,255,255,.4);
+
+    font-size:10px;
+
+    text-transform:uppercase;
+
+    letter-spacing:.8px;
+}
+
+.detail-box-value{
+    margin-top:7px;
+
+    font-size:18px;
+
+    font-weight:700;
+}
+
+.detail-meta{
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:12px;
+
+    margin-top:15px;
+}
+
+.meta-item{
+    padding:17px;
+
+    border-radius:16px;
+
+    background:rgba(255,255,255,.035);
+}
+
+.meta-label{
+    color:rgba(255,255,255,.4);
+
+    font-size:10px;
+
+    text-transform:uppercase;
+}
+
+.meta-value{
+    margin-top:5px;
+
+    font-size:14px;
+}
+
+/* =========================================================
+   VIEW TRANSITION
+========================================================= */
+
+.dashboard.view-changing{
+    animation:viewShift .45s ease;
+}
+
+@keyframes viewShift{
+    0%{
+        opacity:.65;
+        transform:translateY(8px);
+    }
+
+    100%{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.footer{
+    text-align:center;
+
+    color:rgba(255,255,255,.32);
+
+    font-size:12px;
+
+    padding:30px 0;
+}
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+.toast{
+    position:fixed;
+
+    bottom:25px;
+    left:50%;
+
+    transform:
+        translate(-50%,120px);
+
+    z-index:500;
+
+    padding:
+        12px 18px;
+
+    border-radius:12px;
+
+    background:
+        rgba(7,16,28,.88);
+
+    border:
+        1px solid rgba(255,255,255,.15);
+
+    backdrop-filter:blur(20px);
+
+    font-size:13px;
+
+    opacity:0;
+
+    transition:.4s;
+}
+
+.toast.show{
+    opacity:1;
+
+    transform:
+        translate(-50%,0);
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:900px){
+
+    .stats{
+        grid-template-columns:
+            repeat(2,1fr);
+    }
+
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+    .insights{
+        grid-template-columns:1fr;
+    }
+
+    .health-strip{
+        grid-template-columns:1fr;
+    }
+
+    .detail-grid{
+        grid-template-columns:
+            repeat(2,1fr);
+    }
+}
+
+@media(max-width:650px){
+
+    .navbar{
+        align-items:flex-start;
+
+        flex-direction:column;
+    }
+
+    .connection-area{
+        width:100%;
+
+        flex-wrap:wrap;
+    }
+
+    .password-box{
+        flex:1;
+    }
+
+    .password-box input{
+        width:auto;
+
+        flex:1;
+    }
+
+    .hero-content{
+        padding-top:45px;
+    }
+
+    .hero-title{
+        letter-spacing:-1px;
+    }
+
+    .stats{
+        grid-template-columns:1fr;
+    }
+
+    .allocation{
+        flex-direction:column;
+    }
+
+    .donut{
+        width:190px;
+        height:190px;
+    }
+
+    .snapshot-grid{
+        grid-template-columns:1fr;
+    }
+
+    .detail-overlay{
+        padding:10px;
+    }
+
+    .detail-panel{
+        padding:22px;
+
+        border-radius:24px;
+
+        max-height:94vh;
+    }
+
+    .detail-grid{
+        grid-template-columns:
+            repeat(2,1fr);
+    }
+
+    .detail-meta{
+        grid-template-columns:1fr;
+    }
+}
+
+</style>
 </head>
-<body class="bg-gray-950 text-gray-100 min-h-screen font-sans pb-12">
 
-  <!-- TOP NAVIGATION BAR -->
-  <header class="border-b border-gray-800 bg-gray-900/80 backdrop-blur sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
-      <div class="flex items-center space-x-3">
-        <span class="text-2xl">💼</span>
-        <div>
-          <h1 class="text-lg font-bold text-emerald-400 leading-tight"> Vageesh's Portfolio Tracker</h1>
-          <p id="status-pill" class="text-xs text-amber-400 font-medium">Public Mode (Demo Values)</p>
-        </div>
-      </div>
+<body>
 
-      <!-- Auth Controls with Enter Key Support -->
-      <div class="flex items-center space-x-2">
-        <input type="password" id="header-passcode" placeholder="Enter Passcode" autocomplete="new-password" name="prevent_autofill_passcode" value=""
-               onkeypress="handleKeyPress(event)"
-               class="bg-gray-950 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-emerald-400 focus:outline-none focus:border-emerald-500 w-36 sm:w-48">
-        <button onclick="handleAuth()" id="auth-btn" 
-                class="bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-semibold px-4 py-1.5 rounded-lg transition-colors flex items-center justify-center min-w-[80px]">
-          <span id="auth-btn-text">Unlock</span>
-        </button>
-      </div>
-    </div>
-  </header>
+<div class="hero">
 
-  <main class="max-w-7xl mx-auto px-4 mt-6 space-y-6">
+<div class="orb one"></div>
+<div class="orb two"></div>
+<div class="orb three"></div>
 
-    <!-- KPI CARDS GRID -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      <div class="bg-gray-900 p-5 rounded-2xl border border-gray-800 shadow-sm">
-        <p class="text-xs text-gray-400 uppercase tracking-wider font-medium">Total Invested</p>
-        <p id="total-invested" class="text-2xl font-bold mt-1 text-gray-100">₹0</p>
-      </div>
-      <div class="bg-gray-900 p-5 rounded-2xl border border-gray-800 shadow-sm">
-        <p class="text-xs text-gray-400 uppercase tracking-wider font-medium">Current Net Worth</p>
-        <p id="net-worth" class="text-2xl font-bold text-emerald-400 mt-1">₹0</p>
-      </div>
-      <div class="bg-gray-900 p-5 rounded-2xl border border-gray-800 shadow-sm">
-        <p class="text-xs text-gray-400 uppercase tracking-wider font-medium">Total Profit / Loss</p>
-        <p id="net-profit" class="text-2xl font-bold text-gray-100 mt-1">₹0</p>
-      </div>
-      <div class="bg-gray-900 p-5 rounded-2xl border border-gray-800 shadow-sm">
-        <p class="text-xs text-gray-400 uppercase tracking-wider font-medium">Annual Return Rate</p>
-        <p id="return-pct" class="text-2xl font-bold mt-1 text-gray-100">0.00%</p>
-      </div>
-    </div>
+<div class="container">
 
-    <!-- ASSET BREAKDOWN & BENCHMARK COMPARISON ROW -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      
-      <!-- Asset Allocation Breakdown Chart -->
-      <div class="bg-gray-900 p-6 rounded-2xl border border-gray-800 space-y-4">
-        <div class="flex justify-between items-center">
-          <h2 class="text-lg font-semibold text-gray-100">Asset Allocation</h2>
-          <span class="text-[10px] text-gray-400 bg-gray-800 px-2 py-0.5 rounded">Click category to inspect</span>
-        </div>
-        <div class="relative h-52 flex items-center justify-center cursor-pointer">
-          <canvas id="assetChart"></canvas>
-        </div>
-        <div id="asset-legend-list" class="space-y-2 text-xs pt-2 border-t border-gray-800/80">
-          <!-- Interactive Legend -->
-        </div>
-      </div>
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
 
-      <!-- FD Benchmark Comparison Card -->
-      <div class="bg-gray-900 p-6 rounded-2xl border border-gray-800 flex flex-col justify-between space-y-4">
-        <div>
-          <h2 class="text-lg font-semibold text-gray-100 mb-1">Performance vs FD Benchmark</h2>
-          <p class="text-xs text-gray-400">Compares actual return rate against Bank Fixed Deposit.</p>
-        </div>
+<nav class="navbar">
 
-        <div class="bg-gray-950 p-5 rounded-xl border border-gray-800 space-y-4">
-          <div class="flex justify-between items-center">
-            <span class="text-sm text-gray-400">Your Actual Return Rate:</span>
-            <span id="user-rate-badge" class="font-bold text-base text-gray-200">0.00%</span>
-          </div>
-          <div class="flex justify-between items-center">
-            <span class="text-sm text-gray-400">Bank FD Benchmark:</span>
-            <span class="font-bold text-base text-amber-400">6.85%</span>
-          </div>
-          <div class="border-t border-gray-800 pt-3 flex justify-between items-center">
-            <span class="text-xs text-gray-400 uppercase font-medium">Verdict:</span>
-            <span id="fd-verdict-badge" class="text-xs font-bold px-3 py-1 rounded-full bg-gray-800 text-gray-400">--</span>
-          </div>
-        </div>
+<div class="logo">
+Vageesh's <span>Portfolio</span>
+</div>
 
-        <div id="alpha-message" class="text-xs text-center text-gray-400 bg-gray-950/50 p-3 rounded-lg border border-gray-800">
-          Unlock dashboard with passcode to view live comparison.
-        </div>
-      </div>
+<div class="connection-area">
 
-      <!-- Personal Portfolio Projection Chart -->
-      <div class="bg-gray-900 p-6 rounded-2xl border border-gray-800 space-y-4">
-        <div>
-          <h2 class="text-lg font-semibold text-gray-100">Personal Growth Projection</h2>
-          <p class="text-xs text-gray-400">Compounded based on your actual net worth, return rate, and SIPs.</p>
-        </div>
-        <div class="h-56">
-          <canvas id="projectionChart"></canvas>
-        </div>
-      </div>
+<div
+    id="connectionStatus"
+    class="connection-status"
+>
 
-    </div>
+<div
+    id="statusDot"
+    class="status-dot"
+></div>
 
-    <!-- DYNAMIC CATEGORY DRILL-DOWN CARD -->
-    <div id="drilldown-card" class="bg-gray-900 p-6 rounded-2xl border border-gray-800 hidden space-y-4 transition-all">
-      <div class="flex justify-between items-center border-b border-gray-800 pb-3">
-        <div class="flex items-center space-x-2">
-          <span class="text-emerald-400 text-lg">🔍</span>
-          <h2 id="drilldown-title" class="text-lg font-bold text-gray-100">Category Details</h2>
-        </div>
-        <button onclick="closeDrilldown()" class="text-xs text-gray-400 hover:text-white bg-gray-800 px-3 py-1 rounded-lg">✕ Close Inspection</button>
-      </div>
+<span id="statusText">
+DEMO MODE
+</span>
 
-      <div class="overflow-x-auto">
-        <table class="w-full text-left text-sm">
-          <thead class="text-xs text-gray-400 uppercase bg-gray-950/60 border-b border-gray-800">
-            <tr>
-              <th class="p-3">Holding / Ticker</th>
-              <th class="p-3">Qty / Units</th>
-              <th class="p-3">Avg / Buy Price</th>
-              <th class="p-3">Total Invested</th>
-              <th class="p-3">Live Price / NAV</th>
-              <th class="p-3">Current Value</th>
-              <th class="p-3">Profit / Loss</th>
-              <th class="p-3">Return (%)</th>
-            </tr>
-          </thead>
-          <tbody id="drilldown-table-body" class="divide-y divide-gray-800/60 text-gray-300">
-            <!-- Populated via JS -->
-          </tbody>
-        </table>
-      </div>
-    </div>
+</div>
 
-    <!-- SEARCHABLE TRANSACTION HISTORY TABLE -->
-    <div class="bg-gray-900 p-6 rounded-2xl border border-gray-800 space-y-4">
-      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-        <div>
-          <h2 class="text-lg font-semibold text-gray-100">SIP Transaction History</h2>
-          <p class="text-xs text-gray-400">Search and filter your past investments.</p>
-        </div>
-        <input type="text" id="search-input" onkeyup="filterTransactions()" placeholder="Search ticker or date..." 
-               class="bg-gray-950 border border-gray-800 text-xs text-gray-200 px-3 py-2 rounded-lg w-full sm:w-64 focus:outline-none focus:border-emerald-500">
-      </div>
+<div class="password-box">
 
-      <div class="overflow-x-auto">
-        <table class="w-full text-left text-sm">
-          <thead class="text-xs text-gray-400 uppercase bg-gray-950/60 border-b border-gray-800">
-            <tr>
-              <th class="p-3">Date</th>
-              <th class="p-3">Fund Ticker</th>
-              <th class="p-3">Amount</th>
-              <th class="p-3">NAV</th>
-              <th class="p-3">Units</th>
-            </tr>
-          </thead>
-          <tbody id="txn-table-body" class="divide-y divide-gray-800/60 text-gray-300">
-            <tr>
-              <td colspan="5" class="p-4 text-center text-xs text-gray-500">Protected data. Unlock with passcode above to view live logs.</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+<input
+    id="password"
+    type="password"
+    placeholder="Enter passcode"
+/>
 
-  </main>
+<button
+    id="unlockButton"
+    onclick="connectToSheet()"
+>
+Unlock
+</button>
 
-  <script>
-    // ----------------------------------------------------
-    // PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL HERE:
-    // ----------------------------------------------------
-    const API_URL = "https://script.google.com/macros/s/AKfycbzeuVC1DbCcsMa6mOzABFO4cNOySPvuzoS0dW0aV3mqrjybChk1vpC6Fy7E4l65hHaT/exec";
-    // ----------------------------------------------------
+</div>
 
-    let rawTransactions = [];
-    let globalCategoryDetails = {};
-    let assetChartInstance = null;
-    let projChartInstance = null;
+</div>
 
-    // Clear session and auto-fill input on page load
-    window.addEventListener("DOMContentLoaded", () => {
-      sessionStorage.clear();
-      const inputElem = document.getElementById("header-passcode");
-      if (inputElem) inputElem.value = "";
-      renderDemoState();
+</nav>
+
+<!-- =====================================================
+     HERO
+===================================================== -->
+
+<section class="hero-content">
+
+<div class="kicker">
+
+<div
+    id="heroDot"
+    class="status-dot"
+></div>
+
+<span id="heroStatus">
+Demo portfolio
+</span>
+
+</div>
+
+<h1 class="hero-title">
+<br>
+<span></span>
+</h1>
+
+<p class="hero-subtitle">
+
+Financial journey —
+investments, allocation, winners, laggards
+and the road ahead.
+
+</p>
+
+</section>
+
+<!-- =====================================================
+     DASHBOARD
+===================================================== -->
+
+<section
+    id="dashboard"
+    class="dashboard"
+>
+
+<!-- VIEW HEADER -->
+
+<div
+    id="viewHeader"
+    class="view-header"
+>
+
+<button
+    class="back-button"
+    onclick="showAllAssets()"
+>
+← Portfolio
+</button>
+
+<div>
+
+<h2
+    id="viewTitle"
+    class="view-title"
+>
+Portfolio
+</h2>
+
+<div
+    id="viewSubtitle"
+    class="view-subtitle"
+>
+All holdings
+</div>
+
+</div>
+
+</div>
+
+<!-- =====================================================
+     STATS
+===================================================== -->
+
+<div class="stats">
+
+<div class="glass stat">
+
+<div class="stat-label">
+Current Portfolio
+</div>
+
+<div
+    id="totalValue"
+    class="stat-value"
+>
+₹0
+</div>
+
+<div
+    id="totalGain"
+    class="stat-change green"
+>
+Demo
+</div>
+
+</div>
+
+<div class="glass stat">
+
+<div class="stat-label">
+Total Invested
+</div>
+
+<div
+    id="totalInvested"
+    class="stat-value"
+>
+₹0
+</div>
+
+<div class="stat-change">
+Capital deployed
+</div>
+
+</div>
+
+<div class="glass stat">
+
+<div class="stat-label">
+Overall Return
+</div>
+
+<div
+    id="returnPercent"
+    class="stat-value"
+>
+0%
+</div>
+
+<div
+    id="returnText"
+    class="stat-change"
+>
+Demo portfolio
+</div>
+
+</div>
+
+<div class="glass stat">
+
+<div class="stat-label">
+Holdings
+</div>
+
+<div
+    id="holdingCount"
+    class="stat-value"
+>
+0
+</div>
+
+<div class="stat-change">
+Current view
+</div>
+
+</div>
+
+</div>
+
+<!-- =====================================================
+     CHARTS
+===================================================== -->
+
+<div class="grid">
+
+<div class="glass card">
+
+<div class="card-title">
+
+<h2>
+Portfolio Landscape
+</h2>
+
+<span id="portfolioChartSubtitle">
+Invested vs Current
+</span>
+
+</div>
+
+<div class="chart-wrap">
+
+<canvas id="portfolioChart"></canvas>
+
+</div>
+
+</div>
+
+<div class="glass card">
+
+<div class="card-title">
+
+<h2>
+Asset Allocation
+</h2>
+
+<span>
+Click a category
+</span>
+
+</div>
+
+<div class="allocation">
+
+<div class="donut">
+
+<canvas id="allocationChart"></canvas>
+
+</div>
+
+<div
+    id="allocationLegend"
+    class="legend"
+>
+</div>
+
+</div>
+
+<div
+    id="allocationSnapshot"
+    class="allocation-snapshot"
+>
+</div>
+
+</div>
+
+</div>
+
+<!-- =====================================================
+     INSIGHTS
+===================================================== -->
+
+<div class="insights">
+
+<div
+    id="winnerCard"
+    class="glass insight"
+>
+
+<div class="insight-icon">
+🏆
+</div>
+
+<h3>
+Top Performer
+</h3>
+
+<p id="topWinner"></p>
+
+</div>
+
+<div
+    id="loserCard"
+    class="glass insight"
+>
+
+<div class="insight-icon">
+⚠️
+</div>
+
+<h3>
+Biggest Drag
+</h3>
+
+<p id="topLoser"></p>
+
+</div>
+
+<div
+    id="largestCard"
+    class="glass insight"
+>
+
+<div class="insight-icon">
+💰
+</div>
+
+<h3>
+Largest Position
+</h3>
+
+<p id="largestPosition"></p>
+
+</div>
+
+</div>
+
+<!-- =====================================================
+     HEALTH SNAPSHOT
+===================================================== -->
+
+<div
+    id="healthStrip"
+    class="health-strip"
+>
+</div>
+
+<!-- =====================================================
+     HOLDINGS
+===================================================== -->
+
+<div class="glass card table-card">
+
+<div class="card-title">
+
+<h2>
+Complete Portfolio
+</h2>
+
+<span id="tableStatus">
+DEMO DATA
+</span>
+
+</div>
+
+<div class="table-toolbar">
+
+<input
+    id="searchInput"
+    class="search-box"
+    type="text"
+    placeholder="Search holdings..."
+    oninput="renderDashboard()"
+/>
+
+<button
+    class="filter-btn active"
+    data-filter="All"
+    onclick="setCategoryFilter('All')"
+>
+All
+</button>
+
+<button
+    class="filter-btn"
+    data-filter="Equity"
+    onclick="setCategoryFilter('Equity')"
+>
+Equity
+</button>
+
+<button
+    class="filter-btn"
+    data-filter="Mutual Funds"
+    onclick="setCategoryFilter('Mutual Funds')"
+>
+Funds
+</button>
+
+<button
+    class="filter-btn"
+    data-filter="Gold"
+    onclick="setCategoryFilter('Gold')"
+>
+Gold
+</button>
+
+<button
+    class="filter-btn"
+    data-filter="Fixed Income"
+    onclick="setCategoryFilter('Fixed Income')"
+>
+Fixed Income
+</button>
+
+</div>
+
+<div class="table-scroll">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>
+Asset
+</th>
+
+<th>
+Category
+</th>
+
+<th>
+Invested
+</th>
+
+<th>
+Current Value
+</th>
+
+<th>
+Gain / Loss
+</th>
+
+<th>
+Return
+</th>
+
+</tr>
+
+</thead>
+
+<tbody id="holdingsTable"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<div class="footer">
+
+My wife is the Best (She made me do it)
+
+</div>
+
+</section>
+
+</div>
+
+</div>
+
+<!-- =====================================================
+     DETAIL OVERLAY
+===================================================== -->
+
+<div
+    id="detailOverlay"
+    class="detail-overlay"
+    onclick="closeDetailFromOutside(event)"
+>
+
+<div class="detail-panel">
+
+<div class="detail-top">
+
+<div>
+
+<div
+    id="detailCategory"
+    class="detail-category"
+></div>
+
+<h2
+    id="detailName"
+    class="detail-name"
+></h2>
+
+</div>
+
+<button
+    class="close-detail"
+    onclick="closeDetail()"
+>
+×
+</button>
+
+</div>
+
+<div class="detail-main-stat">
+
+<div class="detail-current-label">
+Current Value
+</div>
+
+<div
+    id="detailCurrent"
+    class="detail-current"
+></div>
+
+<div
+    id="detailReturn"
+    class="detail-return"
+></div>
+
+</div>
+
+<div
+    id="detailGrid"
+    class="detail-grid"
+></div>
+
+<div
+    id="detailMeta"
+    class="detail-meta"
+></div>
+
+</div>
+
+</div>
+
+<!-- =====================================================
+     TOAST
+===================================================== -->
+
+<div
+    id="toast"
+    class="toast"
+></div>
+
+<script>
+
+/* =========================================================
+   GOOGLE APPS SCRIPT URL
+========================================================= */
+
+const API_URL =
+"https://script.google.com/macros/s/AKfycbzeuVC1DbCcsMa6mOzABFO4cNOySPvuzoS0dW0aV3mqrjybChk1vpC6Fy7E4l65hHaT/exec";
+
+/* =========================================================
+   DEMO DATA
+========================================================= */
+
+const DEMO_ASSETS = [
+
+{
+    Asset:"Oceanic Technologies",
+    Category:"Equity",
+    Invested:185000,
+    CurrentValue:218500,
+    Ticker:"DEMO:OCEAN"
+},
+
+{
+    Asset:"Sunrise Industries",
+    Category:"Equity",
+    Invested:125000,
+    CurrentValue:119500,
+    Ticker:"DEMO:SUN"
+},
+
+{
+    Asset:"BlueWave Finance",
+    Category:"Equity",
+    Invested:95000,
+    CurrentValue:108000,
+    Ticker:"DEMO:BLUE"
+},
+
+{
+    Asset:"Mountain Index Fund",
+    Category:"Mutual Funds",
+    Invested:240000,
+    CurrentValue:268500,
+    Ticker:"MF:DEMO_INDEX"
+},
+
+{
+    Asset:"Global Flexi Fund",
+    Category:"Mutual Funds",
+    Invested:180000,
+    CurrentValue:194000,
+    Ticker:"MF:DEMO_FLEXI"
+},
+
+{
+    Asset:"Coastal Midcap Fund",
+    Category:"Mutual Funds",
+    Invested:145000,
+    CurrentValue:159000,
+    Ticker:"MF:DEMO_MIDCAP"
+},
+
+{
+    Asset:"Golden Horizon ETF",
+    Category:"Gold",
+    Invested:80000,
+    CurrentValue:91000,
+    Ticker:"DEMO:GOLD"
+},
+
+{
+    Asset:"Safe Harbour Fund",
+    Category:"Fixed Income",
+    Invested:300000,
+    CurrentValue:321000,
+    Ticker:"DEMO:DEBT"
+}
+
+];
+
+/* =========================================================
+   STATE
+========================================================= */
+
+let assets = [...DEMO_ASSETS];
+
+let currentCategory = "All";
+
+let allocationChart = null;
+
+let portfolioChart = null;
+
+/*
+   Stable colors.
+
+   IMPORTANT:
+   These are intentionally kept fixed so the donut does
+   not change colors when a category is selected.
+*/
+
+const ALLOCATION_COLORS = [
+    "#ffc46b",
+    "#6ec8ff",
+    "#8ee6b2",
+    "#ff8e83",
+    "#b79cff",
+    "#f4a261",
+    "#72ddf7",
+    "#d4a5ff"
+];
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function hasValue(value){
+
+    return value !== undefined &&
+           value !== null &&
+           value !== "" &&
+           !Number.isNaN(Number(value));
+
+}
+
+function numeric(value){
+
+    return hasValue(value)
+        ? Number(value)
+        : null;
+
+}
+
+function money(value){
+
+    if(!hasValue(value)){
+        return "";
+    }
+
+    return new Intl.NumberFormat(
+        "en-IN",
+        {
+            style:"currency",
+            currency:"INR",
+            maximumFractionDigits:0
+        }
+    ).format(Number(value));
+
+}
+
+function number(value){
+
+    if(!hasValue(value)){
+        return "";
+    }
+
+    return new Intl.NumberFormat(
+        "en-IN",
+        {
+            maximumFractionDigits:0
+        }
+    ).format(Number(value));
+
+}
+
+function gainFor(asset){
+
+    const invested = numeric(asset.Invested);
+    const current = numeric(asset.CurrentValue);
+
+    if(invested === null || current === null){
+        return null;
+    }
+
+    return current - invested;
+
+}
+
+function returnFor(asset){
+
+    const invested = numeric(asset.Invested);
+    const gain = gainFor(asset);
+
+    if(
+        invested === null ||
+        gain === null ||
+        invested === 0
+    ){
+        return null;
+    }
+
+    return gain / invested * 100;
+
+}
+
+function escapeHTML(value){
+
+    return String(value ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+
+}
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+function showToast(message){
+
+    const toast =
+        document.getElementById("toast");
+
+    toast.innerText = message;
+
+    toast.classList.add("show");
+
+    clearTimeout(window.toastTimer);
+
+    window.toastTimer =
+        setTimeout(
+            () => toast.classList.remove("show"),
+            3000
+        );
+
+}
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+function setDemoStatus(){
+
+    const status =
+        document.getElementById(
+            "connectionStatus"
+        );
+
+    status.classList.remove("live");
+
+    document.getElementById(
+        "statusText"
+    ).innerText =
+        "DEMO MODE";
+
+    document.getElementById(
+        "heroStatus"
+    ).innerText =
+        "Demo portfolio";
+
+    document.getElementById(
+        "tableStatus"
+    ).innerText =
+        "DEMO DATA";
+
+}
+
+function setLiveStatus(){
+
+    const status =
+        document.getElementById(
+            "connectionStatus"
+        );
+
+    status.classList.add("live");
+
+    document.getElementById(
+        "statusText"
+    ).innerText =
+        "LIVE • GOOGLE SHEET";
+
+    document.getElementById(
+        "heroStatus"
+    ).innerText =
+        "Live portfolio";
+
+    document.getElementById(
+        "tableStatus"
+    ).innerText =
+        "LIVE DATA";
+
+}
+
+/* =========================================================
+   CONNECT
+========================================================= */
+
+async function connectToSheet(){
+
+    const password =
+        document
+            .getElementById("password")
+            .value
+            .trim();
+
+    if(!password){
+
+        showToast(
+            "Enter your passcode first."
+        );
+
+        return;
+    }
+
+    const button =
+        document.getElementById(
+            "unlockButton"
+        );
+
+    button.disabled = true;
+
+    button.innerText =
+        "Connecting…";
+
+    try{
+
+        const response =
+            await fetch(
+
+                API_URL +
+                "?passcode=" +
+                encodeURIComponent(password),
+
+                {
+                    method:"GET",
+                    cache:"no-store"
+                }
+
+            );
+
+        if(!response.ok){
+            throw new Error("Connection failed");
+        }
+
+        const data =
+            await response.json();
+
+        if(data.error){
+            throw new Error("Invalid passcode");
+        }
+
+        if(
+            !data.assets ||
+            !Array.isArray(data.assets) ||
+            data.assets.length === 0
+        ){
+
+            throw new Error(
+                "No portfolio data received"
+            );
+
+        }
+
+        assets = data.assets;
+
+        currentCategory = "All";
+
+        setLiveStatus();
+
+        updateFilterButtons();
+
+        renderDashboard();
+
+        showToast(
+            "✓ Portfolio unlocked • Live data connected"
+        );
+
+    }catch(error){
+
+        console.error(error);
+
+        assets = [...DEMO_ASSETS];
+
+        currentCategory = "All";
+
+        setDemoStatus();
+
+        updateFilterButtons();
+
+        renderDashboard();
+
+        if(
+            error.message ===
+            "Invalid passcode"
+        ){
+
+            showToast(
+                "Incorrect passcode."
+            );
+
+        }else{
+
+            showToast(
+                "Could not connect. Demo mode remains active."
+            );
+
+        }
+
+    }finally{
+
+        button.disabled = false;
+
+        button.innerText =
+            "Unlock";
+
+    }
+
+}
+
+/* =========================================================
+   FILTERED ASSETS
+========================================================= */
+
+function getFilteredAssets(){
+
+    const search =
+        document
+            .getElementById("searchInput")
+            .value
+            .toLowerCase()
+            .trim();
+
+    return assets.filter(asset => {
+
+        const categoryMatch =
+            currentCategory === "All" ||
+            String(asset.Category || "") === currentCategory;
+
+        const searchMatch =
+            !search ||
+            String(asset.Asset || "")
+                .toLowerCase()
+                .includes(search) ||
+            String(asset.Category || "")
+                .toLowerCase()
+                .includes(search) ||
+            String(asset.Ticker || "")
+                .toLowerCase()
+                .includes(search);
+
+        return categoryMatch && searchMatch;
+
     });
 
-    // Enter key trigger for passcode field
-    function handleKeyPress(e) {
-      if (e.key === "Enter") handleAuth();
-    }
+}
 
-    function renderDemoState() {
-      document.getElementById("status-pill").innerText = "Public Mode (Demo Values)";
-      document.getElementById("status-pill").className = "text-xs text-amber-400 font-medium";
-      document.getElementById("auth-btn-text").innerText = "Unlock";
+/* =========================================================
+   FILTER BUTTONS
+========================================================= */
 
-      document.getElementById("total-invested").innerText = "₹0";
-      document.getElementById("net-worth").innerText = "₹0";
-      document.getElementById("net-profit").innerText = "₹0";
-      document.getElementById("return-pct").innerText = "0.00%";
+function updateFilterButtons(){
 
-      closeDrilldown();
-      renderAssetChart([{ category: "Mutual Funds", amount: 1 }, { category: "Stocks", amount: 1 }, { category: "PPF / EPF", amount: 1 }]);
-      renderProjectionChart(0, 0, 0);
-    }
+    document
+        .querySelectorAll(".filter-btn")
+        .forEach(button => {
 
-    function handleAuth() {
-      const pass = document.getElementById("header-passcode").value;
-      if (!pass) return;
+            button.classList.toggle(
+                "active",
+                button.dataset.filter === currentCategory
+            );
 
-      if (sessionStorage.getItem("authenticated_passcode") && document.getElementById("auth-btn-text").innerText === "Lock") {
-        sessionStorage.removeItem("authenticated_passcode");
-        location.reload();
+        });
+
+}
+
+/* =========================================================
+   VIEW HEADER
+========================================================= */
+
+function updateViewHeader(){
+
+    const header =
+        document.getElementById(
+            "viewHeader"
+        );
+
+    const title =
+        document.getElementById(
+            "viewTitle"
+        );
+
+    const subtitle =
+        document.getElementById(
+            "viewSubtitle"
+        );
+
+    if(currentCategory === "All"){
+
+        header.classList.remove("active");
+
+        title.innerText =
+            "Portfolio";
+
+        subtitle.innerText =
+            "All holdings";
+
         return;
-      }
 
-      fetchPortfolioData(pass);
     }
 
-    async function fetchPortfolioData(passcode) {
-      const btnText = document.getElementById("auth-btn-text");
-      const statusPill = document.getElementById("status-pill");
+    header.classList.add("active");
 
-      // Instant loading visual feedback
-      btnText.innerText = "Syncing...";
-      statusPill.innerText = "⏳ Fetching live data...";
-      statusPill.className = "text-xs text-amber-400 font-medium animate-pulse";
+    title.innerText =
+        currentCategory;
 
-      try {
-        const res = await fetch(`${API_URL}?passcode=${encodeURIComponent(passcode)}`);
-        const data = await res.json();
+    subtitle.innerText =
+        "Filtered portfolio view";
 
-        if (data.error) {
-          alert("Invalid Passcode!");
-          btnText.innerText = "Unlock";
-          renderDemoState();
-          return;
+}
+
+/* =========================================================
+   CATEGORY FILTER
+
+   IMPORTANT:
+
+   Selecting a category DOES NOT:
+   - move the allocation card
+   - scroll the page
+   - redraw the donut
+   - change donut colours
+   - animate the donut again
+========================================================= */
+
+function setCategoryFilter(category){
+
+    currentCategory = category;
+
+    updateFilterButtons();
+
+    updateViewHeader();
+
+    const dashboard =
+        document.getElementById("dashboard");
+
+    dashboard.classList.remove(
+        "view-changing"
+    );
+
+    void dashboard.offsetWidth;
+
+    dashboard.classList.add(
+        "view-changing"
+    );
+
+    renderDashboard();
+
+}
+
+/* =========================================================
+   SHOW ALL
+========================================================= */
+
+function showAllAssets(){
+
+    currentCategory = "All";
+
+    document
+        .getElementById("searchInput")
+        .value = "";
+
+    updateFilterButtons();
+
+    updateViewHeader();
+
+    renderDashboard();
+
+}
+
+/* =========================================================
+   DASHBOARD
+========================================================= */
+
+function renderDashboard(){
+
+    const currentAssets =
+        getFilteredAssets();
+
+    renderStats(currentAssets);
+
+    renderInsights(currentAssets);
+
+    /*
+       renderAllocation() updates the legend and snapshot
+       but DOES NOT destroy the donut chart every time.
+    */
+    renderAllocation();
+
+    renderAllocationSnapshot();
+
+    renderHealth(currentAssets);
+
+    renderTable(currentAssets);
+
+    renderPortfolioChart(currentAssets);
+
+}
+
+/* =========================================================
+   STATS
+========================================================= */
+
+function renderStats(currentAssets){
+
+    let invested = 0;
+    let current = 0;
+
+    let investedAvailable = false;
+    let currentAvailable = false;
+
+    currentAssets.forEach(asset => {
+
+        const i = numeric(asset.Invested);
+        const c = numeric(asset.CurrentValue);
+
+        if(i !== null){
+            invested += i;
+            investedAvailable = true;
         }
 
-        sessionStorage.setItem("authenticated_passcode", passcode);
-        statusPill.innerText = "● Live Sheet Connected";
-        statusPill.className = "text-xs text-emerald-400 font-medium";
-        btnText.innerText = "Lock";
-
-        const m = data.metrics || {};
-        const netWorth = m.netWorth || 0;
-        const actualRate = Number(m.returnPct || 0);
-        const monthlySIP = m.monthlySIP || 0;
-
-        document.getElementById("total-invested").innerText = formatCurrency(m.totalInvested);
-        document.getElementById("net-worth").innerText = formatCurrency(netWorth);
-        
-        const pElem = document.getElementById("net-profit");
-        pElem.innerText = formatCurrency(m.netProfit);
-        pElem.className = (m.netProfit || 0) >= 0 ? "text-2xl font-bold text-emerald-400 mt-1" : "text-2xl font-bold text-red-400 mt-1";
-
-        document.getElementById("return-pct").innerText = actualRate.toFixed(2) + "%";
-
-        // FD Benchmark Verdict
-        const fdRate = m.fdBenchmarkRate || 7.0;
-        document.getElementById("user-rate-badge").innerText = actualRate.toFixed(2) + "%";
-        
-        const verdictElem = document.getElementById("fd-verdict-badge");
-        const alphaMsgElem = document.getElementById("alpha-message");
-
-        if (actualRate > fdRate) {
-          const spread = (actualRate - fdRate).toFixed(2);
-          verdictElem.innerText = "BEATING FD BY +" + spread + "%";
-          verdictElem.className = "text-xs font-bold px-3 py-1 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-800";
-          alphaMsgElem.innerText = `🔥 Great job! Your portfolio is outperforming fixed deposits by ${spread}% per year.`;
-        } else {
-          const lag = (fdRate - actualRate).toFixed(2);
-          verdictElem.innerText = "LAGGING FD BY -" + lag + "%";
-          verdictElem.className = "text-xs font-bold px-3 py-1 rounded-full bg-red-950 text-red-400 border border-red-800";
-          alphaMsgElem.innerText = `⚠️ Your current return is lagging fixed deposit rates by ${lag}%.`;
+        if(c !== null){
+            current += c;
+            currentAvailable = true;
         }
 
-        globalCategoryDetails = data.categoryDetails || {};
+    });
 
-        renderAssetChart(data.assetBreakdown || []);
-        
-        // ORIGINAL PROJECTION CALCULATION (Uses actual return rate directly)
-        renderProjectionChart(netWorth, actualRate, monthlySIP);
+    const gain =
+        investedAvailable &&
+        currentAvailable
+        ? current - invested
+        : null;
 
-        rawTransactions = data.transactions || [];
-        renderTransactionsTable(rawTransactions);
+    const returnPercent =
+        investedAvailable &&
+        currentAvailable &&
+        invested > 0
+        ? gain / invested * 100
+        : null;
 
-      } catch (err) {
-        console.error("API Fetch Error:", err);
-        btnText.innerText = "Unlock";
-        statusPill.innerText = "❌ Connection failed. Check Web App URL.";
-        statusPill.className = "text-xs text-red-400 font-medium";
-      }
+    document.getElementById(
+        "totalValue"
+    ).innerText =
+        currentAvailable
+        ? money(current)
+        : "—";
+
+    document.getElementById(
+        "totalInvested"
+    ).innerText =
+        investedAvailable
+        ? money(invested)
+        : "—";
+
+    const gainElement =
+        document.getElementById(
+            "totalGain"
+        );
+
+    if(gain !== null){
+
+        gainElement.innerText =
+            (gain >= 0 ? "+" : "") +
+            money(gain);
+
+        gainElement.className =
+            "stat-change " +
+            (gain >= 0 ? "green" : "red");
+
+    }else{
+
+        gainElement.innerText = "";
+
+        gainElement.className =
+            "stat-change";
+
     }
 
-    // INTERACTIVE DOUGHNUT CHART
-    function renderAssetChart(assets) {
-      const ctx = document.getElementById('assetChart').getContext('2d');
-      if (assetChartInstance) assetChartInstance.destroy();
+    document.getElementById(
+        "returnPercent"
+    ).innerText =
+        returnPercent !== null
+        ? returnPercent.toFixed(2) + "%"
+        : "—";
 
-      const labels = assets.map(a => a.category);
-      const data = assets.map(a => a.amount);
-      const colors = ['#10B981', '#3B82F6', '#F59E0B'];
+    const returnText =
+        document.getElementById(
+            "returnText"
+        );
 
-      assetChartInstance = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-          labels: labels,
-          datasets: [{
-            data: data,
-            backgroundColor: colors.slice(0, labels.length),
-            borderWidth: 0
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
-          onClick: (evt, activeElements) => {
-            if (activeElements.length > 0) {
-              const index = activeElements[0].index;
-              openDrilldown(labels[index]);
-            }
-          }
+    if(returnPercent !== null){
+
+        returnText.innerText =
+            gain >= 0
+            ? "Portfolio is in profit"
+            : "Portfolio is below cost";
+
+        returnText.className =
+            "stat-change " +
+            (gain >= 0 ? "green" : "red");
+
+    }else{
+
+        returnText.innerText = "";
+        returnText.className = "stat-change";
+
+    }
+
+    document.getElementById(
+        "holdingCount"
+    ).innerText =
+        currentAssets.length;
+
+}
+
+/* =========================================================
+   ALLOCATION DATA
+========================================================= */
+
+function getAllocationData(){
+
+    const allocation = {};
+
+    assets.forEach(asset => {
+
+        const category =
+            asset.Category ||
+            "Other";
+
+        const value =
+            numeric(asset.CurrentValue);
+
+        if(value === null){
+            return;
         }
-      });
 
-      const legendList = document.getElementById("asset-legend-list");
-      const total = data.reduce((a, b) => a + b, 0) || 1;
+        allocation[category] =
+            (allocation[category] || 0) +
+            value;
 
-      legendList.innerHTML = assets.map((a, i) => {
-        const pct = ((a.amount / total) * 100).toFixed(1);
-        return `
-          <div onclick="openDrilldown('${a.category}')" class="flex justify-between items-center p-1.5 rounded-lg hover:bg-gray-800/60 cursor-pointer transition-colors">
-            <div class="flex items-center space-x-2">
-              <span class="w-2.5 h-2.5 rounded-full" style="background-color: ${colors[i % colors.length]}"></span>
-              <span class="text-gray-300 font-medium">${a.category}</span>
-            </div>
-            <div class="space-x-2">
-              <span class="text-gray-400">${formatCurrency(a.amount)}</span>
-              <span class="font-bold text-gray-200">${pct}%</span>
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
+    });
 
-    // DRILLDOWN INSPECTION LOGIC
-    function openDrilldown(category) {
-      const card = document.getElementById("drilldown-card");
-      const title = document.getElementById("drilldown-title");
-      const tbody = document.getElementById("drilldown-table-body");
+    return allocation;
 
-      const items = globalCategoryDetails[category] || [];
-      title.innerText = category + " Breakdown";
+}
 
-      if (!items.length) {
-        tbody.innerHTML = `<tr><td colspan="8" class="p-4 text-center text-xs text-gray-500">No specific holdings logged under ${category}.</td></tr>`;
-      } else {
-        tbody.innerHTML = items.map(item => {
-          const units = item.units ? item.units.toLocaleString() : "--";
-          const avg = item.avgPrice ? "₹" + item.avgPrice.toFixed(2) : "--";
-          const inv = item.invested || 0;
-          const live = item.livePrice ? "₹" + item.livePrice.toFixed(2) : "--";
-          const curr = item.currentValue || 0;
-          const profit = item.profit || (curr - inv);
-          const retPct = item.returnPct ? item.returnPct.toFixed(2) + "%" : "--";
-          const pClass = profit >= 0 ? "text-emerald-400 font-semibold" : "text-red-400 font-semibold";
+/* =========================================================
+   ALLOCATION
 
-          return `
-            <tr class="hover:bg-gray-800/40 transition-colors">
-              <td class="p-3 font-semibold text-emerald-400">${item.name}</td>
-              <td class="p-3 text-gray-300">${units}</td>
-              <td class="p-3 text-gray-400">${avg}</td>
-              <td class="p-3">${formatCurrency(inv)}</td>
-              <td class="p-3 text-gray-300">${live}</td>
-              <td class="p-3 font-semibold text-gray-100">${formatCurrency(curr)}</td>
-              <td class="p-3 ${pClass}">${formatCurrency(profit)}</td>
-              <td class="p-3 ${pClass}">${retPct}</td>
-            </tr>
-          `;
-        }).join('');
-      }
+   KEY FIX:
+   The Chart.js donut is created ONCE.
 
-      card.classList.remove("hidden");
-      card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }
+   Category clicks only update the legend selection.
+   Therefore the donut keeps:
+   - same position
+   - same colours
+   - same hover behaviour
+   - same animation state
+========================================================= */
 
-    function closeDrilldown() {
-      document.getElementById("drilldown-card").classList.add("hidden");
-    }
+function renderAllocation(){
 
-    // ORIGINAL PROJECTION CALCULATION
-    function calculateFV(ratePct, years, pmt, pv) {
-      const r = (ratePct / 100) / 12; // Monthly compounding rate
-      const n = years * 12;           // Total months
-      if (r === 0) return pv + (pmt * n);
-      return pv * Math.pow(1 + r, n) + pmt * ((Math.pow(1 + r, n) - 1) / r);
-    }
+    const allocation =
+        getAllocationData();
 
-    function renderProjectionChart(currentNetWorth, actualRate, monthlySIP) {
-      const ctx = document.getElementById('projectionChart').getContext('2d');
-      if (projChartInstance) projChartInstance.destroy();
+    const labels =
+        Object.keys(allocation);
 
-      const val5y  = calculateFV(actualRate, 5, monthlySIP, currentNetWorth);
-      const val10y = calculateFV(actualRate, 10, monthlySIP, currentNetWorth);
-      const val15y = calculateFV(actualRate, 15, monthlySIP, currentNetWorth);
+    const values =
+        Object.values(allocation);
 
-      projChartInstance = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: ['Today', '5 Years', '10 Years', '15 Years'],
-          datasets: [{
-            label: 'Projected Net Worth',
-            data: [currentNetWorth, val5y, val10y, val15y],
-            backgroundColor: ['#3B82F6', '#10B981', '#059669', '#047857'],
-            borderRadius: 6
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { 
-            legend: { display: false },
-            tooltip: {
-              callbacks: {
-                label: function(context) {
-                  return ` Projected: ${formatCurrency(context.raw)} (@ ${actualRate.toFixed(2)}% p.a.)`;
+    const total =
+        values.reduce(
+            (a,b) => a+b,
+            0
+        );
+
+    /*
+       Only create the chart if it doesn't already exist.
+    */
+
+    if(!allocationChart){
+
+        allocationChart =
+            new Chart(
+
+                document.getElementById(
+                    "allocationChart"
+                ),
+
+                {
+
+                    type:"doughnut",
+
+                    data:{
+
+                        labels,
+
+                        datasets:[{
+
+                            data:values,
+
+                            backgroundColor:
+                                labels.map(
+                                    (_,index) =>
+                                        ALLOCATION_COLORS[
+                                            index %
+                                            ALLOCATION_COLORS.length
+                                        ]
+                                ),
+
+                            borderWidth:0,
+
+                            hoverOffset:12
+
+                        }]
+
+                    },
+
+                    options:{
+
+                        responsive:true,
+
+                        maintainAspectRatio:false,
+
+                        cutout:"72%",
+
+                        plugins:{
+
+                            legend:{
+                                display:false
+                            }
+
+                        },
+
+                        /*
+                           This preserves the nice original
+                           hover response.
+                        */
+
+                        animation:{
+                            duration:1100
+                        },
+
+                        interaction:{
+                            mode:"nearest",
+                            intersect:true
+                        }
+
+                    }
+
                 }
-              }
-            }
-          },
-          scales: {
-            y: { 
-              ticks: { 
-                color: '#9CA3AF', 
-                callback: v => '₹' + (v / 100000).toFixed(0) + 'L' 
-              }, 
-              grid: { color: '#1F2937' } 
-            },
-            x: { ticks: { color: '#9CA3AF' }, grid: { display: false } }
-          }
+
+            );
+
+    }else{
+
+        /*
+           If Google Sheet data changes after unlocking,
+           update the donut data without recreating the
+           chart unnecessarily.
+        */
+
+        const existingLabels =
+            allocationChart.data.labels || [];
+
+        const changed =
+            JSON.stringify(existingLabels) !==
+            JSON.stringify(labels);
+
+        if(changed){
+
+            allocationChart.data.labels =
+                labels;
+
+            allocationChart.data.datasets[0].data =
+                values;
+
+            allocationChart.data.datasets[0].backgroundColor =
+                labels.map(
+                    (_,index) =>
+                        ALLOCATION_COLORS[
+                            index %
+                            ALLOCATION_COLORS.length
+                        ]
+                );
+
+            allocationChart.update("none");
+
         }
-      });
+
     }
 
-    // TRANSACTIONS TABLE
-    function renderTransactionsTable(txns) {
-      const tbody = document.getElementById("txn-table-body");
-      if (!txns.length) {
-        tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-xs text-gray-500">No transactions recorded yet.</td></tr>`;
+    /*
+       Rebuild ONLY the legend.
+       This does not touch the donut.
+    */
+
+    const legend =
+        document.getElementById(
+            "allocationLegend"
+        );
+
+    legend.innerHTML = "";
+
+    labels.forEach(
+        (label,index) => {
+
+            const percentageValue =
+                total > 0
+                ? values[index] / total * 100
+                : 0;
+
+            const row =
+                document.createElement(
+                    "div"
+                );
+
+            row.className =
+                "legend-row" +
+                (
+                    currentCategory === label
+                    ? " selected"
+                    : ""
+                );
+
+            const color =
+                ALLOCATION_COLORS[
+                    index %
+                    ALLOCATION_COLORS.length
+                ];
+
+            row.innerHTML = `
+
+                <div class="legend-left">
+
+                    <div
+                        class="legend-dot"
+                        style="background:${color}"
+                    ></div>
+
+                    <span>
+                        ${escapeHTML(label)}
+                    </span>
+
+                </div>
+
+                <strong>
+                    ${percentageValue.toFixed(1)}%
+                </strong>
+
+            `;
+
+            /*
+               ONLY THE LEGEND is clickable.
+
+               The donut itself remains hover-only.
+            */
+
+            row.onclick =
+                () => setCategoryFilter(label);
+
+            legend.appendChild(row);
+
+        }
+    );
+
+}
+
+/* =========================================================
+   ALLOCATION SNAPSHOT
+========================================================= */
+
+function renderAllocationSnapshot(){
+
+    const box =
+        document.getElementById(
+            "allocationSnapshot"
+        );
+
+    let category =
+        currentCategory;
+
+    if(category === "All"){
+
+        const largest =
+            getLargestPosition();
+
+        box.innerHTML = `
+
+            <div class="snapshot-top">
+
+                <div class="snapshot-title">
+                    Portfolio snapshot
+                </div>
+
+                <div class="snapshot-pill">
+                    All assets
+                </div>
+
+            </div>
+
+            <div class="snapshot-grid">
+
+                <div>
+
+                    <div class="snapshot-item-label">
+                        Categories
+                    </div>
+
+                    <div class="snapshot-item-value">
+                        ${new Set(
+                            assets
+                                .map(a => a.Category)
+                                .filter(Boolean)
+                        ).size}
+                    </div>
+
+                </div>
+
+                <div>
+
+                    <div class="snapshot-item-label">
+                        Positions
+                    </div>
+
+                    <div class="snapshot-item-value">
+                        ${assets.length}
+                    </div>
+
+                </div>
+
+                <div>
+
+                    <div class="snapshot-item-label">
+                        Largest
+                    </div>
+
+                    <div class="snapshot-item-value">
+                        ${
+                            largest
+                            ? escapeHTML(largest.Asset)
+                            : "—"
+                        }
+                    </div>
+
+                </div>
+
+            </div>
+
+        `;
+
         return;
-      }
-      tbody.innerHTML = txns.map(t => `
-        <tr class="hover:bg-gray-800/40 transition-colors">
-          <td class="p-3 text-xs text-gray-400">${t.date}</td>
-          <td class="p-3 font-semibold text-emerald-400">${t.ticker}</td>
-          <td class="p-3">${formatCurrency(t.amount)}</td>
-          <td class="p-3">₹${t.nav.toFixed(2)}</td>
-          <td class="p-3 text-gray-400">${t.units.toFixed(4)}</td>
-        </tr>
-      `).join('');
+
     }
 
-    function filterTransactions() {
-      const q = document.getElementById("search-input").value.toLowerCase();
-      const filtered = rawTransactions.filter(t => 
-        t.ticker.toLowerCase().includes(q) || t.date.toLowerCase().includes(q)
-      );
-      renderTransactionsTable(filtered);
+    const categoryAssets =
+        assets.filter(
+            asset =>
+                String(asset.Category || "") === category
+        );
+
+    let invested = 0;
+    let current = 0;
+
+    let hasInvested = false;
+    let hasCurrent = false;
+
+    categoryAssets.forEach(asset => {
+
+        const i = numeric(asset.Invested);
+        const c = numeric(asset.CurrentValue);
+
+        if(i !== null){
+            invested += i;
+            hasInvested = true;
+        }
+
+        if(c !== null){
+            current += c;
+            hasCurrent = true;
+        }
+
+    });
+
+    const gain =
+        hasInvested && hasCurrent
+        ? current - invested
+        : null;
+
+    const ret =
+        hasInvested &&
+        hasCurrent &&
+        invested > 0
+        ? gain / invested * 100
+        : null;
+
+    const items = [];
+
+    if(hasCurrent){
+
+        items.push(`
+
+            <div>
+
+                <div class="snapshot-item-label">
+                    Current Value
+                </div>
+
+                <div class="snapshot-item-value">
+                    ${money(current)}
+                </div>
+
+            </div>
+
+        `);
+
     }
 
-    function formatCurrency(val) {
-      return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(val || 0);
+    if(hasInvested){
+
+        items.push(`
+
+            <div>
+
+                <div class="snapshot-item-label">
+                    Invested
+                </div>
+
+                <div class="snapshot-item-value">
+                    ${money(invested)}
+                </div>
+
+            </div>
+
+        `);
+
     }
-  </script>
+
+    if(ret !== null){
+
+        items.push(`
+
+            <div>
+
+                <div class="snapshot-item-label">
+                    Return
+                </div>
+
+                <div
+                    class="snapshot-item-value ${
+                        ret >= 0
+                        ? "green"
+                        : "red"
+                    }"
+                >
+                    ${ret >= 0 ? "+" : ""}
+                    ${ret.toFixed(2)}%
+                </div>
+
+            </div>
+
+        `);
+
+    }
+
+    if(!items.length){
+
+        box.innerHTML = "";
+        return;
+
+    }
+
+    box.innerHTML = `
+
+        <div class="snapshot-top">
+
+            <div class="snapshot-title">
+                ${escapeHTML(category)}
+            </div>
+
+            <div class="snapshot-pill">
+
+                ${categoryAssets.length}
+
+                ${
+                    categoryAssets.length === 1
+                    ? "position"
+                    : "positions"
+                }
+
+            </div>
+
+        </div>
+
+        <div class="snapshot-grid">
+            ${items.join("")}
+        </div>
+
+    `;
+
+}
+
+/* =========================================================
+   HEALTH
+========================================================= */
+
+function renderHealth(currentAssets){
+
+    const strip =
+        document.getElementById(
+            "healthStrip"
+        );
+
+    const items = [];
+
+    const validReturns =
+        currentAssets
+            .map(asset => ({
+                asset,
+                ret:returnFor(asset)
+            }))
+            .filter(x => x.ret !== null);
+
+    if(validReturns.length){
+
+        const profitable =
+            validReturns.filter(
+                x => x.ret >= 0
+            ).length;
+
+        const ratio =
+            profitable /
+            validReturns.length *
+            100;
+
+        items.push(`
+
+            <div class="glass health-item">
+
+                <div class="health-left">
+
+                    <div class="health-icon">
+                        📈
+                    </div>
+
+                    <div>
+
+                        <div class="health-label">
+                            Holdings in profit
+                        </div>
+
+                        <div class="health-value">
+                            ${profitable}/${validReturns.length}
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <strong class="${
+                    ratio >= 50
+                    ? "green"
+                    : "red"
+                }">
+                    ${ratio.toFixed(0)}%
+                </strong>
+
+            </div>
+
+        `);
+
+    }
+
+    const largest =
+        getLargestPosition(currentAssets);
+
+    const total =
+        currentAssets.reduce(
+            (sum,asset) =>
+                sum +
+                (
+                    numeric(asset.CurrentValue) || 0
+                ),
+            0
+        );
+
+    if(
+        largest &&
+        total > 0 &&
+        numeric(largest.CurrentValue) !== null
+    ){
+
+        const concentration =
+            numeric(largest.CurrentValue) /
+            total *
+            100;
+
+        items.push(`
+
+            <div class="glass health-item">
+
+                <div class="health-left">
+
+                    <div class="health-icon">
+                        🎯
+                    </div>
+
+                    <div>
+
+                        <div class="health-label">
+                            Largest position
+                        </div>
+
+                        <div class="health-value">
+                            ${escapeHTML(
+                                largest.Asset
+                            )}
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <strong class="orange">
+                    ${concentration.toFixed(1)}%
+                </strong>
+
+            </div>
+
+        `);
+
+    }
+
+    if(validReturns.length){
+
+        const average =
+            validReturns.reduce(
+                (sum,x) => sum + x.ret,
+                0
+            ) / validReturns.length;
+
+        items.push(`
+
+            <div class="glass health-item">
+
+                <div class="health-left">
+
+                    <div class="health-icon">
+                        ✨
+                    </div>
+
+                    <div>
+
+                        <div class="health-label">
+                            Average holding return
+                        </div>
+
+                        <div class="health-value">
+                            ${average >= 0 ? "+" : ""}
+                            ${average.toFixed(2)}%
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <strong class="${
+                    average >= 0
+                    ? "green"
+                    : "red"
+                }">
+                    ${
+                        average >= 0
+                        ? "Positive"
+                        : "Negative"
+                    }
+                </strong>
+
+            </div>
+
+        `);
+
+    }
+
+    strip.innerHTML =
+        items.join("");
+
+}
+
+/* =========================================================
+   LARGEST POSITION
+========================================================= */
+
+function getLargestPosition(source = assets){
+
+    const valid =
+        source.filter(
+            asset =>
+                numeric(asset.CurrentValue) !== null
+        );
+
+    if(!valid.length){
+        return null;
+    }
+
+    return [...valid].sort(
+        (a,b) =>
+            numeric(b.CurrentValue) -
+            numeric(a.CurrentValue)
+    )[0];
+
+}
+
+/* =========================================================
+   INSIGHTS
+========================================================= */
+
+function renderInsights(currentAssets){
+
+    const valid =
+        currentAssets.filter(
+            asset =>
+                gainFor(asset) !== null
+        );
+
+    const winner =
+        valid.length
+        ? [...valid].sort(
+            (a,b) =>
+                gainFor(b) -
+                gainFor(a)
+        )[0]
+        : null;
+
+    const loser =
+        valid.length
+        ? [...valid].sort(
+            (a,b) =>
+                gainFor(a) -
+                gainFor(b)
+        )[0]
+        : null;
+
+    const biggest =
+        getLargestPosition(currentAssets);
+
+    const winnerCard =
+        document.getElementById(
+            "winnerCard"
+        );
+
+    const loserCard =
+        document.getElementById(
+            "loserCard"
+        );
+
+    const largestCard =
+        document.getElementById(
+            "largestCard"
+        );
+
+    const winnerText =
+        document.getElementById(
+            "topWinner"
+        );
+
+    const loserText =
+        document.getElementById(
+            "topLoser"
+        );
+
+    const largestText =
+        document.getElementById(
+            "largestPosition"
+        );
+
+    if(winner){
+
+        winnerText.innerHTML = `
+
+            <strong>
+                ${escapeHTML(winner.Asset)}
+            </strong>
+
+            gained
+
+            <strong class="${
+                gainFor(winner) >= 0
+                ? "green"
+                : "red"
+            }">
+
+                ${gainFor(winner) >= 0 ? "+" : ""}
+                ${money(gainFor(winner))}
+
+            </strong>
+
+            <br>
+
+            <small>
+                Click to inspect
+            </small>
+
+        `;
+
+        winnerCard.onclick =
+            () => openDetail(winner);
+
+    }else{
+
+        winnerText.innerHTML = "";
+        winnerCard.onclick = null;
+
+    }
+
+    if(loser){
+
+        loserText.innerHTML = `
+
+            <strong>
+                ${escapeHTML(loser.Asset)}
+            </strong>
+
+            is at
+
+            <strong class="${
+                gainFor(loser) >= 0
+                ? "green"
+                : "red"
+            }">
+
+                ${gainFor(loser) >= 0 ? "+" : ""}
+                ${money(gainFor(loser))}
+
+            </strong>
+
+            <br>
+
+            <small>
+                Click to inspect
+            </small>
+
+        `;
+
+        loserCard.onclick =
+            () => openDetail(loser);
+
+    }else{
+
+        loserText.innerHTML = "";
+        loserCard.onclick = null;
+
+    }
+
+    if(biggest){
+
+        largestText.innerHTML = `
+
+            <strong>
+                ${escapeHTML(biggest.Asset)}
+            </strong>
+
+            is your largest position at
+
+            <strong class="orange">
+
+                ${money(
+                    biggest.CurrentValue
+                )}
+
+            </strong>
+
+            <br>
+
+            <small>
+                Click to inspect
+            </small>
+
+        `;
+
+        largestCard.onclick =
+            () => openDetail(biggest);
+
+    }else{
+
+        largestText.innerHTML = "";
+        largestCard.onclick = null;
+
+    }
+
+}
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+function renderTable(currentAssets){
+
+    const table =
+        document.getElementById(
+            "holdingsTable"
+        );
+
+    table.innerHTML = "";
+
+    if(!currentAssets.length){
+
+        table.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="6"
+                    style="
+                        text-align:center;
+                        padding:40px;
+                        color:rgba(255,255,255,.4);
+                    "
+                >
+                    No matching holdings.
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+    currentAssets.forEach(asset => {
+
+        const invested =
+            numeric(asset.Invested);
+
+        const current =
+            numeric(asset.CurrentValue);
+
+        const gain =
+            gainFor(asset);
+
+        const ret =
+            returnFor(asset);
+
+        const row =
+            document.createElement("tr");
+
+        row.innerHTML = `
+
+            <td class="asset-name">
+                ${escapeHTML(
+                    asset.Asset
+                )}
+            </td>
+
+            <td>
+
+                ${
+                    asset.Category
+                    ? `
+                        <span class="badge">
+                            ${escapeHTML(
+                                asset.Category
+                            )}
+                        </span>
+                    `
+                    : ""
+                }
+
+            </td>
+
+            <td>
+                ${
+                    invested !== null
+                    ? money(invested)
+                    : ""
+                }
+            </td>
+
+            <td>
+                ${
+                    current !== null
+                    ? money(current)
+                    : ""
+                }
+            </td>
+
+            <td class="${
+                gain !== null
+                ? gain >= 0
+                    ? "green"
+                    : "red"
+                : ""
+            }">
+
+                ${
+                    gain !== null
+                    ? (gain >= 0 ? "+" : "") +
+                      money(gain)
+                    : ""
+                }
+
+            </td>
+
+            <td class="${
+                ret !== null
+                ? ret >= 0
+                    ? "green"
+                    : "red"
+                : ""
+            }">
+
+                ${
+                    ret !== null
+                    ? (ret >= 0 ? "+" : "") +
+                      ret.toFixed(2) +
+                      "%"
+                    : ""
+                }
+
+            </td>
+
+        `;
+
+        row.onclick =
+            () => openDetail(asset);
+
+        table.appendChild(row);
+
+    });
+
+}
+
+/* =========================================================
+   PORTFOLIO CHART
+========================================================= */
+
+function renderPortfolioChart(currentAssets){
+
+    if(portfolioChart){
+        portfolioChart.destroy();
+    }
+
+    const subtitle =
+        document.getElementById(
+            "portfolioChartSubtitle"
+        );
+
+    subtitle.innerText =
+        currentCategory === "All"
+        ? "Invested vs Current"
+        : currentCategory;
+
+    portfolioChart =
+        new Chart(
+
+            document.getElementById(
+                "portfolioChart"
+            ),
+
+            {
+
+                type:"bar",
+
+                data:{
+
+                    labels:
+                        currentAssets.map(
+                            asset =>
+                                asset.Asset
+                        ),
+
+                    datasets:[
+
+                        {
+
+                            label:
+                                "Current Value",
+
+                            data:
+                                currentAssets.map(
+                                    asset =>
+                                        numeric(
+                                            asset.CurrentValue
+                                        ) || 0
+                                ),
+
+                            borderRadius:8,
+
+                            borderSkipped:false
+
+                        },
+
+                        {
+
+                            label:
+                                "Invested",
+
+                            data:
+                                currentAssets.map(
+                                    asset =>
+                                        numeric(
+                                            asset.Invested
+                                        ) || 0
+                                ),
+
+                            borderRadius:8,
+
+                            borderSkipped:false
+
+                        }
+
+                    ]
+
+                },
+
+                options:{
+
+                    responsive:true,
+
+                    maintainAspectRatio:false,
+
+                    animation:{
+                        duration:900
+                    },
+
+                    plugins:{
+
+                        legend:{
+
+                            labels:{
+
+                                color:
+                                    "rgba(255,255,255,.7)"
+
+                            }
+
+                        }
+
+                    },
+
+                    scales:{
+
+                        x:{
+
+                            ticks:{
+
+                                color:
+                                    "rgba(255,255,255,.5)",
+
+                                maxRotation:45,
+
+                                minRotation:45
+
+                            },
+
+                            grid:{
+                                display:false
+                            }
+
+                        },
+
+                        y:{
+
+                            ticks:{
+
+                                color:
+                                    "rgba(255,255,255,.5)",
+
+                                callback:
+                                    function(value){
+
+                                        return "₹" +
+                                            number(value);
+
+                                    }
+
+                            },
+
+                            grid:{
+
+                                color:
+                                    "rgba(255,255,255,.07)"
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        );
+
+}
+
+/* =========================================================
+   DETAIL PANEL
+========================================================= */
+
+function openDetail(asset){
+
+    if(!asset){
+        return;
+    }
+
+    const invested =
+        numeric(asset.Invested);
+
+    const current =
+        numeric(asset.CurrentValue);
+
+    const gain =
+        gainFor(asset);
+
+    const ret =
+        returnFor(asset);
+
+    const portfolioTotal =
+        assets.reduce(
+            (sum,item) =>
+                sum +
+                (
+                    numeric(item.CurrentValue) || 0
+                ),
+            0
+        );
+
+    const weight =
+        current !== null &&
+        portfolioTotal > 0
+        ? current / portfolioTotal * 100
+        : null;
+
+    const sorted =
+        [...assets]
+            .filter(
+                x =>
+                    numeric(x.CurrentValue) !== null
+            )
+            .sort(
+                (a,b) =>
+                    numeric(b.CurrentValue) -
+                    numeric(a.CurrentValue)
+            );
+
+    const rankIndex =
+        sorted.indexOf(asset);
+
+    document.getElementById(
+        "detailCategory"
+    ).innerText =
+        asset.Category || "";
+
+    document.getElementById(
+        "detailName"
+    ).innerText =
+        asset.Asset || "Asset";
+
+    document.getElementById(
+        "detailCurrent"
+    ).innerText =
+        current !== null
+        ? money(current)
+        : "";
+
+    const returnElement =
+        document.getElementById(
+            "detailReturn"
+        );
+
+    if(ret !== null){
+
+        returnElement.innerText =
+            (ret >= 0 ? "+" : "") +
+            ret.toFixed(2) +
+            "%";
+
+        returnElement.className =
+            "detail-return " +
+            (ret >= 0 ? "green" : "red");
+
+    }else{
+
+        returnElement.innerText = "";
+
+    }
+
+    const detailGrid =
+        document.getElementById(
+            "detailGrid"
+        );
+
+    detailGrid.innerHTML = "";
+
+    addDetailBox(
+        detailGrid,
+        "Total Invested",
+        invested !== null
+            ? money(invested)
+            : ""
+    );
+
+    addDetailBox(
+        detailGrid,
+        "Gain / Loss",
+        gain !== null
+            ? (gain >= 0 ? "+" : "") +
+              money(gain)
+            : "",
+        gain !== null
+            ? gain >= 0
+                ? "green"
+                : "red"
+            : ""
+    );
+
+    addDetailBox(
+        detailGrid,
+        "Portfolio Weight",
+        weight !== null
+            ? weight.toFixed(2) + "%"
+            : ""
+    );
+
+    if(rankIndex >= 0){
+
+        addDetailBox(
+            detailGrid,
+            "Position Rank",
+            "#" + (rankIndex + 1)
+        );
+
+    }
+
+    const meta =
+        document.getElementById(
+            "detailMeta"
+        );
+
+    meta.innerHTML = "";
+
+    addMeta(
+        meta,
+        "Category",
+        asset.Category
+    );
+
+    addMeta(
+        meta,
+        "Ticker / Identifier",
+        asset.Ticker
+    );
+
+    if(gain !== null){
+
+        addMeta(
+            meta,
+            "Position Status",
+            gain >= 0
+            ? "In profit"
+            : "Below invested value",
+            gain >= 0
+            ? "green"
+            : "red"
+        );
+
+    }
+
+    if(ret !== null){
+
+        addMeta(
+            meta,
+            "Capital Efficiency",
+            ret >= 0
+            ? "Positive capital growth"
+            : "Capital currently under water"
+        );
+
+    }
+
+    /*
+       Optional fields.
+       They appear ONLY if your Google Sheet supplies them.
+    */
+
+    const optionalFields = [
+
+        ["Fund", "Fund"],
+        ["AMC", "AMC"],
+        ["ISIN", "ISIN"],
+        ["Sector", "Sector"],
+        ["Units", "Units"],
+        ["NAV", "NAV"],
+        ["Quantity", "Quantity"],
+        ["AveragePrice", "Average Price"],
+        ["PurchaseDate", "Purchase Date"],
+        ["Type", "Type"],
+        ["Broker", "Broker"]
+
+    ];
+
+    optionalFields.forEach(
+        ([key,label]) => {
+
+            if(
+                asset[key] !== undefined &&
+                asset[key] !== null &&
+                asset[key] !== ""
+            ){
+
+                addMeta(
+                    meta,
+                    label,
+                    asset[key]
+                );
+
+            }
+
+        }
+    );
+
+    document
+        .getElementById(
+            "detailOverlay"
+        )
+        .classList.add("open");
+
+    document.body.style.overflow =
+        "hidden";
+
+}
+
+function addDetailBox(
+    parent,
+    label,
+    value,
+    colorClass = ""
+){
+
+    if(
+        value === undefined ||
+        value === null ||
+        value === ""
+    ){
+        return;
+    }
+
+    const box =
+        document.createElement("div");
+
+    box.className =
+        "detail-box";
+
+    box.innerHTML = `
+
+        <div class="detail-box-label">
+            ${escapeHTML(label)}
+        </div>
+
+        <div class="detail-box-value ${colorClass}">
+            ${escapeHTML(value)}
+        </div>
+
+    `;
+
+    parent.appendChild(box);
+
+}
+
+function addMeta(
+    parent,
+    label,
+    value,
+    colorClass = ""
+){
+
+    if(
+        value === undefined ||
+        value === null ||
+        value === ""
+    ){
+        return;
+    }
+
+    const item =
+        document.createElement("div");
+
+    item.className =
+        "meta-item";
+
+    item.innerHTML = `
+
+        <div class="meta-label">
+            ${escapeHTML(label)}
+        </div>
+
+        <div class="meta-value ${colorClass}">
+            ${escapeHTML(value)}
+        </div>
+
+    `;
+
+    parent.appendChild(item);
+
+}
+
+/* =========================================================
+   CLOSE DETAIL
+========================================================= */
+
+function closeDetail(){
+
+    document
+        .getElementById(
+            "detailOverlay"
+        )
+        .classList.remove("open");
+
+    document.body.style.overflow =
+        "";
+
+}
+
+function closeDetailFromOutside(event){
+
+    if(
+        event.target.id ===
+        "detailOverlay"
+    ){
+
+        closeDetail();
+
+    }
+
+}
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if(
+            event.key === "Escape"
+        ){
+
+            closeDetail();
+
+        }
+
+    }
+);
+
+/* =========================================================
+   INITIAL STATE
+========================================================= */
+
+setDemoStatus();
+
+updateFilterButtons();
+
+updateViewHeader();
+
+renderDashboard();
+
+/* =========================================================
+   ENTER KEY
+========================================================= */
+
+document
+    .getElementById("password")
+    .addEventListener(
+        "keydown",
+        function(event){
+
+            if(
+                event.key === "Enter"
+            ){
+
+                connectToSheet();
+
+            }
+
+        }
+    );
+
+</script>
+
 </body>
 </html>
