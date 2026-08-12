@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Dashboard</title>
+<title>Vageesh's Portfolio</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -33,7 +33,8 @@ body{
 }
 
 button,
-input{
+input,
+select{
     font-family:inherit;
 }
 
@@ -42,7 +43,7 @@ button{
 }
 
 /* =========================================================
-   BACKGROUND
+BACKGROUND
 ========================================================= */
 
 .hero{
@@ -58,10 +59,6 @@ button{
         ),
         url("https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=2400&q=90")
         center / cover fixed;
-
-    transition:
-        filter .8s ease,
-        transform .8s ease;
 }
 
 .hero::before{
@@ -97,7 +94,7 @@ button{
 }
 
 /* =========================================================
-   FLOATING LIGHTS
+FLOATING LIGHTS
 ========================================================= */
 
 .orb{
@@ -146,7 +143,7 @@ button{
 }
 
 /* =========================================================
-   CONTAINER
+CONTAINER
 ========================================================= */
 
 .container{
@@ -157,7 +154,7 @@ button{
 }
 
 /* =========================================================
-   NAVBAR
+NAVBAR
 ========================================================= */
 
 .navbar{
@@ -180,7 +177,7 @@ button{
 }
 
 /* =========================================================
-   CONNECTION
+CONNECTION
 ========================================================= */
 
 .connection-area{
@@ -221,8 +218,7 @@ button{
 
     background:#ffc46b;
 
-    box-shadow:
-        0 0 12px rgba(255,196,107,.7);
+    box-shadow:0 0 12px rgba(255,196,107,.7);
 
     transition:.4s;
 }
@@ -242,17 +238,12 @@ button{
 }
 
 @keyframes livePulse{
-    0%,100%{
-        opacity:1;
-    }
-
-    50%{
-        opacity:.45;
-    }
+    0%,100%{opacity:1}
+    50%{opacity:.45}
 }
 
 /* =========================================================
-   PASSWORD
+PASSWORD
 ========================================================= */
 
 .password-box{
@@ -323,7 +314,7 @@ button{
 }
 
 /* =========================================================
-   HERO
+HERO
 ========================================================= */
 
 .hero-content{
@@ -382,7 +373,7 @@ button{
 }
 
 /* =========================================================
-   GLASS
+GLASS
 ========================================================= */
 
 .glass{
@@ -402,14 +393,12 @@ button{
 }
 
 /* =========================================================
-   STATS
+STATS
 ========================================================= */
 
 .stats{
     display:grid;
-
-    grid-template-columns:
-        repeat(4,1fr);
+    grid-template-columns:repeat(4,1fr);
 
     gap:15px;
 
@@ -420,8 +409,6 @@ button{
     padding:23px;
 
     transition:.35s;
-
-    cursor:default;
 }
 
 .stat:hover{
@@ -467,7 +454,7 @@ button{
 }
 
 /* =========================================================
-   DASHBOARD
+DASHBOARD
 ========================================================= */
 
 .dashboard{
@@ -477,8 +464,7 @@ button{
 .grid{
     display:grid;
 
-    grid-template-columns:
-        1.5fr 1fr;
+    grid-template-columns:1.5fr 1fr;
 
     gap:18px;
 }
@@ -514,7 +500,7 @@ button{
 }
 
 /* =========================================================
-   CHART
+CHART
 ========================================================= */
 
 .chart-wrap{
@@ -522,7 +508,7 @@ button{
 }
 
 /* =========================================================
-   ALLOCATION
+ALLOCATION
 ========================================================= */
 
 .allocation{
@@ -591,7 +577,7 @@ button{
 }
 
 /* =========================================================
-   ALLOCATION SNAPSHOT
+SNAPSHOT
 ========================================================= */
 
 .allocation-snapshot{
@@ -645,8 +631,7 @@ button{
 .snapshot-grid{
     display:grid;
 
-    grid-template-columns:
-        repeat(3,1fr);
+    grid-template-columns:repeat(3,1fr);
 
     gap:12px;
 }
@@ -670,14 +655,13 @@ button{
 }
 
 /* =========================================================
-   INSIGHTS
+INSIGHTS
 ========================================================= */
 
 .insights{
     display:grid;
 
-    grid-template-columns:
-        repeat(3,1fr);
+    grid-template-columns:repeat(3,1fr);
 
     gap:15px;
 
@@ -729,14 +713,13 @@ button{
 }
 
 /* =========================================================
-   HEALTH SNAPSHOT
+HEALTH
 ========================================================= */
 
 .health-strip{
     display:grid;
 
-    grid-template-columns:
-        repeat(3,1fr);
+    grid-template-columns:repeat(3,1fr);
 
     gap:15px;
 
@@ -784,7 +767,7 @@ button{
 }
 
 /* =========================================================
-   PORTFOLIO TABLE
+TABLE
 ========================================================= */
 
 .table-card{
@@ -822,11 +805,11 @@ button{
 }
 
 .search-box:focus{
-    border-color:
-        rgba(255,196,107,.5);
+    border-color:rgba(255,196,107,.5);
 }
 
-.filter-btn{
+.filter-btn,
+.sort-select{
     border:1px solid rgba(255,255,255,.10);
 
     background:rgba(255,255,255,.05);
@@ -843,12 +826,18 @@ button{
 }
 
 .filter-btn:hover,
-.filter-btn.active{
+.filter-btn.active,
+.sort-select:focus{
     background:rgba(255,196,107,.14);
 
     border-color:rgba(255,196,107,.35);
 
     color:#ffc46b;
+}
+
+.sort-select option{
+    background:#0b1727;
+    color:white;
 }
 
 .table-scroll{
@@ -911,7 +900,378 @@ tbody tr:hover{
 }
 
 /* =========================================================
-   VIEW HEADER
+ANALYTICS
+========================================================= */
+
+.analytics-toggle{
+    margin-top:25px;
+
+    width:100%;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:18px 22px;
+
+    border-radius:18px;
+
+    background:rgba(255,255,255,.055);
+
+    border:1px solid rgba(255,255,255,.11);
+
+    color:white;
+
+    cursor:pointer;
+
+    transition:.3s;
+}
+
+.analytics-toggle:hover{
+    background:rgba(255,255,255,.085);
+
+    border-color:rgba(255,196,107,.3);
+}
+
+.analytics-toggle-left{
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+}
+
+.analytics-toggle-icon{
+    width:38px;
+    height:38px;
+
+    display:grid;
+    place-items:center;
+
+    border-radius:12px;
+
+    background:rgba(255,196,107,.10);
+
+    color:#ffc46b;
+}
+
+.analytics-arrow{
+    transition:.35s;
+
+    font-size:18px;
+}
+
+.analytics-toggle.open .analytics-arrow{
+    transform:rotate(180deg);
+}
+
+.analytics-panel{
+    display:none;
+
+    margin-top:15px;
+
+    animation:analyticsIn .45s ease;
+}
+
+.analytics-panel.open{
+    display:block;
+}
+
+@keyframes analyticsIn{
+    from{
+        opacity:0;
+        transform:translateY(-10px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+.analytics-grid{
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:18px;
+}
+
+.analytics-card{
+    padding:24px;
+}
+
+.analytics-card h3{
+    margin:0 0 5px;
+
+    font-size:17px;
+}
+
+.analytics-card-subtitle{
+    color:rgba(255,255,255,.4);
+
+    font-size:11px;
+
+    margin-bottom:20px;
+}
+
+.sip-total{
+    padding:22px;
+
+    border-radius:18px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,196,107,.13),
+            rgba(255,255,255,.025)
+        );
+
+    border:1px solid rgba(255,196,107,.15);
+}
+
+.sip-total-label{
+    color:rgba(255,255,255,.45);
+
+    text-transform:uppercase;
+
+    letter-spacing:1px;
+
+    font-size:10px;
+}
+
+.sip-total-value{
+    font-size:32px;
+
+    font-weight:700;
+
+    margin-top:6px;
+}
+
+.sip-annual{
+    color:#63e6a4;
+
+    margin-top:5px;
+
+    font-size:13px;
+}
+
+.sip-list{
+    margin-top:18px;
+}
+
+.sip-row{
+    display:grid;
+
+    grid-template-columns:1fr auto auto;
+
+    gap:12px;
+
+    align-items:center;
+
+    padding:12px 4px;
+
+    border-bottom:1px solid rgba(255,255,255,.07);
+
+    font-size:12px;
+}
+
+.sip-fund{
+    font-weight:600;
+}
+
+.sip-day{
+    color:rgba(255,255,255,.38);
+
+    font-size:10px;
+}
+
+.sip-amount{
+    color:#ffc46b;
+
+    font-weight:700;
+}
+
+.progress-bar{
+    height:6px;
+
+    margin-top:7px;
+
+    border-radius:10px;
+
+    background:rgba(255,255,255,.08);
+
+    overflow:hidden;
+}
+
+.progress-fill{
+    height:100%;
+
+    border-radius:10px;
+
+    background:linear-gradient(
+        90deg,
+        #ffc46b,
+        #ff8658
+    );
+}
+
+.projection-controls{
+    display:flex;
+
+    gap:8px;
+
+    flex-wrap:wrap;
+
+    margin-bottom:18px;
+}
+
+.scenario-btn{
+    padding:8px 12px;
+
+    border-radius:10px;
+
+    border:1px solid rgba(255,255,255,.10);
+
+    background:rgba(255,255,255,.05);
+
+    color:rgba(255,255,255,.6);
+
+    cursor:pointer;
+}
+
+.scenario-btn.active{
+    background:rgba(255,196,107,.13);
+
+    color:#ffc46b;
+
+    border-color:rgba(255,196,107,.3);
+}
+
+.roi-display{
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding:12px 14px;
+
+    border-radius:12px;
+
+    background:rgba(255,255,255,.035);
+
+    margin-bottom:15px;
+
+    font-size:12px;
+}
+
+.projection-table{
+    width:100%;
+}
+
+.projection-table-row{
+    display:grid;
+
+    grid-template-columns:70px 1fr 1fr 1fr;
+
+    gap:10px;
+
+    padding:13px 5px;
+
+    border-bottom:1px solid rgba(255,255,255,.07);
+
+    font-size:12px;
+
+    align-items:center;
+}
+
+.projection-table-row.header{
+    color:rgba(255,255,255,.35);
+
+    font-size:9px;
+
+    text-transform:uppercase;
+
+    letter-spacing:.8px;
+}
+
+.projection-value{
+    font-weight:700;
+
+    color:#ffc46b;
+}
+
+.projection-growth{
+    color:#63e6a4;
+}
+
+.milestone-list{
+    display:grid;
+
+    grid-template-columns:repeat(5,1fr);
+
+    gap:10px;
+}
+
+.milestone{
+    padding:16px 12px;
+
+    border-radius:15px;
+
+    background:rgba(255,255,255,.035);
+
+    border:1px solid rgba(255,255,255,.07);
+
+    text-align:center;
+}
+
+.milestone-value{
+    font-weight:700;
+
+    font-size:15px;
+
+    color:#ffc46b;
+}
+
+.milestone-label{
+    margin-top:5px;
+
+    color:rgba(255,255,255,.4);
+
+    font-size:9px;
+
+    text-transform:uppercase;
+}
+
+.milestone-time{
+    margin-top:9px;
+
+    font-size:12px;
+
+    font-weight:700;
+}
+
+.projection-chart-wrap{
+    height:300px;
+
+    margin-top:20px;
+}
+
+.scenario-note{
+    margin-top:12px;
+
+    color:rgba(255,255,255,.35);
+
+    font-size:10px;
+
+    line-height:1.6;
+}
+
+/* =========================================================
+VIEW HEADER
 ========================================================= */
 
 .view-header{
@@ -922,24 +1282,10 @@ tbody tr:hover{
     gap:12px;
 
     margin-bottom:18px;
-
-    animation:viewHeaderIn .4s ease;
 }
 
 .view-header.active{
     display:flex;
-}
-
-@keyframes viewHeaderIn{
-    from{
-        opacity:0;
-        transform:translateY(-8px);
-    }
-
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
 }
 
 .back-button{
@@ -983,7 +1329,7 @@ tbody tr:hover{
 }
 
 /* =========================================================
-   DETAIL OVERLAY
+DETAIL
 ========================================================= */
 
 .detail-overlay{
@@ -1021,7 +1367,7 @@ tbody tr:hover{
 }
 
 .detail-panel{
-    width:min(1000px,100%);
+    width:min(1050px,100%);
 
     max-height:90vh;
 
@@ -1034,13 +1380,11 @@ tbody tr:hover{
             rgba(7,16,28,.96)
         );
 
-    border:
-        1px solid rgba(255,255,255,.15);
+    border:1px solid rgba(255,255,255,.15);
 
     border-radius:30px;
 
-    box-shadow:
-        0 40px 120px rgba(0,0,0,.55);
+    box-shadow:0 40px 120px rgba(0,0,0,.55);
 
     padding:32px;
 
@@ -1096,25 +1440,15 @@ tbody tr:hover{
 
     border-radius:50%;
 
-    border:
-        1px solid rgba(255,255,255,.13);
+    border:1px solid rgba(255,255,255,.13);
 
-    background:
-        rgba(255,255,255,.06);
+    background:rgba(255,255,255,.06);
 
     color:white;
 
     cursor:pointer;
 
     font-size:18px;
-
-    transition:.25s;
-}
-
-.close-detail:hover{
-    transform:rotate(90deg);
-
-    background:rgba(255,255,255,.12);
 }
 
 .detail-main-stat{
@@ -1131,8 +1465,7 @@ tbody tr:hover{
             rgba(255,255,255,.025)
         );
 
-    border:
-        1px solid rgba(255,255,255,.10);
+    border:1px solid rgba(255,255,255,.10);
 }
 
 .detail-current-label{
@@ -1160,8 +1493,7 @@ tbody tr:hover{
 .detail-grid{
     display:grid;
 
-    grid-template-columns:
-        repeat(4,1fr);
+    grid-template-columns:repeat(4,1fr);
 
     gap:12px;
 
@@ -1173,11 +1505,9 @@ tbody tr:hover{
 
     border-radius:18px;
 
-    background:
-        rgba(255,255,255,.045);
+    background:rgba(255,255,255,.045);
 
-    border:
-        1px solid rgba(255,255,255,.07);
+    border:1px solid rgba(255,255,255,.07);
 }
 
 .detail-box-label{
@@ -1231,27 +1561,7 @@ tbody tr:hover{
 }
 
 /* =========================================================
-   VIEW TRANSITION
-========================================================= */
-
-.dashboard.view-changing{
-    animation:viewShift .45s ease;
-}
-
-@keyframes viewShift{
-    0%{
-        opacity:.65;
-        transform:translateY(8px);
-    }
-
-    100%{
-        opacity:1;
-        transform:translateY(0);
-    }
-}
-
-/* =========================================================
-   FOOTER
+FOOTER / TOAST
 ========================================================= */
 
 .footer{
@@ -1264,31 +1574,23 @@ tbody tr:hover{
     padding:30px 0;
 }
 
-/* =========================================================
-   TOAST
-========================================================= */
-
 .toast{
     position:fixed;
 
     bottom:25px;
     left:50%;
 
-    transform:
-        translate(-50%,120px);
+    transform:translate(-50%,120px);
 
     z-index:500;
 
-    padding:
-        12px 18px;
+    padding:12px 18px;
 
     border-radius:12px;
 
-    background:
-        rgba(7,16,28,.88);
+    background:rgba(7,16,28,.88);
 
-    border:
-        1px solid rgba(255,255,255,.15);
+    border:1px solid rgba(255,255,255,.15);
 
     backdrop-filter:blur(20px);
 
@@ -1302,19 +1604,17 @@ tbody tr:hover{
 .toast.show{
     opacity:1;
 
-    transform:
-        translate(-50%,0);
+    transform:translate(-50%,0);
 }
 
 /* =========================================================
-   MOBILE
+MOBILE
 ========================================================= */
 
-@media(max-width:900px){
+@media(max-width:1000px){
 
     .stats{
-        grid-template-columns:
-            repeat(2,1fr);
+        grid-template-columns:repeat(2,1fr);
     }
 
     .grid{
@@ -1329,9 +1629,16 @@ tbody tr:hover{
         grid-template-columns:1fr;
     }
 
+    .analytics-grid{
+        grid-template-columns:1fr;
+    }
+
+    .milestone-list{
+        grid-template-columns:repeat(3,1fr);
+    }
+
     .detail-grid{
-        grid-template-columns:
-            repeat(2,1fr);
+        grid-template-columns:repeat(2,1fr);
     }
 }
 
@@ -1375,13 +1682,20 @@ tbody tr:hover{
         flex-direction:column;
     }
 
-    .donut{
-        width:190px;
-        height:190px;
-    }
-
     .snapshot-grid{
         grid-template-columns:1fr;
+    }
+
+    .milestone-list{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .projection-table-row{
+        grid-template-columns:55px 1fr 1fr;
+    }
+
+    .projection-table-row > div:last-child{
+        display:none;
     }
 
     .detail-overlay{
@@ -1397,12 +1711,19 @@ tbody tr:hover{
     }
 
     .detail-grid{
-        grid-template-columns:
-            repeat(2,1fr);
+        grid-template-columns:repeat(2,1fr);
     }
 
     .detail-meta{
         grid-template-columns:1fr;
+    }
+
+    .sip-row{
+        grid-template-columns:1fr auto;
+    }
+
+    .sip-day{
+        display:none;
     }
 }
 
@@ -1419,10 +1740,6 @@ tbody tr:hover{
 
 <div class="container">
 
-<!-- =====================================================
-     NAVBAR
-===================================================== -->
-
 <nav class="navbar">
 
 <div class="logo">
@@ -1431,18 +1748,12 @@ Vageesh's <span>Portfolio</span>
 
 <div class="connection-area">
 
-<div
-    id="connectionStatus"
-    class="connection-status"
->
+<div id="connectionStatus" class="connection-status">
 
-<div
-    id="statusDot"
-    class="status-dot"
-></div>
+<div id="statusDot" class="status-dot"></div>
 
 <span id="statusText">
-DEMO MODE
+LOCKED
 </span>
 
 </div>
@@ -1450,14 +1761,14 @@ DEMO MODE
 <div class="password-box">
 
 <input
-    id="password"
-    type="password"
-    placeholder="Enter passcode"
+id="password"
+type="password"
+placeholder="Enter passcode"
 />
 
 <button
-    id="unlockButton"
-    onclick="connectToSheet()"
+id="unlockButton"
+onclick="connectToSheet()"
 >
 Unlock
 </button>
@@ -1468,76 +1779,49 @@ Unlock
 
 </nav>
 
-<!-- =====================================================
-     HERO
-===================================================== -->
-
 <section class="hero-content">
 
 <div class="kicker">
 
-<div
-    id="heroDot"
-    class="status-dot"
-></div>
+<div id="heroDot" class="status-dot"></div>
 
 <span id="heroStatus">
-Demo portfolio
+Private portfolio
 </span>
 
 </div>
 
 <h1 class="hero-title">
-<br>
-<span></span>
+Your money.<br>
+<span>Your journey.</span>
 </h1>
 
 <p class="hero-subtitle">
-
 Financial journey —
-investments, allocation, winners, laggards
-and the road ahead.
-
+investments, allocation, winners, laggards,
+SIP growth and the road ahead.
 </p>
 
 </section>
 
-<!-- =====================================================
-     DASHBOARD
-===================================================== -->
+<section id="dashboard" class="dashboard">
 
-<section
-    id="dashboard"
-    class="dashboard"
->
-
-<!-- VIEW HEADER -->
-
-<div
-    id="viewHeader"
-    class="view-header"
->
+<div id="viewHeader" class="view-header">
 
 <button
-    class="back-button"
-    onclick="showAllAssets()"
+class="back-button"
+onclick="showAllAssets()"
 >
 ← Portfolio
 </button>
 
 <div>
 
-<h2
-    id="viewTitle"
-    class="view-title"
->
+<h2 id="viewTitle" class="view-title">
 Portfolio
 </h2>
 
-<div
-    id="viewSubtitle"
-    class="view-subtitle"
->
+<div id="viewSubtitle" class="view-subtitle">
 All holdings
 </div>
 
@@ -1545,9 +1829,7 @@ All holdings
 
 </div>
 
-<!-- =====================================================
-     STATS
-===================================================== -->
+<!-- STATS -->
 
 <div class="stats">
 
@@ -1557,18 +1839,12 @@ All holdings
 Current Portfolio
 </div>
 
-<div
-    id="totalValue"
-    class="stat-value"
->
-₹0
+<div id="totalValue" class="stat-value">
+—
 </div>
 
-<div
-    id="totalGain"
-    class="stat-change green"
->
-Demo
+<div id="totalGain" class="stat-change">
+Connect to view
 </div>
 
 </div>
@@ -1579,11 +1855,8 @@ Demo
 Total Invested
 </div>
 
-<div
-    id="totalInvested"
-    class="stat-value"
->
-₹0
+<div id="totalInvested" class="stat-value">
+—
 </div>
 
 <div class="stat-change">
@@ -1598,18 +1871,12 @@ Capital deployed
 Overall Return
 </div>
 
-<div
-    id="returnPercent"
-    class="stat-value"
->
-0%
+<div id="returnPercent" class="stat-value">
+—
 </div>
 
-<div
-    id="returnText"
-    class="stat-change"
->
-Demo portfolio
+<div id="returnText" class="stat-change">
+Live portfolio
 </div>
 
 </div>
@@ -1620,11 +1887,8 @@ Demo portfolio
 Holdings
 </div>
 
-<div
-    id="holdingCount"
-    class="stat-value"
->
-0
+<div id="holdingCount" class="stat-value">
+—
 </div>
 
 <div class="stat-change">
@@ -1635,9 +1899,7 @@ Current view
 
 </div>
 
-<!-- =====================================================
-     CHARTS
-===================================================== -->
+<!-- CHARTS -->
 
 <div class="grid">
 
@@ -1650,7 +1912,7 @@ Portfolio Landscape
 </h2>
 
 <span id="portfolioChartSubtitle">
-Invested vs Current
+Current portfolio
 </span>
 
 </div>
@@ -1685,34 +1947,23 @@ Click a category
 
 </div>
 
-<div
-    id="allocationLegend"
-    class="legend"
->
+<div id="allocationLegend" class="legend">
 </div>
 
 </div>
 
-<div
-    id="allocationSnapshot"
-    class="allocation-snapshot"
->
+<div id="allocationSnapshot" class="allocation-snapshot">
 </div>
 
 </div>
 
 </div>
 
-<!-- =====================================================
-     INSIGHTS
-===================================================== -->
+<!-- INSIGHTS -->
 
 <div class="insights">
 
-<div
-    id="winnerCard"
-    class="glass insight"
->
+<div id="winnerCard" class="glass insight">
 
 <div class="insight-icon">
 🏆
@@ -1722,14 +1973,13 @@ Click a category
 Top Performer
 </h3>
 
-<p id="topWinner"></p>
+<p id="topWinner">
+Connect your portfolio to see this.
+</p>
 
 </div>
 
-<div
-    id="loserCard"
-    class="glass insight"
->
+<div id="loserCard" class="glass insight">
 
 <div class="insight-icon">
 ⚠️
@@ -1739,14 +1989,13 @@ Top Performer
 Biggest Drag
 </h3>
 
-<p id="topLoser"></p>
+<p id="topLoser">
+Connect your portfolio to see this.
+</p>
 
 </div>
 
-<div
-    id="largestCard"
-    class="glass insight"
->
+<div id="largestCard" class="glass insight">
 
 <div class="insight-icon">
 💰
@@ -1756,25 +2005,20 @@ Biggest Drag
 Largest Position
 </h3>
 
-<p id="largestPosition"></p>
+<p id="largestPosition">
+Connect your portfolio to see this.
+</p>
 
 </div>
 
 </div>
 
-<!-- =====================================================
-     HEALTH SNAPSHOT
-===================================================== -->
+<!-- HEALTH -->
 
-<div
-    id="healthStrip"
-    class="health-strip"
->
+<div id="healthStrip" class="health-strip">
 </div>
 
-<!-- =====================================================
-     HOLDINGS
-===================================================== -->
+<!-- HOLDINGS -->
 
 <div class="glass card table-card">
 
@@ -1785,7 +2029,7 @@ Complete Portfolio
 </h2>
 
 <span id="tableStatus">
-DEMO DATA
+LOCKED
 </span>
 
 </div>
@@ -1793,52 +2037,92 @@ DEMO DATA
 <div class="table-toolbar">
 
 <input
-    id="searchInput"
-    class="search-box"
-    type="text"
-    placeholder="Search holdings..."
-    oninput="renderDashboard()"
+id="searchInput"
+class="search-box"
+type="text"
+placeholder="Search holdings..."
+oninput="renderDashboard()"
 />
 
 <button
-    class="filter-btn active"
-    data-filter="All"
-    onclick="setCategoryFilter('All')"
+class="filter-btn active"
+data-filter="All"
+onclick="setCategoryFilter('All')"
 >
 All
 </button>
 
 <button
-    class="filter-btn"
-    data-filter="Equity"
-    onclick="setCategoryFilter('Equity')"
+class="filter-btn"
+data-filter="Equity"
+onclick="setCategoryFilter('Equity')"
 >
 Equity
 </button>
 
 <button
-    class="filter-btn"
-    data-filter="Mutual Funds"
-    onclick="setCategoryFilter('Mutual Funds')"
+class="filter-btn"
+data-filter="Mutual Funds"
+onclick="setCategoryFilter('Mutual Funds')"
 >
 Funds
 </button>
 
 <button
-    class="filter-btn"
-    data-filter="Gold"
-    onclick="setCategoryFilter('Gold')"
+class="filter-btn"
+data-filter="Gold"
+onclick="setCategoryFilter('Gold')"
 >
 Gold
 </button>
 
 <button
-    class="filter-btn"
-    data-filter="Fixed Income"
-    onclick="setCategoryFilter('Fixed Income')"
+class="filter-btn"
+data-filter="Fixed Income"
+onclick="setCategoryFilter('Fixed Income')"
 >
 Fixed Income
 </button>
+
+<select
+id="sortSelect"
+class="sort-select"
+onchange="renderDashboard()"
+>
+
+<option value="default">
+Sort: Default
+</option>
+
+<option value="returnDesc">
+Highest Return %
+</option>
+
+<option value="returnAsc">
+Lowest Return %
+</option>
+
+<option value="gainDesc">
+Highest Gain
+</option>
+
+<option value="gainAsc">
+Lowest Gain
+</option>
+
+<option value="valueDesc">
+Largest Position
+</option>
+
+<option value="investedDesc">
+Highest Invested
+</option>
+
+<option value="nameAsc">
+Name A–Z
+</option>
+
+</select>
 
 </div>
 
@@ -1850,29 +2134,12 @@ Fixed Income
 
 <tr>
 
-<th>
-Asset
-</th>
-
-<th>
-Category
-</th>
-
-<th>
-Invested
-</th>
-
-<th>
-Current Value
-</th>
-
-<th>
-Gain / Loss
-</th>
-
-<th>
-Return
-</th>
+<th>Asset</th>
+<th>Category</th>
+<th>Invested</th>
+<th>Current Value</th>
+<th>Gain / Loss</th>
+<th>Return</th>
 
 </tr>
 
@@ -1886,26 +2153,204 @@ Return
 
 </div>
 
+<!-- MORE ANALYTICS -->
+
+<button
+id="analyticsToggle"
+class="analytics-toggle"
+onclick="toggleAnalytics()"
+>
+
+<div class="analytics-toggle-left">
+
+<div class="analytics-toggle-icon">
+✦
+</div>
+
+<div>
+
+<div style="font-weight:700;">
+More Analytics
+</div>
+
+<div
+style="
+color:rgba(255,255,255,.4);
+font-size:11px;
+margin-top:3px;
+"
+>
+SIP, projections, milestones & deeper portfolio data
+</div>
+
+</div>
+
+</div>
+
+<div class="analytics-arrow">
+⌄
+</div>
+
+</button>
+
+<div id="analyticsPanel" class="analytics-panel">
+
+<div class="analytics-grid">
+
+<!-- SIP -->
+
+<div class="glass analytics-card">
+
+<h3>
+Monthly SIP
+</h3>
+
+<div class="analytics-card-subtitle">
+Live data from <strong>SIP_Config</strong>
+</div>
+
+<div class="sip-total">
+
+<div class="sip-total-label">
+Current Monthly SIP
+</div>
+
+<div id="sipMonthly" class="sip-total-value">
+—
+</div>
+
+<div id="sipAnnual" class="sip-annual">
+—
+</div>
+
+</div>
+
+<div id="sipList" class="sip-list">
+</div>
+
+</div>
+
+<!-- PROJECTION -->
+
+<div class="glass analytics-card">
+
+<h3>
+Wealth Projection
+</h3>
+
+<div class="analytics-card-subtitle">
+Current corpus + dynamic SIP + selected return assumption
+</div>
+
+<div class="projection-controls">
+
+<button
+class="scenario-btn"
+data-scenario="conservative"
+onclick="setProjectionScenario('conservative')"
+>
+8%
+</button>
+
+<button
+class="scenario-btn active"
+data-scenario="actual"
+onclick="setProjectionScenario('actual')"
+>
+Actual ROI
+</button>
+
+<button
+class="scenario-btn"
+data-scenario="optimistic"
+onclick="setProjectionScenario('optimistic')"
+>
+15%
+</button>
+
+</div>
+
+<div class="roi-display">
+
+<span>
+Projection return
+</span>
+
+<strong id="projectionROI" class="orange">
+—
+</strong>
+
+</div>
+
+<div id="projectionTable" class="projection-table">
+</div>
+
+<div class="projection-chart-wrap">
+
+<canvas id="projectionChart"></canvas>
+
+</div>
+
+<div class="scenario-note">
+Actual ROI uses your current overall portfolio return as the projection rate.
+This is a mathematical projection, not a prediction of future market returns.
+</div>
+
+</div>
+
+<!-- MILESTONES -->
+
+<div class="glass analytics-card">
+
+<h3>
+Financial Milestones
+</h3>
+
+<div class="analytics-card-subtitle">
+Estimated time to reach each corpus level
+</div>
+
+<div id="milestoneList" class="milestone-list">
+</div>
+
+</div>
+
+<!-- SIP BREAKDOWN -->
+
+<div class="glass analytics-card">
+
+<h3>
+SIP Allocation
+</h3>
+
+<div class="analytics-card-subtitle">
+Where your monthly SIP is going
+</div>
+
+<div id="sipAllocationList">
+</div>
+
+</div>
+
+</div>
+
+</div>
+
 <div class="footer">
-
 My wife is the Best (She made me do it)
-
 </div>
 
 </section>
 
 </div>
-
 </div>
 
-<!-- =====================================================
-     DETAIL OVERLAY
-===================================================== -->
+<!-- DETAIL -->
 
 <div
-    id="detailOverlay"
-    class="detail-overlay"
-    onclick="closeDetailFromOutside(event)"
+id="detailOverlay"
+class="detail-overlay"
+onclick="closeDetailFromOutside(event)"
 >
 
 <div class="detail-panel">
@@ -1914,21 +2359,17 @@ My wife is the Best (She made me do it)
 
 <div>
 
-<div
-    id="detailCategory"
-    class="detail-category"
-></div>
+<div id="detailCategory" class="detail-category">
+</div>
 
-<h2
-    id="detailName"
-    class="detail-name"
-></h2>
+<h2 id="detailName" class="detail-name">
+</h2>
 
 </div>
 
 <button
-    class="close-detail"
-    onclick="closeDetail()"
+class="close-detail"
+onclick="closeDetail()"
 >
 ×
 </button>
@@ -1941,127 +2382,44 @@ My wife is the Best (She made me do it)
 Current Value
 </div>
 
-<div
-    id="detailCurrent"
-    class="detail-current"
-></div>
+<div id="detailCurrent" class="detail-current">
+</div>
 
-<div
-    id="detailReturn"
-    class="detail-return"
-></div>
+<div id="detailReturn" class="detail-return">
+</div>
 
 </div>
 
-<div
-    id="detailGrid"
-    class="detail-grid"
-></div>
+<div id="detailGrid" class="detail-grid">
+</div>
 
-<div
-    id="detailMeta"
-    class="detail-meta"
-></div>
+<div id="detailMeta" class="detail-meta">
+</div>
 
 </div>
 
 </div>
 
-<!-- =====================================================
-     TOAST
-===================================================== -->
-
-<div
-    id="toast"
-    class="toast"
-></div>
+<div id="toast" class="toast"></div>
 
 <script>
 
 /* =========================================================
-   GOOGLE APPS SCRIPT URL
+API
 ========================================================= */
 
 const API_URL =
 "https://script.google.com/macros/s/AKfycbzeuVC1DbCcsMa6mOzABFO4cNOySPvuzoS0dW0aV3mqrjybChk1vpC6Fy7E4l65hHaT/exec";
 
 /* =========================================================
-   DEMO DATA
+STATE
 ========================================================= */
 
-const DEMO_ASSETS = [
+let apiData = null;
 
-{
-    Asset:"Oceanic Technologies",
-    Category:"Equity",
-    Invested:185000,
-    CurrentValue:218500,
-    Ticker:"DEMO:OCEAN"
-},
+let assets = [];
 
-{
-    Asset:"Sunrise Industries",
-    Category:"Equity",
-    Invested:125000,
-    CurrentValue:119500,
-    Ticker:"DEMO:SUN"
-},
-
-{
-    Asset:"BlueWave Finance",
-    Category:"Equity",
-    Invested:95000,
-    CurrentValue:108000,
-    Ticker:"DEMO:BLUE"
-},
-
-{
-    Asset:"Mountain Index Fund",
-    Category:"Mutual Funds",
-    Invested:240000,
-    CurrentValue:268500,
-    Ticker:"MF:DEMO_INDEX"
-},
-
-{
-    Asset:"Global Flexi Fund",
-    Category:"Mutual Funds",
-    Invested:180000,
-    CurrentValue:194000,
-    Ticker:"MF:DEMO_FLEXI"
-},
-
-{
-    Asset:"Coastal Midcap Fund",
-    Category:"Mutual Funds",
-    Invested:145000,
-    CurrentValue:159000,
-    Ticker:"MF:DEMO_MIDCAP"
-},
-
-{
-    Asset:"Golden Horizon ETF",
-    Category:"Gold",
-    Invested:80000,
-    CurrentValue:91000,
-    Ticker:"DEMO:GOLD"
-},
-
-{
-    Asset:"Safe Harbour Fund",
-    Category:"Fixed Income",
-    Invested:300000,
-    CurrentValue:321000,
-    Ticker:"DEMO:DEBT"
-}
-
-];
-
-/* =========================================================
-   STATE
-========================================================= */
-
-let assets = [...DEMO_ASSETS];
+let sipConfig = [];
 
 let currentCategory = "All";
 
@@ -2069,36 +2427,35 @@ let allocationChart = null;
 
 let portfolioChart = null;
 
-/*
-   Stable colors.
+let projectionChart = null;
 
-   IMPORTANT:
-   These are intentionally kept fixed so the donut does
-   not change colors when a category is selected.
-*/
+let projectionScenario = "actual";
+
+let isLive = false;
 
 const ALLOCATION_COLORS = [
-    "#ffc46b",
-    "#6ec8ff",
-    "#8ee6b2",
-    "#ff8e83",
-    "#b79cff",
-    "#f4a261",
-    "#72ddf7",
-    "#d4a5ff"
+"#ffc46b",
+"#6ec8ff",
+"#8ee6b2",
+"#ff8e83",
+"#b79cff",
+"#f4a261",
+"#72ddf7",
+"#d4a5ff"
 ];
 
 /* =========================================================
-   HELPERS
+HELPERS
 ========================================================= */
 
 function hasValue(value){
 
-    return value !== undefined &&
-           value !== null &&
-           value !== "" &&
-           !Number.isNaN(Number(value));
-
+    return (
+        value !== undefined &&
+        value !== null &&
+        value !== "" &&
+        !Number.isNaN(Number(value))
+    );
 }
 
 function numeric(value){
@@ -2106,7 +2463,6 @@ function numeric(value){
     return hasValue(value)
         ? Number(value)
         : null;
-
 }
 
 function money(value){
@@ -2123,7 +2479,6 @@ function money(value){
             maximumFractionDigits:0
         }
     ).format(Number(value));
-
 }
 
 function number(value){
@@ -2138,37 +2493,6 @@ function number(value){
             maximumFractionDigits:0
         }
     ).format(Number(value));
-
-}
-
-function gainFor(asset){
-
-    const invested = numeric(asset.Invested);
-    const current = numeric(asset.CurrentValue);
-
-    if(invested === null || current === null){
-        return null;
-    }
-
-    return current - invested;
-
-}
-
-function returnFor(asset){
-
-    const invested = numeric(asset.Invested);
-    const gain = gainFor(asset);
-
-    if(
-        invested === null ||
-        gain === null ||
-        invested === 0
-    ){
-        return null;
-    }
-
-    return gain / invested * 100;
-
 }
 
 function escapeHTML(value){
@@ -2179,12 +2503,7 @@ function escapeHTML(value){
         .replaceAll(">","&gt;")
         .replaceAll('"',"&quot;")
         .replaceAll("'","&#039;");
-
 }
-
-/* =========================================================
-   TOAST
-========================================================= */
 
 function showToast(message){
 
@@ -2202,14 +2521,397 @@ function showToast(message){
             () => toast.classList.remove("show"),
             3000
         );
+}
+
+/* =========================================================
+FLEXIBLE FIELD READER
+========================================================= */
+
+function field(object, ...names){
+
+    if(!object){
+        return null;
+    }
+
+    for(const name of names){
+
+        if(
+            object[name] !== undefined &&
+            object[name] !== null &&
+            object[name] !== ""
+        ){
+
+            return object[name];
+
+        }
+
+    }
+
+    return null;
+}
+
+/* =========================================================
+NORMALISE MUTUAL FUNDS
+========================================================= */
+
+function normalizeMutualFunds(){
+
+    const rows =
+        Array.isArray(apiData?.mutualFunds)
+        ? apiData.mutualFunds
+        : [];
+
+    return rows.map(row => {
+
+        const invested =
+            numeric(
+                field(
+                    row,
+                    "invested",
+                    "totalInvested"
+                )
+            );
+
+        const current =
+            numeric(
+                field(
+                    row,
+                    "currentValue"
+                )
+            );
+
+        return {
+
+            Asset:
+                field(
+                    row,
+                    "name",
+                    "fundName",
+                    "fund",
+                    "ticker",
+                    "fundTicker"
+                ) || "Mutual Fund",
+
+            Category:
+                "Mutual Funds",
+
+            Invested:
+                invested,
+
+            CurrentValue:
+                current,
+
+            Ticker:
+                field(
+                    row,
+                    "ticker",
+                    "fundTicker"
+                ),
+
+            Units:
+                field(
+                    row,
+                    "units",
+                    "totalUnits"
+                ),
+
+            NAV:
+                field(
+                    row,
+                    "nav",
+                    "liveNAV"
+                ),
+
+            ProfitLoss:
+                numeric(
+                    field(
+                        row,
+                        "profitLoss"
+                    )
+                ),
+
+            ReturnPercent:
+                numeric(
+                    field(
+                        row,
+                        "returnPercent"
+                    )
+                ),
+
+            Original:
+                row
+
+        };
+
+    });
 
 }
 
 /* =========================================================
-   STATUS
+NORMALISE STOCKS
 ========================================================= */
 
-function setDemoStatus(){
+function normalizeStocks(){
+
+    const rows =
+        Array.isArray(apiData?.stocks)
+        ? apiData.stocks
+        : [];
+
+    return rows.map(row => {
+
+        const invested =
+            numeric(
+                field(
+                    row,
+                    "invested",
+                    "totalInvested"
+                )
+            );
+
+        const current =
+            numeric(
+                field(
+                    row,
+                    "currentValue"
+                )
+            );
+
+        return {
+
+            Asset:
+                field(
+                    row,
+                    "instrument",
+                    "name",
+                    "stockName",
+                    "symbol",
+                    "ticker",
+                    "googleTicker"
+                ) || "Stock",
+
+            Category:
+                "Equity",
+
+            Invested:
+                invested,
+
+            CurrentValue:
+                current,
+
+            Ticker:
+                field(
+                    row,
+                    "ticker",
+                    "symbol",
+                    "googleTicker"
+                ),
+
+            Quantity:
+                field(
+                    row,
+                    "quantity",
+                    "qty"
+                ),
+
+            AveragePrice:
+                field(
+                    row,
+                    "averagePrice",
+                    "avgPrice"
+                ),
+
+            LivePrice:
+                field(
+                    row,
+                    "livePrice"
+                ),
+
+            ProfitLoss:
+                numeric(
+                    field(
+                        row,
+                        "profitLoss"
+                    )
+                ),
+
+            ReturnPercent:
+                numeric(
+                    field(
+                        row,
+                        "returnPercent"
+                    )
+                ),
+
+            Original:
+                row
+
+        };
+
+    });
+
+}
+
+/* =========================================================
+NORMALISE PPF
+========================================================= */
+
+function normalizePPF(){
+
+    const rows =
+        Array.isArray(apiData?.ppf)
+        ? apiData.ppf
+        : [];
+
+    return rows.map(row => {
+
+        const invested =
+            numeric(
+                field(
+                    row,
+                    "deposited",
+                    "totalDeposited",
+                    "invested"
+                )
+            );
+
+        const current =
+            numeric(
+                field(
+                    row,
+                    "currentBalance",
+                    "currentValue"
+                )
+            );
+
+        return {
+
+            Asset:
+                field(
+                    row,
+                    "name",
+                    "fundName"
+                ) || "PPF",
+
+            Category:
+                "Fixed Income",
+
+            Invested:
+                invested,
+
+            CurrentValue:
+                current,
+
+            Ticker:
+                "PPF",
+
+            InterestRate:
+                field(
+                    row,
+                    "interestRate"
+                ),
+
+            InterestEarned:
+                numeric(
+                    field(
+                        row,
+                        "interestEarned"
+                    )
+                ),
+
+            Original:
+                row
+
+        };
+
+    });
+
+}
+
+/* =========================================================
+BUILD ASSETS FROM NEW API
+========================================================= */
+
+function buildAssetsFromAPI(){
+
+    return [
+
+        ...normalizeMutualFunds(),
+
+        ...normalizeStocks(),
+
+        ...normalizePPF()
+
+    ];
+}
+
+/* =========================================================
+NORMALISE SIP CONFIG
+========================================================= */
+
+function normalizeSIP(){
+
+    const rows =
+        Array.isArray(apiData?.sipConfig)
+        ? apiData.sipConfig
+        : [];
+
+    return rows.map(row => {
+
+        return {
+
+            ticker:
+                field(
+                    row,
+                    "ticker",
+                    "fundTicker"
+                ),
+
+            sipAmount:
+                numeric(
+                    field(
+                        row,
+                        "sipAmount",
+                        "amount",
+                        "monthlySIP",
+                        "monthlyAmount"
+                    )
+                ) || 0,
+
+            sipDay:
+                field(
+                    row,
+                    "sipDay",
+                    "day",
+                    "sipDate"
+                ),
+
+            fundName:
+                field(
+                    row,
+                    "fundName",
+                    "name",
+                    "fund",
+                    "schemeName",
+                    "ticker"
+                ) || "SIP",
+
+            Original:
+                row
+
+        };
+
+    });
+
+}
+
+/* =========================================================
+STATUS
+========================================================= */
+
+function setLockedStatus(){
+
+    isLive = false;
 
     const status =
         document.getElementById(
@@ -2221,21 +2923,23 @@ function setDemoStatus(){
     document.getElementById(
         "statusText"
     ).innerText =
-        "DEMO MODE";
+        "LOCKED";
 
     document.getElementById(
         "heroStatus"
     ).innerText =
-        "Demo portfolio";
+        "Private portfolio";
 
     document.getElementById(
         "tableStatus"
     ).innerText =
-        "DEMO DATA";
+        "LOCKED";
 
 }
 
 function setLiveStatus(){
+
+    isLive = true;
 
     const status =
         document.getElementById(
@@ -2262,7 +2966,7 @@ function setLiveStatus(){
 }
 
 /* =========================================================
-   CONNECT
+CONNECT TO NEW API
 ========================================================= */
 
 async function connectToSheet(){
@@ -2296,42 +3000,72 @@ async function connectToSheet(){
 
         const response =
             await fetch(
-
                 API_URL +
                 "?passcode=" +
-                encodeURIComponent(password),
-
+                encodeURIComponent(password) +
+                "&t=" +
+                Date.now(),
                 {
                     method:"GET",
                     cache:"no-store"
                 }
-
             );
 
         if(!response.ok){
-            throw new Error("Connection failed");
+
+            throw new Error(
+                "Connection failed"
+            );
+
         }
 
         const data =
             await response.json();
 
-        if(data.error){
-            throw new Error("Invalid passcode");
-        }
-
         if(
-            !data.assets ||
-            !Array.isArray(data.assets) ||
-            data.assets.length === 0
+            data.error === true ||
+            data.error === "true"
         ){
 
             throw new Error(
-                "No portfolio data received"
+                data.message ||
+                "Invalid passcode"
             );
 
         }
 
-        assets = data.assets;
+        /*
+        NEW API STRUCTURE
+
+        We keep the entire API response.
+
+        Nothing is hardcoded.
+        */
+
+        apiData = data;
+
+        /*
+        Build website holdings dynamically
+        from the actual API arrays.
+        */
+
+        assets =
+            buildAssetsFromAPI();
+
+        /*
+        SIP_Config is also completely dynamic.
+        */
+
+        sipConfig =
+            normalizeSIP();
+
+        if(!assets.length){
+
+            throw new Error(
+                "API connected but no holdings were returned."
+            );
+
+        }
 
         currentCategory = "All";
 
@@ -2339,42 +3073,50 @@ async function connectToSheet(){
 
         updateFilterButtons();
 
+        updateViewHeader();
+
         renderDashboard();
 
+        renderSipAnalytics();
+
         showToast(
-            "✓ Portfolio unlocked • Live data connected"
+            "✓ Live portfolio connected"
+        );
+
+        console.log(
+            "Portfolio API response:",
+            data
         );
 
     }catch(error){
 
         console.error(error);
 
-        assets = [...DEMO_ASSETS];
+        setLockedStatus();
 
-        currentCategory = "All";
+        /*
+        IMPORTANT:
+        We do NOT fall back to hardcoded
+        demo stock/fund names anymore.
+        */
 
-        setDemoStatus();
+        assets = [];
 
-        updateFilterButtons();
+        sipConfig = [];
+
+        apiData = null;
 
         renderDashboard();
 
-        if(
+        renderSipAnalytics();
+
+        showToast(
             error.message ===
             "Invalid passcode"
-        ){
-
-            showToast(
-                "Incorrect passcode."
-            );
-
-        }else{
-
-            showToast(
-                "Could not connect. Demo mode remains active."
-            );
-
-        }
+            ? "Incorrect passcode."
+            : error.message ||
+              "Could not connect to portfolio API."
+        );
 
     }finally{
 
@@ -2388,7 +3130,76 @@ async function connectToSheet(){
 }
 
 /* =========================================================
-   FILTERED ASSETS
+GAIN / RETURN
+========================================================= */
+
+function gainFor(asset){
+
+    const invested =
+        numeric(asset.Invested);
+
+    const current =
+        numeric(asset.CurrentValue);
+
+    if(
+        invested === null ||
+        current === null
+    ){
+
+        return null;
+
+    }
+
+    return current - invested;
+}
+
+function returnFor(asset){
+
+    /*
+    Prefer the returnPercent supplied
+    by the API when available.
+
+    Otherwise calculate it.
+    */
+
+    if(
+        hasValue(
+            asset.ReturnPercent
+        )
+    ){
+
+        return Number(
+            asset.ReturnPercent
+        );
+
+    }
+
+    const invested =
+        numeric(asset.Invested);
+
+    const gain =
+        gainFor(asset);
+
+    if(
+        invested === null ||
+        gain === null ||
+        invested === 0
+    ){
+
+        return null;
+
+    }
+
+    return (
+        gain /
+        invested *
+        100
+    );
+
+}
+
+/* =========================================================
+FILTERING
 ========================================================= */
 
 function getFilteredAssets(){
@@ -2400,32 +3211,116 @@ function getFilteredAssets(){
             .toLowerCase()
             .trim();
 
-    return assets.filter(asset => {
+    let result =
+        assets.filter(asset => {
 
-        const categoryMatch =
-            currentCategory === "All" ||
-            String(asset.Category || "") === currentCategory;
+            const categoryMatch =
+                currentCategory === "All" ||
+                String(
+                    asset.Category || ""
+                ) === currentCategory;
 
-        const searchMatch =
-            !search ||
-            String(asset.Asset || "")
+            const searchMatch =
+                !search ||
+                String(
+                    asset.Asset || ""
+                )
                 .toLowerCase()
                 .includes(search) ||
-            String(asset.Category || "")
+
+                String(
+                    asset.Category || ""
+                )
                 .toLowerCase()
                 .includes(search) ||
-            String(asset.Ticker || "")
+
+                String(
+                    asset.Ticker || ""
+                )
                 .toLowerCase()
                 .includes(search);
 
-        return categoryMatch && searchMatch;
+            return (
+                categoryMatch &&
+                searchMatch
+            );
+
+        });
+
+    const sort =
+        document.getElementById(
+            "sortSelect"
+        ).value;
+
+    result.sort((a,b) => {
+
+        switch(sort){
+
+            case "returnDesc":
+
+                return (
+                    (returnFor(b) ?? -Infinity) -
+                    (returnFor(a) ?? -Infinity)
+                );
+
+            case "returnAsc":
+
+                return (
+                    (returnFor(a) ?? Infinity) -
+                    (returnFor(b) ?? Infinity)
+                );
+
+            case "gainDesc":
+
+                return (
+                    (gainFor(b) ?? -Infinity) -
+                    (gainFor(a) ?? -Infinity)
+                );
+
+            case "gainAsc":
+
+                return (
+                    (gainFor(a) ?? Infinity) -
+                    (gainFor(b) ?? Infinity)
+                );
+
+            case "valueDesc":
+
+                return (
+                    (numeric(b.CurrentValue) ?? -Infinity) -
+                    (numeric(a.CurrentValue) ?? -Infinity)
+                );
+
+            case "investedDesc":
+
+                return (
+                    (numeric(b.Invested) ?? -Infinity) -
+                    (numeric(a.Invested) ?? -Infinity)
+                );
+
+            case "nameAsc":
+
+                return String(
+                    a.Asset || ""
+                ).localeCompare(
+                    String(
+                        b.Asset || ""
+                    )
+                );
+
+            default:
+
+                return 0;
+
+        }
 
     });
 
+    return result;
 }
 
 /* =========================================================
-   FILTER BUTTONS
+FILTER BUTTONS
 ========================================================= */
 
 function updateFilterButtons(){
@@ -2436,15 +3331,44 @@ function updateFilterButtons(){
 
             button.classList.toggle(
                 "active",
-                button.dataset.filter === currentCategory
+                button.dataset.filter ===
+                currentCategory
             );
 
         });
 
 }
 
+function setCategoryFilter(category){
+
+    currentCategory =
+        category;
+
+    updateFilterButtons();
+
+    updateViewHeader();
+
+    renderDashboard();
+}
+
+function showAllAssets(){
+
+    currentCategory =
+        "All";
+
+    document.getElementById(
+        "searchInput"
+    ).value = "";
+
+    updateFilterButtons();
+
+    updateViewHeader();
+
+    renderDashboard();
+}
+
 /* =========================================================
-   VIEW HEADER
+VIEW HEADER
 ========================================================= */
 
 function updateViewHeader(){
@@ -2466,19 +3390,17 @@ function updateViewHeader(){
 
     if(currentCategory === "All"){
 
-        header.classList.remove("active");
-
-        title.innerText =
-            "Portfolio";
-
-        subtitle.innerText =
-            "All holdings";
+        header.classList.remove(
+            "active"
+        );
 
         return;
 
     }
 
-    header.classList.add("active");
+    header.classList.add(
+        "active"
+    );
 
     title.innerText =
         currentCategory;
@@ -2489,65 +3411,7 @@ function updateViewHeader(){
 }
 
 /* =========================================================
-   CATEGORY FILTER
-
-   IMPORTANT:
-
-   Selecting a category DOES NOT:
-   - move the allocation card
-   - scroll the page
-   - redraw the donut
-   - change donut colours
-   - animate the donut again
-========================================================= */
-
-function setCategoryFilter(category){
-
-    currentCategory = category;
-
-    updateFilterButtons();
-
-    updateViewHeader();
-
-    const dashboard =
-        document.getElementById("dashboard");
-
-    dashboard.classList.remove(
-        "view-changing"
-    );
-
-    void dashboard.offsetWidth;
-
-    dashboard.classList.add(
-        "view-changing"
-    );
-
-    renderDashboard();
-
-}
-
-/* =========================================================
-   SHOW ALL
-========================================================= */
-
-function showAllAssets(){
-
-    currentCategory = "All";
-
-    document
-        .getElementById("searchInput")
-        .value = "";
-
-    updateFilterButtons();
-
-    updateViewHeader();
-
-    renderDashboard();
-
-}
-
-/* =========================================================
-   DASHBOARD
+DASHBOARD
 ========================================================= */
 
 function renderDashboard(){
@@ -2555,54 +3419,119 @@ function renderDashboard(){
     const currentAssets =
         getFilteredAssets();
 
-    renderStats(currentAssets);
+    renderStats(
+        currentAssets
+    );
 
-    renderInsights(currentAssets);
+    renderInsights(
+        currentAssets
+    );
 
-    /*
-       renderAllocation() updates the legend and snapshot
-       but DOES NOT destroy the donut chart every time.
-    */
     renderAllocation();
 
     renderAllocationSnapshot();
 
-    renderHealth(currentAssets);
+    renderHealth(
+        currentAssets
+    );
 
-    renderTable(currentAssets);
+    renderTable(
+        currentAssets
+    );
 
-    renderPortfolioChart(currentAssets);
+    renderPortfolioChart(
+        currentAssets
+    );
 
 }
 
 /* =========================================================
-   STATS
+STATS
 ========================================================= */
 
-function renderStats(currentAssets){
+function renderStats(
+    currentAssets
+){
+
+    /*
+    For "All", prefer the official API
+    summary totals.
+
+    For filtered views, calculate from
+    the filtered rows.
+    */
 
     let invested = 0;
+
     let current = 0;
 
     let investedAvailable = false;
+
     let currentAvailable = false;
 
-    currentAssets.forEach(asset => {
+    if(
+        currentCategory === "All" &&
+        apiData?.summary?.total
+    ){
 
-        const i = numeric(asset.Invested);
-        const c = numeric(asset.CurrentValue);
+        const summary =
+            apiData.summary.total;
 
-        if(i !== null){
-            invested += i;
-            investedAvailable = true;
-        }
+        invested =
+            numeric(
+                summary.invested
+            ) || 0;
 
-        if(c !== null){
-            current += c;
-            currentAvailable = true;
-        }
+        current =
+            numeric(
+                summary.currentValue
+            ) || 0;
 
-    });
+        investedAvailable =
+            hasValue(
+                summary.invested
+            );
+
+        currentAvailable =
+            hasValue(
+                summary.currentValue
+            );
+
+    }else{
+
+        currentAssets.forEach(
+            asset => {
+
+                const i =
+                    numeric(
+                        asset.Invested
+                    );
+
+                const c =
+                    numeric(
+                        asset.CurrentValue
+                    );
+
+                if(i !== null){
+
+                    invested += i;
+
+                    investedAvailable = true;
+
+                }
+
+                if(c !== null){
+
+                    current += c;
+
+                    currentAvailable = true;
+
+                }
+
+            }
+        );
+
+    }
 
     const gain =
         investedAvailable &&
@@ -2614,7 +3543,9 @@ function renderStats(currentAssets){
         investedAvailable &&
         currentAvailable &&
         invested > 0
-        ? gain / invested * 100
+        ? gain /
+          invested *
+          100
         : null;
 
     document.getElementById(
@@ -2639,16 +3570,25 @@ function renderStats(currentAssets){
     if(gain !== null){
 
         gainElement.innerText =
-            (gain >= 0 ? "+" : "") +
+            (
+                gain >= 0
+                ? "+"
+                : ""
+            ) +
             money(gain);
 
         gainElement.className =
             "stat-change " +
-            (gain >= 0 ? "green" : "red");
+            (
+                gain >= 0
+                ? "green"
+                : "red"
+            );
 
     }else{
 
-        gainElement.innerText = "";
+        gainElement.innerText =
+            "—";
 
         gainElement.className =
             "stat-change";
@@ -2676,12 +3616,11 @@ function renderStats(currentAssets){
 
         returnText.className =
             "stat-change " +
-            (gain >= 0 ? "green" : "red");
-
-    }else{
-
-        returnText.innerText = "";
-        returnText.className = "stat-change";
+            (
+                gain >= 0
+                ? "green"
+                : "red"
+            );
 
     }
 
@@ -2693,7 +3632,7 @@ function renderStats(currentAssets){
 }
 
 /* =========================================================
-   ALLOCATION DATA
+ALLOCATION
 ========================================================= */
 
 function getAllocationData(){
@@ -2707,35 +3646,24 @@ function getAllocationData(){
             "Other";
 
         const value =
-            numeric(asset.CurrentValue);
+            numeric(
+                asset.CurrentValue
+            );
 
         if(value === null){
             return;
         }
 
         allocation[category] =
-            (allocation[category] || 0) +
-            value;
+            (
+                allocation[category] ||
+                0
+            ) + value;
 
     });
 
     return allocation;
-
 }
-
-/* =========================================================
-   ALLOCATION
-
-   KEY FIX:
-   The Chart.js donut is created ONCE.
-
-   Category clicks only update the legend selection.
-   Therefore the donut keeps:
-   - same position
-   - same colours
-   - same hover behaviour
-   - same animation state
-========================================================= */
 
 function renderAllocation(){
 
@@ -2743,10 +3671,14 @@ function renderAllocation(){
         getAllocationData();
 
     const labels =
-        Object.keys(allocation);
+        Object.keys(
+            allocation
+        );
 
     const values =
-        Object.values(allocation);
+        Object.values(
+            allocation
+        );
 
     const total =
         values.reduce(
@@ -2754,25 +3686,18 @@ function renderAllocation(){
             0
         );
 
-    /*
-       Only create the chart if it doesn't already exist.
-    */
-
     if(!allocationChart){
 
         allocationChart =
             new Chart(
-
                 document.getElementById(
                     "allocationChart"
                 ),
-
                 {
 
                     type:"doughnut",
 
                     data:{
-
                         labels,
 
                         datasets:[{
@@ -2805,75 +3730,40 @@ function renderAllocation(){
                         cutout:"72%",
 
                         plugins:{
-
                             legend:{
                                 display:false
                             }
-
                         },
-
-                        /*
-                           This preserves the nice original
-                           hover response.
-                        */
 
                         animation:{
                             duration:1100
-                        },
-
-                        interaction:{
-                            mode:"nearest",
-                            intersect:true
                         }
 
                     }
 
                 }
-
             );
 
     }else{
 
-        /*
-           If Google Sheet data changes after unlocking,
-           update the donut data without recreating the
-           chart unnecessarily.
-        */
+        allocationChart.data.labels =
+            labels;
 
-        const existingLabels =
-            allocationChart.data.labels || [];
+        allocationChart.data.datasets[0].data =
+            values;
 
-        const changed =
-            JSON.stringify(existingLabels) !==
-            JSON.stringify(labels);
+        allocationChart.data.datasets[0].backgroundColor =
+            labels.map(
+                (_,index) =>
+                    ALLOCATION_COLORS[
+                        index %
+                        ALLOCATION_COLORS.length
+                    ]
+            );
 
-        if(changed){
-
-            allocationChart.data.labels =
-                labels;
-
-            allocationChart.data.datasets[0].data =
-                values;
-
-            allocationChart.data.datasets[0].backgroundColor =
-                labels.map(
-                    (_,index) =>
-                        ALLOCATION_COLORS[
-                            index %
-                            ALLOCATION_COLORS.length
-                        ]
-                );
-
-            allocationChart.update("none");
-
-        }
+        allocationChart.update();
 
     }
-
-    /*
-       Rebuild ONLY the legend.
-       This does not touch the donut.
-    */
 
     const legend =
         document.getElementById(
@@ -2882,12 +3772,30 @@ function renderAllocation(){
 
     legend.innerHTML = "";
 
+    if(!labels.length){
+
+        legend.innerHTML =
+            `
+            <div style="
+                color:rgba(255,255,255,.35);
+                font-size:12px;
+            ">
+                Connect portfolio to view allocation.
+            </div>
+            `;
+
+        return;
+
+    }
+
     labels.forEach(
         (label,index) => {
 
-            const percentageValue =
+            const percentage =
                 total > 0
-                ? values[index] / total * 100
+                ? values[index] /
+                  total *
+                  100
                 : 0;
 
             const row =
@@ -2925,19 +3833,16 @@ function renderAllocation(){
                 </div>
 
                 <strong>
-                    ${percentageValue.toFixed(1)}%
+                    ${percentage.toFixed(1)}%
                 </strong>
 
             `;
 
-            /*
-               ONLY THE LEGEND is clickable.
-
-               The donut itself remains hover-only.
-            */
-
             row.onclick =
-                () => setCategoryFilter(label);
+                () =>
+                    setCategoryFilter(
+                        label
+                    );
 
             legend.appendChild(row);
 
@@ -2947,7 +3852,39 @@ function renderAllocation(){
 }
 
 /* =========================================================
-   ALLOCATION SNAPSHOT
+LARGEST POSITION
+========================================================= */
+
+function getLargestPosition(
+    source = assets
+){
+
+    const valid =
+        source.filter(
+            asset =>
+                numeric(
+                    asset.CurrentValue
+                ) !== null
+        );
+
+    if(!valid.length){
+        return null;
+    }
+
+    return [...valid].sort(
+        (a,b) =>
+            numeric(
+                b.CurrentValue
+            ) -
+            numeric(
+                a.CurrentValue
+            )
+    )[0];
+
+}
+
+/* =========================================================
+SNAPSHOT
 ========================================================= */
 
 function renderAllocationSnapshot(){
@@ -2957,10 +3894,18 @@ function renderAllocationSnapshot(){
             "allocationSnapshot"
         );
 
-    let category =
-        currentCategory;
+    if(!assets.length){
 
-    if(category === "All"){
+        box.innerHTML = `
+            <div class="snapshot-title">
+                Connect your portfolio to view live data.
+            </div>
+        `;
+
+        return;
+    }
+
+    if(currentCategory === "All"){
 
         const largest =
             getLargestPosition();
@@ -2974,7 +3919,7 @@ function renderAllocationSnapshot(){
                 </div>
 
                 <div class="snapshot-pill">
-                    All assets
+                    Live
                 </div>
 
             </div>
@@ -2988,11 +3933,16 @@ function renderAllocationSnapshot(){
                     </div>
 
                     <div class="snapshot-item-value">
-                        ${new Set(
-                            assets
-                                .map(a => a.Category)
-                                .filter(Boolean)
-                        ).size}
+                        ${
+                            new Set(
+                                assets
+                                    .map(
+                                        a =>
+                                            a.Category
+                                    )
+                                    .filter(Boolean)
+                            ).size
+                        }
                     </div>
 
                 </div>
@@ -3018,7 +3968,9 @@ function renderAllocationSnapshot(){
                     <div class="snapshot-item-value">
                         ${
                             largest
-                            ? escapeHTML(largest.Asset)
+                            ? escapeHTML(
+                                largest.Asset
+                            )
                             : "—"
                         }
                     </div>
@@ -3036,49 +3988,63 @@ function renderAllocationSnapshot(){
     const categoryAssets =
         assets.filter(
             asset =>
-                String(asset.Category || "") === category
+                String(
+                    asset.Category || ""
+                ) === currentCategory
         );
 
     let invested = 0;
+
     let current = 0;
 
-    let hasInvested = false;
-    let hasCurrent = false;
+    categoryAssets.forEach(
+        asset => {
 
-    categoryAssets.forEach(asset => {
+            invested +=
+                numeric(
+                    asset.Invested
+                ) || 0;
 
-        const i = numeric(asset.Invested);
-        const c = numeric(asset.CurrentValue);
+            current +=
+                numeric(
+                    asset.CurrentValue
+                ) || 0;
 
-        if(i !== null){
-            invested += i;
-            hasInvested = true;
         }
-
-        if(c !== null){
-            current += c;
-            hasCurrent = true;
-        }
-
-    });
+    );
 
     const gain =
-        hasInvested && hasCurrent
-        ? current - invested
-        : null;
+        current - invested;
 
     const ret =
-        hasInvested &&
-        hasCurrent &&
         invested > 0
-        ? gain / invested * 100
+        ? gain /
+          invested *
+          100
         : null;
 
-    const items = [];
+    box.innerHTML = `
 
-    if(hasCurrent){
+        <div class="snapshot-top">
 
-        items.push(`
+            <div class="snapshot-title">
+                ${escapeHTML(
+                    currentCategory
+                )}
+            </div>
+
+            <div class="snapshot-pill">
+                ${categoryAssets.length}
+                ${
+                    categoryAssets.length === 1
+                    ? "position"
+                    : "positions"
+                }
+            </div>
+
+        </div>
+
+        <div class="snapshot-grid">
 
             <div>
 
@@ -3092,14 +4058,6 @@ function renderAllocationSnapshot(){
 
             </div>
 
-        `);
-
-    }
-
-    if(hasInvested){
-
-        items.push(`
-
             <div>
 
                 <div class="snapshot-item-label">
@@ -3111,14 +4069,6 @@ function renderAllocationSnapshot(){
                 </div>
 
             </div>
-
-        `);
-
-    }
-
-    if(ret !== null){
-
-        items.push(`
 
             <div>
 
@@ -3134,46 +4084,15 @@ function renderAllocationSnapshot(){
                     }"
                 >
                     ${ret >= 0 ? "+" : ""}
-                    ${ret.toFixed(2)}%
+                    ${
+                        ret !== null
+                        ? ret.toFixed(2) + "%"
+                        : "—"
+                    }
                 </div>
 
             </div>
 
-        `);
-
-    }
-
-    if(!items.length){
-
-        box.innerHTML = "";
-        return;
-
-    }
-
-    box.innerHTML = `
-
-        <div class="snapshot-top">
-
-            <div class="snapshot-title">
-                ${escapeHTML(category)}
-            </div>
-
-            <div class="snapshot-pill">
-
-                ${categoryAssets.length}
-
-                ${
-                    categoryAssets.length === 1
-                    ? "position"
-                    : "positions"
-                }
-
-            </div>
-
-        </div>
-
-        <div class="snapshot-grid">
-            ${items.join("")}
         </div>
 
     `;
@@ -3181,31 +4100,206 @@ function renderAllocationSnapshot(){
 }
 
 /* =========================================================
-   HEALTH
+INSIGHTS
 ========================================================= */
 
-function renderHealth(currentAssets){
+function renderInsights(
+    currentAssets
+){
+
+    const valid =
+        currentAssets.filter(
+            asset =>
+                gainFor(asset) !== null
+        );
+
+    const winner =
+        valid.length
+        ? [...valid].sort(
+            (a,b) =>
+                gainFor(b) -
+                gainFor(a)
+        )[0]
+        : null;
+
+    const loser =
+        valid.length
+        ? [...valid].sort(
+            (a,b) =>
+                gainFor(a) -
+                gainFor(b)
+        )[0]
+        : null;
+
+    const biggest =
+        getLargestPosition(
+            currentAssets
+        );
+
+    if(!winner){
+
+        document.getElementById(
+            "topWinner"
+        ).innerText =
+            "No live data.";
+
+        return;
+
+    }
+
+    document.getElementById(
+        "topWinner"
+    ).innerHTML = `
+
+        <strong>
+            ${escapeHTML(
+                winner.Asset
+            )}
+        </strong>
+
+        gained
+
+        <strong class="green">
+            +
+            ${money(
+                gainFor(winner)
+            )}
+        </strong>
+
+        <br>
+
+        <small>
+            Click to inspect
+        </small>
+
+    `;
+
+    document.getElementById(
+        "winnerCard"
+    ).onclick =
+        () => openDetail(
+            winner
+        );
+
+    document.getElementById(
+        "topLoser"
+    ).innerHTML = `
+
+        <strong>
+            ${escapeHTML(
+                loser.Asset
+            )}
+        </strong>
+
+        is at
+
+        <strong class="${
+            gainFor(loser) >= 0
+            ? "green"
+            : "red"
+        }">
+
+            ${
+                gainFor(loser) >= 0
+                ? "+"
+                : ""
+            }
+
+            ${money(
+                gainFor(loser)
+            )}
+
+        </strong>
+
+        <br>
+
+        <small>
+            Click to inspect
+        </small>
+
+    `;
+
+    document.getElementById(
+        "loserCard"
+    ).onclick =
+        () => openDetail(
+            loser
+        );
+
+    if(biggest){
+
+        document.getElementById(
+            "largestPosition"
+        ).innerHTML = `
+
+            <strong>
+                ${escapeHTML(
+                    biggest.Asset
+                )}
+            </strong>
+
+            is your largest position at
+
+            <strong class="orange">
+                ${money(
+                    biggest.CurrentValue
+                )}
+            </strong>
+
+            <br>
+
+            <small>
+                Click to inspect
+            </small>
+
+        `;
+
+        document.getElementById(
+            "largestCard"
+        ).onclick =
+            () => openDetail(
+                biggest
+            );
+
+    }
+
+}
+
+/* =========================================================
+HEALTH
+========================================================= */
+
+function renderHealth(
+    currentAssets
+){
 
     const strip =
         document.getElementById(
             "healthStrip"
         );
 
-    const items = [];
-
     const validReturns =
         currentAssets
-            .map(asset => ({
-                asset,
-                ret:returnFor(asset)
-            }))
-            .filter(x => x.ret !== null);
+            .map(
+                asset => ({
+                    asset,
+                    ret:
+                        returnFor(asset)
+                })
+            )
+            .filter(
+                x =>
+                    x.ret !== null
+            );
+
+    const items = [];
 
     if(validReturns.length){
 
         const profitable =
             validReturns.filter(
-                x => x.ret >= 0
+                x =>
+                    x.ret >= 0
             ).length;
 
         const ratio =
@@ -3252,26 +4346,31 @@ function renderHealth(currentAssets){
     }
 
     const largest =
-        getLargestPosition(currentAssets);
+        getLargestPosition(
+            currentAssets
+        );
 
     const total =
         currentAssets.reduce(
             (sum,asset) =>
                 sum +
                 (
-                    numeric(asset.CurrentValue) || 0
+                    numeric(
+                        asset.CurrentValue
+                    ) || 0
                 ),
             0
         );
 
     if(
         largest &&
-        total > 0 &&
-        numeric(largest.CurrentValue) !== null
+        total > 0
     ){
 
         const concentration =
-            numeric(largest.CurrentValue) /
+            numeric(
+                largest.CurrentValue
+            ) /
             total *
             100;
 
@@ -3315,9 +4414,11 @@ function renderHealth(currentAssets){
 
         const average =
             validReturns.reduce(
-                (sum,x) => sum + x.ret,
+                (sum,x) =>
+                    sum + x.ret,
                 0
-            ) / validReturns.length;
+            ) /
+            validReturns.length;
 
         items.push(`
 
@@ -3336,7 +4437,11 @@ function renderHealth(currentAssets){
                         </div>
 
                         <div class="health-value">
-                            ${average >= 0 ? "+" : ""}
+                            ${
+                                average >= 0
+                                ? "+"
+                                : ""
+                            }
                             ${average.toFixed(2)}%
                         </div>
 
@@ -3349,11 +4454,13 @@ function renderHealth(currentAssets){
                     ? "green"
                     : "red"
                 }">
+
                     ${
                         average >= 0
                         ? "Positive"
                         : "Negative"
                     }
+
                 </strong>
 
             </div>
@@ -3368,213 +4475,12 @@ function renderHealth(currentAssets){
 }
 
 /* =========================================================
-   LARGEST POSITION
+TABLE
 ========================================================= */
 
-function getLargestPosition(source = assets){
-
-    const valid =
-        source.filter(
-            asset =>
-                numeric(asset.CurrentValue) !== null
-        );
-
-    if(!valid.length){
-        return null;
-    }
-
-    return [...valid].sort(
-        (a,b) =>
-            numeric(b.CurrentValue) -
-            numeric(a.CurrentValue)
-    )[0];
-
-}
-
-/* =========================================================
-   INSIGHTS
-========================================================= */
-
-function renderInsights(currentAssets){
-
-    const valid =
-        currentAssets.filter(
-            asset =>
-                gainFor(asset) !== null
-        );
-
-    const winner =
-        valid.length
-        ? [...valid].sort(
-            (a,b) =>
-                gainFor(b) -
-                gainFor(a)
-        )[0]
-        : null;
-
-    const loser =
-        valid.length
-        ? [...valid].sort(
-            (a,b) =>
-                gainFor(a) -
-                gainFor(b)
-        )[0]
-        : null;
-
-    const biggest =
-        getLargestPosition(currentAssets);
-
-    const winnerCard =
-        document.getElementById(
-            "winnerCard"
-        );
-
-    const loserCard =
-        document.getElementById(
-            "loserCard"
-        );
-
-    const largestCard =
-        document.getElementById(
-            "largestCard"
-        );
-
-    const winnerText =
-        document.getElementById(
-            "topWinner"
-        );
-
-    const loserText =
-        document.getElementById(
-            "topLoser"
-        );
-
-    const largestText =
-        document.getElementById(
-            "largestPosition"
-        );
-
-    if(winner){
-
-        winnerText.innerHTML = `
-
-            <strong>
-                ${escapeHTML(winner.Asset)}
-            </strong>
-
-            gained
-
-            <strong class="${
-                gainFor(winner) >= 0
-                ? "green"
-                : "red"
-            }">
-
-                ${gainFor(winner) >= 0 ? "+" : ""}
-                ${money(gainFor(winner))}
-
-            </strong>
-
-            <br>
-
-            <small>
-                Click to inspect
-            </small>
-
-        `;
-
-        winnerCard.onclick =
-            () => openDetail(winner);
-
-    }else{
-
-        winnerText.innerHTML = "";
-        winnerCard.onclick = null;
-
-    }
-
-    if(loser){
-
-        loserText.innerHTML = `
-
-            <strong>
-                ${escapeHTML(loser.Asset)}
-            </strong>
-
-            is at
-
-            <strong class="${
-                gainFor(loser) >= 0
-                ? "green"
-                : "red"
-            }">
-
-                ${gainFor(loser) >= 0 ? "+" : ""}
-                ${money(gainFor(loser))}
-
-            </strong>
-
-            <br>
-
-            <small>
-                Click to inspect
-            </small>
-
-        `;
-
-        loserCard.onclick =
-            () => openDetail(loser);
-
-    }else{
-
-        loserText.innerHTML = "";
-        loserCard.onclick = null;
-
-    }
-
-    if(biggest){
-
-        largestText.innerHTML = `
-
-            <strong>
-                ${escapeHTML(biggest.Asset)}
-            </strong>
-
-            is your largest position at
-
-            <strong class="orange">
-
-                ${money(
-                    biggest.CurrentValue
-                )}
-
-            </strong>
-
-            <br>
-
-            <small>
-                Click to inspect
-            </small>
-
-        `;
-
-        largestCard.onclick =
-            () => openDetail(biggest);
-
-    }else{
-
-        largestText.innerHTML = "";
-        largestCard.onclick = null;
-
-    }
-
-}
-
-/* =========================================================
-   TABLE
-========================================================= */
-
-function renderTable(currentAssets){
+function renderTable(
+    currentAssets
+){
 
     const table =
         document.getElementById(
@@ -3592,12 +4498,16 @@ function renderTable(currentAssets){
                 <td
                     colspan="6"
                     style="
-                        text-align:center;
-                        padding:40px;
-                        color:rgba(255,255,255,.4);
+                    text-align:center;
+                    padding:40px;
+                    color:rgba(255,255,255,.4);
                     "
                 >
-                    No matching holdings.
+                    ${
+                        isLive
+                        ? "No matching holdings."
+                        : "Unlock your portfolio to view holdings."
+                    }
                 </td>
 
             </tr>
@@ -3608,128 +4518,216 @@ function renderTable(currentAssets){
 
     }
 
-    currentAssets.forEach(asset => {
+    currentAssets.forEach(
+        asset => {
 
-        const invested =
-            numeric(asset.Invested);
+            const invested =
+                numeric(
+                    asset.Invested
+                );
 
-        const current =
-            numeric(asset.CurrentValue);
+            const current =
+                numeric(
+                    asset.CurrentValue
+                );
 
-        const gain =
-            gainFor(asset);
+            const gain =
+                gainFor(asset);
 
-        const ret =
-            returnFor(asset);
+            const ret =
+                returnFor(asset);
 
-        const row =
-            document.createElement("tr");
+            const row =
+                document.createElement(
+                    "tr"
+                );
 
-        row.innerHTML = `
+            row.innerHTML = `
 
-            <td class="asset-name">
-                ${escapeHTML(
-                    asset.Asset
-                )}
-            </td>
+                <td class="asset-name">
+                    ${escapeHTML(
+                        asset.Asset
+                    )}
+                </td>
 
-            <td>
+                <td>
 
-                ${
-                    asset.Category
-                    ? `
-                        <span class="badge">
-                            ${escapeHTML(
-                                asset.Category
-                            )}
-                        </span>
-                    `
-                    : ""
-                }
+                    <span class="badge">
+                        ${escapeHTML(
+                            asset.Category
+                        )}
+                    </span>
 
-            </td>
+                </td>
 
-            <td>
-                ${
-                    invested !== null
-                    ? money(invested)
-                    : ""
-                }
-            </td>
+                <td>
+                    ${
+                        invested !== null
+                        ? money(invested)
+                        : ""
+                    }
+                </td>
 
-            <td>
-                ${
-                    current !== null
-                    ? money(current)
-                    : ""
-                }
-            </td>
+                <td>
+                    ${
+                        current !== null
+                        ? money(current)
+                        : ""
+                    }
+                </td>
 
-            <td class="${
-                gain !== null
-                ? gain >= 0
-                    ? "green"
-                    : "red"
-                : ""
-            }">
-
-                ${
+                <td class="${
                     gain !== null
-                    ? (gain >= 0 ? "+" : "") +
-                      money(gain)
+                    ? gain >= 0
+                        ? "green"
+                        : "red"
                     : ""
-                }
+                }">
 
-            </td>
+                    ${
+                        gain !== null
+                        ? (
+                            gain >= 0
+                            ? "+"
+                            : ""
+                        ) +
+                        money(gain)
+                        : ""
+                    }
 
-            <td class="${
-                ret !== null
-                ? ret >= 0
-                    ? "green"
-                    : "red"
-                : ""
-            }">
+                </td>
 
-                ${
+                <td class="${
                     ret !== null
-                    ? (ret >= 0 ? "+" : "") +
-                      ret.toFixed(2) +
-                      "%"
+                    ? ret >= 0
+                        ? "green"
+                        : "red"
                     : ""
-                }
+                }">
 
-            </td>
+                    ${
+                        ret !== null
+                        ? (
+                            ret >= 0
+                            ? "+"
+                            : ""
+                        ) +
+                        ret.toFixed(2) +
+                        "%"
+                        : ""
+                    }
 
-        `;
+                </td>
 
-        row.onclick =
-            () => openDetail(asset);
+            `;
 
-        table.appendChild(row);
+            row.onclick =
+                () => openDetail(
+                    asset
+                );
 
-    });
+            table.appendChild(row);
+
+        }
+    );
 
 }
 
 /* =========================================================
-   PORTFOLIO CHART
+PORTFOLIO CHART
 ========================================================= */
 
-function renderPortfolioChart(currentAssets){
+function renderPortfolioChart(
+    currentAssets
+){
 
     if(portfolioChart){
+
         portfolioChart.destroy();
+
     }
 
-    const subtitle =
-        document.getElementById(
-            "portfolioChartSubtitle"
-        );
-
-    subtitle.innerText =
+    document.getElementById(
+        "portfolioChartSubtitle"
+    ).innerText =
         currentCategory === "All"
         ? "Invested vs Current"
         : currentCategory;
+
+    /*
+    For the complete portfolio we show
+    categories instead of potentially
+    hundreds of individual positions.
+
+    This makes the chart automatically
+    scale with the API data.
+    */
+
+    let chartData = {};
+
+    if(currentCategory === "All"){
+
+        currentAssets.forEach(
+            asset => {
+
+                const category =
+                    asset.Category ||
+                    "Other";
+
+                if(!chartData[category]){
+
+                    chartData[category] = {
+                        current:0,
+                        invested:0
+                    };
+
+                }
+
+                chartData[category].current +=
+                    numeric(
+                        asset.CurrentValue
+                    ) || 0;
+
+                chartData[category].invested +=
+                    numeric(
+                        asset.Invested
+                    ) || 0;
+
+            }
+        );
+
+    }else{
+
+        currentAssets.forEach(
+            asset => {
+
+                const name =
+                    asset.Asset ||
+                    "Asset";
+
+                chartData[name] = {
+
+                    current:
+                        numeric(
+                            asset.CurrentValue
+                        ) || 0,
+
+                    invested:
+                        numeric(
+                            asset.Invested
+                        ) || 0
+
+                };
+
+            }
+        );
+
+    }
+
+    const labels =
+        Object.keys(
+            chartData
+        );
 
     portfolioChart =
         new Chart(
@@ -3744,11 +4742,7 @@ function renderPortfolioChart(currentAssets){
 
                 data:{
 
-                    labels:
-                        currentAssets.map(
-                            asset =>
-                                asset.Asset
-                        ),
+                    labels,
 
                     datasets:[
 
@@ -3758,11 +4752,11 @@ function renderPortfolioChart(currentAssets){
                                 "Current Value",
 
                             data:
-                                currentAssets.map(
-                                    asset =>
-                                        numeric(
-                                            asset.CurrentValue
-                                        ) || 0
+                                labels.map(
+                                    label =>
+                                        chartData[
+                                            label
+                                        ].current
                                 ),
 
                             borderRadius:8,
@@ -3777,11 +4771,11 @@ function renderPortfolioChart(currentAssets){
                                 "Invested",
 
                             data:
-                                currentAssets.map(
-                                    asset =>
-                                        numeric(
-                                            asset.Invested
-                                        ) || 0
+                                labels.map(
+                                    label =>
+                                        chartData[
+                                            label
+                                        ].invested
                                 ),
 
                             borderRadius:8,
@@ -3801,7 +4795,7 @@ function renderPortfolioChart(currentAssets){
                     maintainAspectRatio:false,
 
                     animation:{
-                        duration:900
+                        duration:700
                     },
 
                     plugins:{
@@ -3848,12 +4842,9 @@ function renderPortfolioChart(currentAssets){
                                     "rgba(255,255,255,.5)",
 
                                 callback:
-                                    function(value){
-
-                                        return "₹" +
-                                            number(value);
-
-                                    }
+                                    value =>
+                                        "₹" +
+                                        number(value)
 
                             },
 
@@ -3877,20 +4868,1016 @@ function renderPortfolioChart(currentAssets){
 }
 
 /* =========================================================
-   DETAIL PANEL
+SIP
 ========================================================= */
 
-function openDetail(asset){
+function getMonthlySIP(){
+
+    /*
+    Prefer the total supplied by the API
+    when available.
+
+    Otherwise calculate directly from
+    SIP_Config.
+    */
+
+    if(
+        apiData &&
+        hasValue(
+            apiData.totalMonthlySIP
+        )
+    ){
+
+        return Number(
+            apiData.totalMonthlySIP
+        );
+
+    }
+
+    if(
+        apiData?.sip &&
+        hasValue(
+            apiData.sip.MonthlySIP
+        )
+    ){
+
+        return Number(
+            apiData.sip.MonthlySIP
+        );
+
+    }
+
+    return sipConfig.reduce(
+        (sum,item) =>
+            sum +
+            (
+                numeric(
+                    item.sipAmount
+                ) || 0
+            ),
+        0
+    );
+
+}
+
+function renderSipAnalytics(){
+
+    const monthly =
+        getMonthlySIP();
+
+    const annual =
+        monthly * 12;
+
+    document.getElementById(
+        "sipMonthly"
+    ).innerText =
+        monthly > 0
+        ? money(monthly)
+        : "—";
+
+    document.getElementById(
+        "sipAnnual"
+    ).innerText =
+        monthly > 0
+        ? money(annual) +
+          " / year"
+        : "—";
+
+    const list =
+        document.getElementById(
+            "sipList"
+        );
+
+    if(!sipConfig.length){
+
+        list.innerHTML = `
+
+            <div style="
+                color:rgba(255,255,255,.4);
+                font-size:12px;
+            ">
+                No SIP configuration found.
+            </div>
+
+        `;
+
+        renderSIPAllocation();
+
+        return;
+
+    }
+
+    list.innerHTML =
+        sipConfig
+            .map(
+                item => {
+
+                    const amount =
+                        numeric(
+                            item.sipAmount
+                        ) || 0;
+
+                    const percentage =
+                        monthly > 0
+                        ? amount /
+                          monthly *
+                          100
+                        : 0;
+
+                    return `
+
+                        <div class="sip-row">
+
+                            <div>
+
+                                <div class="sip-fund">
+                                    ${escapeHTML(
+                                        item.fundName
+                                    )}
+                                </div>
+
+                                <div class="progress-bar">
+
+                                    <div
+                                        class="progress-fill"
+                                        style="width:${percentage}%"
+                                    ></div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="sip-day">
+                                ${
+                                    item.sipDay
+                                    ? "Day " +
+                                      escapeHTML(
+                                          item.sipDay
+                                      )
+                                    : ""
+                                }
+                            </div>
+
+                            <div class="sip-amount">
+                                ${money(amount)}
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }
+            )
+            .join("");
+
+    renderSIPAllocation();
+
+}
+
+/* =========================================================
+SIP ALLOCATION
+========================================================= */
+
+function renderSIPAllocation(){
+
+    const box =
+        document.getElementById(
+            "sipAllocationList"
+        );
+
+    const monthly =
+        getMonthlySIP();
+
+    if(!sipConfig.length){
+
+        box.innerHTML =
+            `
+            <div style="
+                color:rgba(255,255,255,.4);
+                font-size:12px;
+            ">
+                No SIP configuration found.
+            </div>
+            `;
+
+        return;
+
+    }
+
+    box.innerHTML =
+        sipConfig.map(
+            (item,index) => {
+
+                const amount =
+                    numeric(
+                        item.sipAmount
+                    ) || 0;
+
+                const pct =
+                    monthly > 0
+                    ? amount /
+                      monthly *
+                      100
+                    : 0;
+
+                const color =
+                    ALLOCATION_COLORS[
+                        index %
+                        ALLOCATION_COLORS.length
+                    ];
+
+                return `
+
+                    <div
+                        style="
+                        padding:13px 5px;
+                        border-bottom:
+                        1px solid rgba(255,255,255,.07);
+                        "
+                    >
+
+                        <div
+                            style="
+                            display:flex;
+                            justify-content:space-between;
+                            gap:10px;
+                            font-size:12px;
+                            "
+                        >
+
+                            <span>
+                                ${escapeHTML(
+                                    item.fundName
+                                )}
+                            </span>
+
+                            <strong
+                                style="color:${color}"
+                            >
+                                ${pct.toFixed(1)}%
+                            </strong>
+
+                        </div>
+
+                        <div
+                            style="
+                            color:rgba(255,255,255,.4);
+                            font-size:10px;
+                            margin-top:4px;
+                            "
+                        >
+                            ${money(amount)}
+                            / month
+                        </div>
+
+                    </div>
+
+                `;
+
+            }
+        ).join("");
+
+}
+
+/* =========================================================
+ANALYTICS TOGGLE
+========================================================= */
+
+function toggleAnalytics(){
+
+    const button =
+        document.getElementById(
+            "analyticsToggle"
+        );
+
+    const panel =
+        document.getElementById(
+            "analyticsPanel"
+        );
+
+    const open =
+        panel.classList.toggle(
+            "open"
+        );
+
+    button.classList.toggle(
+        "open",
+        open
+    );
+
+    if(open){
+
+        renderSipAnalytics();
+
+        renderProjection();
+
+    }
+
+}
+
+/* =========================================================
+PORTFOLIO TOTALS
+========================================================= */
+
+function getPortfolioTotals(){
+
+    /*
+    Use official API summary for the
+    complete portfolio.
+    */
+
+    if(
+        currentCategory === "All" &&
+        apiData?.summary?.total
+    ){
+
+        const total =
+            apiData.summary.total;
+
+        const current =
+            numeric(
+                total.currentValue
+            ) || 0;
+
+        const invested =
+            numeric(
+                total.invested
+            ) || 0;
+
+        const gain =
+            numeric(
+                total.profitLoss
+            );
+
+        const calculatedGain =
+            current -
+            invested;
+
+        return {
+
+            current,
+
+            invested,
+
+            gain:
+                gain !== null
+                ? gain
+                : calculatedGain,
+
+            roi:
+                numeric(
+                    total.returnPercent
+                ) ??
+                (
+                    invested > 0
+                    ? (
+                        (
+                            gain !== null
+                            ? gain
+                            : calculatedGain
+                        ) /
+                        invested *
+                        100
+                    )
+                    : 0
+                )
+
+        };
+
+    }
+
+    let current = 0;
+
+    let invested = 0;
+
+    assets.forEach(
+        asset => {
+
+            current +=
+                numeric(
+                    asset.CurrentValue
+                ) || 0;
+
+            invested +=
+                numeric(
+                    asset.Invested
+                ) || 0;
+
+        }
+    );
+
+    const gain =
+        current -
+        invested;
+
+    const roi =
+        invested > 0
+        ? gain /
+          invested *
+          100
+        : 0;
+
+    return {
+
+        current,
+        invested,
+        gain,
+        roi
+
+    };
+
+}
+
+/* =========================================================
+FUTURE VALUE
+========================================================= */
+
+function futureValue(
+    principal,
+    monthlySIP,
+    annualRate,
+    years
+){
+
+    const months =
+        years * 12;
+
+    const monthlyRate =
+        annualRate /
+        100 /
+        12;
+
+    if(monthlyRate === 0){
+
+        return principal +
+            monthlySIP *
+            months;
+
+    }
+
+    return (
+        principal *
+        Math.pow(
+            1 + monthlyRate,
+            months
+        )
+    ) +
+    (
+        monthlySIP *
+        (
+            Math.pow(
+                1 + monthlyRate,
+                months
+            ) - 1
+        ) /
+        monthlyRate
+    );
+
+}
+
+/* =========================================================
+PROJECTION RATE
+========================================================= */
+
+function projectionRate(){
+
+    const portfolio =
+        getPortfolioTotals();
+
+    if(
+        projectionScenario ===
+        "conservative"
+    ){
+
+        return 8;
+
+    }
+
+    if(
+        projectionScenario ===
+        "optimistic"
+    ){
+
+        return 15;
+
+    }
+
+    return portfolio.roi;
+
+}
+
+/* =========================================================
+PROJECTION SCENARIO
+========================================================= */
+
+function setProjectionScenario(
+    scenario
+){
+
+    projectionScenario =
+        scenario;
+
+    document
+        .querySelectorAll(
+            ".scenario-btn"
+        )
+        .forEach(
+            button => {
+
+                button.classList.toggle(
+                    "active",
+                    button.dataset.scenario ===
+                    scenario
+                );
+
+            }
+        );
+
+    renderProjection();
+
+}
+
+/* =========================================================
+PROJECTION
+========================================================= */
+
+function renderProjection(){
+
+    const portfolio =
+        getPortfolioTotals();
+
+    const monthly =
+        getMonthlySIP();
+
+    const rate =
+        projectionRate();
+
+    document.getElementById(
+        "projectionROI"
+    ).innerText =
+        rate.toFixed(2) +
+        "% / year";
+
+    const periods =
+        [1,3,5,10,15,20];
+
+    const table =
+        document.getElementById(
+            "projectionTable"
+        );
+
+    table.innerHTML = `
+
+        <div
+            class="projection-table-row header"
+        >
+
+            <div>
+                Years
+            </div>
+
+            <div>
+                Contributions
+            </div>
+
+            <div>
+                Projected
+            </div>
+
+            <div>
+                Growth
+            </div>
+
+        </div>
+
+    `;
+
+    periods.forEach(
+        years => {
+
+            const projected =
+                futureValue(
+                    portfolio.current,
+                    monthly,
+                    rate,
+                    years
+                );
+
+            const contributions =
+                monthly *
+                years *
+                12;
+
+            const totalCapital =
+                portfolio.current +
+                contributions;
+
+            const growth =
+                projected -
+                totalCapital;
+
+            table.innerHTML += `
+
+                <div
+                    class="projection-table-row"
+                >
+
+                    <div>
+                        ${years}Y
+                    </div>
+
+                    <div>
+                        ${money(
+                            contributions
+                        )}
+                    </div>
+
+                    <div
+                        class="projection-value"
+                    >
+                        ${money(
+                            projected
+                        )}
+                    </div>
+
+                    <div
+                        class="projection-growth"
+                    >
+                        ${money(
+                            growth
+                        )}
+                    </div>
+
+                </div>
+
+            `;
+
+        }
+    );
+
+    renderProjectionChart(
+        portfolio.current,
+        monthly,
+        rate
+    );
+
+    renderMilestones(
+        portfolio.current,
+        monthly,
+        rate
+    );
+
+}
+
+/* =========================================================
+PROJECTION CHART
+========================================================= */
+
+function renderProjectionChart(
+    current,
+    monthly,
+    rate
+){
+
+    if(projectionChart){
+
+        projectionChart.destroy();
+
+    }
+
+    const years =
+        Array.from(
+            {length:21},
+            (_,i) => i
+        );
+
+    const values =
+        years.map(
+            year =>
+                futureValue(
+                    current,
+                    monthly,
+                    rate,
+                    year
+                )
+        );
+
+    projectionChart =
+        new Chart(
+
+            document.getElementById(
+                "projectionChart"
+            ),
+
+            {
+
+                type:"line",
+
+                data:{
+
+                    labels:
+                        years.map(
+                            y =>
+                                y + "Y"
+                        ),
+
+                    datasets:[{
+
+                        label:
+                            "Projected Portfolio",
+
+                        data:values,
+
+                        tension:.35,
+
+                        fill:true,
+
+                        borderWidth:2,
+
+                        pointRadius:2
+
+                    }]
+
+                },
+
+                options:{
+
+                    responsive:true,
+
+                    maintainAspectRatio:false,
+
+                    plugins:{
+
+                        legend:{
+
+                            labels:{
+                                color:
+                                    "rgba(255,255,255,.65)"
+                            }
+
+                        }
+
+                    },
+
+                    scales:{
+
+                        x:{
+
+                            ticks:{
+                                color:
+                                    "rgba(255,255,255,.4)"
+                            },
+
+                            grid:{
+                                display:false
+                            }
+
+                        },
+
+                        y:{
+
+                            ticks:{
+
+                                color:
+                                    "rgba(255,255,255,.4)",
+
+                                callback:
+                                    value =>
+                                        "₹" +
+                                        number(value)
+
+                            },
+
+                            grid:{
+                                color:
+                                    "rgba(255,255,255,.07)"
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        );
+
+}
+
+/* =========================================================
+MILESTONES
+========================================================= */
+
+function yearsToReach(
+    current,
+    monthly,
+    rate,
+    target
+){
+
+    if(current >= target){
+
+        return 0;
+
+    }
+
+    const monthlyRate =
+        rate /
+        100 /
+        12;
+
+    if(monthly <= 0){
+
+        if(rate <= 0){
+
+            return null;
+
+        }
+
+        const months =
+            Math.log(
+                target /
+                current
+            ) /
+            Math.log(
+                1 +
+                monthlyRate
+            );
+
+        return months / 12;
+
+    }
+
+    if(monthlyRate === 0){
+
+        return (
+            target -
+            current
+        ) /
+        monthly /
+        12;
+
+    }
+
+    let low = 0;
+
+    let high = 100 * 12;
+
+    for(
+        let i = 0;
+        i < 100;
+        i++
+    ){
+
+        const mid =
+            (low + high) /
+            2;
+
+        const value =
+            futureValue(
+                current,
+                monthly,
+                rate,
+                mid / 12
+            );
+
+        if(value >= target){
+
+            high = mid;
+
+        }else{
+
+            low = mid;
+
+        }
+
+    }
+
+    return high / 12;
+
+}
+
+function renderMilestones(
+    current,
+    monthly,
+    rate
+){
+
+    const milestones = [
+
+        {
+            label:"₹25L",
+            value:2500000
+        },
+
+        {
+            label:"₹50L",
+            value:5000000
+        },
+
+        {
+            label:"₹1Cr",
+            value:10000000
+        },
+
+        {
+            label:"₹2Cr",
+            value:20000000
+        },
+
+        {
+            label:"₹5Cr",
+            value:50000000
+        }
+
+    ];
+
+    const box =
+        document.getElementById(
+            "milestoneList"
+        );
+
+    box.innerHTML =
+        milestones
+            .map(
+                milestone => {
+
+                    const years =
+                        yearsToReach(
+                            current,
+                            monthly,
+                            rate,
+                            milestone.value
+                        );
+
+                    let text;
+
+                    if(years === null){
+
+                        text =
+                            "Not reachable";
+
+                    }else if(years === 0){
+
+                        text =
+                            "Already reached";
+
+                    }else{
+
+                        text =
+                            years.toFixed(1) +
+                            " years";
+
+                    }
+
+                    return `
+
+                        <div class="milestone">
+
+                            <div class="milestone-value">
+                                ${milestone.label}
+                            </div>
+
+                            <div class="milestone-label">
+                                Target
+                            </div>
+
+                            <div class="milestone-time">
+                                ${text}
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }
+            )
+            .join("");
+
+}
+
+/* =========================================================
+DETAIL PANEL
+========================================================= */
+
+function openDetail(
+    asset
+){
 
     if(!asset){
         return;
     }
 
     const invested =
-        numeric(asset.Invested);
+        numeric(
+            asset.Invested
+        );
 
     const current =
-        numeric(asset.CurrentValue);
+        numeric(
+            asset.CurrentValue
+        );
 
     const gain =
         gainFor(asset);
@@ -3903,7 +5890,9 @@ function openDetail(asset){
             (sum,item) =>
                 sum +
                 (
-                    numeric(item.CurrentValue) || 0
+                    numeric(
+                        item.CurrentValue
+                    ) || 0
                 ),
             0
         );
@@ -3911,23 +5900,33 @@ function openDetail(asset){
     const weight =
         current !== null &&
         portfolioTotal > 0
-        ? current / portfolioTotal * 100
+        ? current /
+          portfolioTotal *
+          100
         : null;
 
     const sorted =
         [...assets]
             .filter(
                 x =>
-                    numeric(x.CurrentValue) !== null
+                    numeric(
+                        x.CurrentValue
+                    ) !== null
             )
             .sort(
                 (a,b) =>
-                    numeric(b.CurrentValue) -
-                    numeric(a.CurrentValue)
+                    numeric(
+                        b.CurrentValue
+                    ) -
+                    numeric(
+                        a.CurrentValue
+                    )
             );
 
     const rankIndex =
-        sorted.indexOf(asset);
+        sorted.indexOf(
+            asset
+        );
 
     document.getElementById(
         "detailCategory"
@@ -3937,7 +5936,8 @@ function openDetail(asset){
     document.getElementById(
         "detailName"
     ).innerText =
-        asset.Asset || "Asset";
+        asset.Asset ||
+        "Asset";
 
     document.getElementById(
         "detailCurrent"
@@ -3954,17 +5954,21 @@ function openDetail(asset){
     if(ret !== null){
 
         returnElement.innerText =
-            (ret >= 0 ? "+" : "") +
+            (
+                ret >= 0
+                ? "+"
+                : ""
+            ) +
             ret.toFixed(2) +
             "%";
 
         returnElement.className =
             "detail-return " +
-            (ret >= 0 ? "green" : "red");
-
-    }else{
-
-        returnElement.innerText = "";
+            (
+                ret >= 0
+                ? "green"
+                : "red"
+            );
 
     }
 
@@ -3979,30 +5983,54 @@ function openDetail(asset){
         detailGrid,
         "Total Invested",
         invested !== null
-            ? money(invested)
-            : ""
+        ? money(invested)
+        : ""
     );
 
     addDetailBox(
         detailGrid,
         "Gain / Loss",
         gain !== null
-            ? (gain >= 0 ? "+" : "") +
-              money(gain)
-            : "",
-        gain !== null
-            ? gain >= 0
-                ? "green"
-                : "red"
+        ? (
+            gain >= 0
+            ? "+"
             : ""
+        ) +
+        money(gain)
+        : "",
+        gain !== null
+        ? gain >= 0
+            ? "green"
+            : "red"
+        : ""
+    );
+
+    addDetailBox(
+        detailGrid,
+        "Return %",
+        ret !== null
+        ? (
+            ret >= 0
+            ? "+"
+            : ""
+        ) +
+        ret.toFixed(2) +
+        "%"
+        : "",
+        ret !== null
+        ? ret >= 0
+            ? "green"
+            : "red"
+        : ""
     );
 
     addDetailBox(
         detailGrid,
         "Portfolio Weight",
         weight !== null
-            ? weight.toFixed(2) + "%"
-            : ""
+        ? weight.toFixed(2) +
+          "%"
+        : ""
     );
 
     if(rankIndex >= 0){
@@ -4010,7 +6038,10 @@ function openDetail(asset){
         addDetailBox(
             detailGrid,
             "Position Rank",
-            "#" + (rankIndex + 1)
+            "#" +
+            (
+                rankIndex + 1
+            )
         );
 
     }
@@ -4034,70 +6065,121 @@ function openDetail(asset){
         asset.Ticker
     );
 
-    if(gain !== null){
-
-        addMeta(
-            meta,
-            "Position Status",
-            gain >= 0
+    addMeta(
+        meta,
+        "Position Status",
+        gain !== null
+        ? gain >= 0
             ? "In profit"
-            : "Below invested value",
-            gain >= 0
+            : "Below invested value"
+        : "",
+        gain !== null
+        ? gain >= 0
             ? "green"
             : "red"
+        : ""
+    );
+
+    /*
+    SIP matching remains completely dynamic.
+    */
+
+    const matchingSIP =
+        sipConfig.find(
+            sip =>
+                String(
+                    sip.ticker || ""
+                ) ===
+                String(
+                    asset.Ticker || ""
+                )
         );
 
-    }
-
-    if(ret !== null){
+    if(matchingSIP){
 
         addMeta(
             meta,
-            "Capital Efficiency",
-            ret >= 0
-            ? "Positive capital growth"
-            : "Capital currently under water"
+            "Monthly SIP",
+            money(
+                matchingSIP.sipAmount
+            ),
+            "orange"
+        );
+
+        addMeta(
+            meta,
+            "SIP Day",
+            matchingSIP.sipDay
+            ? "Day " +
+              matchingSIP.sipDay
+            : ""
         );
 
     }
 
     /*
-       Optional fields.
-       They appear ONLY if your Google Sheet supplies them.
+    Show useful fields from the original
+    API row when available.
+
+    This means newly added columns can
+    appear without changing the HTML.
     */
 
-    const optionalFields = [
+    const original =
+        asset.Original || {};
 
-        ["Fund", "Fund"],
-        ["AMC", "AMC"],
-        ["ISIN", "ISIN"],
-        ["Sector", "Sector"],
-        ["Units", "Units"],
-        ["NAV", "NAV"],
-        ["Quantity", "Quantity"],
-        ["AveragePrice", "Average Price"],
-        ["PurchaseDate", "Purchase Date"],
-        ["Type", "Type"],
-        ["Broker", "Broker"]
+    const ignored =
+        new Set([
+            "name",
+            "fundName",
+            "fund",
+            "ticker",
+            "fundTicker",
+            "instrument",
+            "symbol",
+            "invested",
+            "totalInvested",
+            "currentValue",
+            "profitLoss",
+            "returnPercent",
+            "deposited",
+            "totalDeposited",
+            "currentBalance"
+        ]);
 
-    ];
-
-    optionalFields.forEach(
-        ([key,label]) => {
+    Object.entries(
+        original
+    ).forEach(
+        ([key,value]) => {
 
             if(
-                asset[key] !== undefined &&
-                asset[key] !== null &&
-                asset[key] !== ""
+                ignored.has(key) ||
+                value === undefined ||
+                value === null ||
+                value === ""
             ){
 
-                addMeta(
-                    meta,
-                    label,
-                    asset[key]
-                );
+                return;
 
             }
+
+            const label =
+                key
+                    .replace(
+                        /([A-Z])/g,
+                        " $1"
+                    )
+                    .replace(
+                        /^./,
+                        c =>
+                            c.toUpperCase()
+                    );
+
+            addMeta(
+                meta,
+                label,
+                value
+            );
 
         }
     );
@@ -4125,11 +6207,15 @@ function addDetailBox(
         value === null ||
         value === ""
     ){
+
         return;
+
     }
 
     const box =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
     box.className =
         "detail-box";
@@ -4146,7 +6232,9 @@ function addDetailBox(
 
     `;
 
-    parent.appendChild(box);
+    parent.appendChild(
+        box
+    );
 
 }
 
@@ -4162,11 +6250,15 @@ function addMeta(
         value === null ||
         value === ""
     ){
+
         return;
+
     }
 
     const item =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
     item.className =
         "meta-item";
@@ -4183,13 +6275,11 @@ function addMeta(
 
     `;
 
-    parent.appendChild(item);
+    parent.appendChild(
+        item
+    );
 
 }
-
-/* =========================================================
-   CLOSE DETAIL
-========================================================= */
 
 function closeDetail(){
 
@@ -4197,14 +6287,18 @@ function closeDetail(){
         .getElementById(
             "detailOverlay"
         )
-        .classList.remove("open");
+        .classList.remove(
+            "open"
+        );
 
     document.body.style.overflow =
         "";
 
 }
 
-function closeDetailFromOutside(event){
+function closeDetailFromOutside(
+    event
+){
 
     if(
         event.target.id ===
@@ -4222,7 +6316,8 @@ document.addEventListener(
     event => {
 
         if(
-            event.key === "Escape"
+            event.key ===
+            "Escape"
         ){
 
             closeDetail();
@@ -4233,10 +6328,10 @@ document.addEventListener(
 );
 
 /* =========================================================
-   INITIAL STATE
+INITIAL
 ========================================================= */
 
-setDemoStatus();
+setLockedStatus();
 
 updateFilterButtons();
 
@@ -4244,18 +6339,23 @@ updateViewHeader();
 
 renderDashboard();
 
+renderSipAnalytics();
+
 /* =========================================================
-   ENTER KEY
+ENTER KEY
 ========================================================= */
 
 document
-    .getElementById("password")
+    .getElementById(
+        "password"
+    )
     .addEventListener(
         "keydown",
-        function(event){
+        event => {
 
             if(
-                event.key === "Enter"
+                event.key ===
+                "Enter"
             ){
 
                 connectToSheet();
