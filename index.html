@@ -245,73 +245,75 @@ CONNECTION
 /* =========================================================
 PASSWORD
 ========================================================= */
-
 .password-box{
     display:flex;
-    gap:6px;
-
-    padding:6px;
-
-    border-radius:14px;
-
-    background:rgba(8,16,28,.46);
-
-    border:1px solid rgba(255,255,255,.15);
-
-    backdrop-filter:blur(20px);
+    align-items:center;
+    gap:4px;
+    min-width:245px;
+    height:42px;
+    padding:4px 5px 4px 14px;
+    border-radius:14px !important;
+    background:rgba(255,255,255,.12) !important;
+    border:1px solid rgba(255,255,255,.24) !important;
+    box-shadow:0 8px 26px rgba(0,0,0,.10), inset 0 1px 0 rgba(255,255,255,.18) !important;
+    backdrop-filter:blur(16px) saturate(120%);
+    -webkit-backdrop-filter:blur(16px) saturate(120%);
+    transition:background .35s ease,border-color .35s ease,box-shadow .35s ease,transform .35s cubic-bezier(.22,1,.36,1);
 }
-
+.password-box:focus-within{
+    background:rgba(255,255,255,.16) !important;
+    border-color:rgba(255,255,255,.38) !important;
+    box-shadow:0 12px 34px rgba(0,0,0,.14),0 0 0 3px rgba(255,255,255,.06),inset 0 1px 0 rgba(255,255,255,.22) !important;
+}
 .password-box input{
-    width:170px;
-
+    flex:1;
+    min-width:0;
+    width:150px;
     background:transparent;
-
     border:none;
     outline:none;
-
-    color:white;
-
-    padding:9px 10px;
+    color:#fff;
+    padding:8px 4px;
+    font:500 13px/1 -apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",sans-serif;
 }
-
-.password-box input::placeholder{
-    color:rgba(255,255,255,.45);
+.password-username{
+    position:absolute !important;
+    width:1px !important;
+    height:1px !important;
+    padding:0 !important;
+    margin:-1px !important;
+    overflow:hidden !important;
+    clip:rect(0,0,0,0) !important;
+    white-space:nowrap !important;
+    border:0 !important;
 }
-
+.password-box input::placeholder{color:rgba(255,255,255,.52);}
 .password-box button{
-    border:none;
-
-    padding:9px 15px;
-
+    flex:0 0 auto;
+    border:1px solid rgba(255,255,255,.18);
+    padding:8px 14px;
+    min-width:70px;
     border-radius:10px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #ffb85f,
-            #ff8658
-        );
-
-    color:white;
-
-    font-weight:700;
-
+    background:rgba(255,255,255,.18);
+    color:#fff;
+    font:600 12px/1 -apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",sans-serif;
+    letter-spacing:.1px;
     cursor:pointer;
-
-    transition:.25s;
+    transition:transform .45s cubic-bezier(.22,1,.36,1),background .3s ease,box-shadow .3s ease,border-color .3s ease;
 }
-
 .password-box button:hover{
-    transform:translateY(-2px);
-
-    box-shadow:
-        0 10px 30px rgba(255,137,88,.3);
+    transform:translateY(-1px);
+    background:rgba(255,255,255,.25);
+    box-shadow:0 7px 18px rgba(0,0,0,.12);
 }
-
-.password-box button:disabled{
-    opacity:.6;
-    cursor:wait;
-}
+.password-box button:active{transform:scale(.97);}
+.password-box button:disabled{opacity:.6;cursor:wait;transform:none;}
+.password-box button.connected{background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.22);cursor:default;}
+.password-box.refresh-only{min-width:112px;justify-content:center;padding-left:5px;}
+.password-box.refresh-only button{width:100%;min-width:0;border-radius:10px;}
+.password-box.is-authenticated{animation:authSwap .55s cubic-bezier(.22,1,.36,1);}
+@keyframes authSwap{0%{opacity:.5;transform:scale(.97);filter:blur(2px)}100%{opacity:1;transform:scale(1);filter:blur(0)}}
+.password-box button.connected:hover{transform:none;}
 
 /* =========================================================
 HERO
@@ -1607,9 +1609,85 @@ FOOTER / TOAST
     transform:translate(-50%,0);
 }
 
+
 /* =========================================================
-MOBILE
+GREETING / WEATHER
 ========================================================= */
+.greeting-line{
+    margin-top:18px;
+    min-height:34px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    color:rgba(255,255,255,.82);
+    font-size:15px;
+    font-weight:600;
+    letter-spacing:.2px;
+}
+.hero-greeting{
+    margin-top:0;
+    min-height:72px;
+    font-size:clamp(38px, 6vw, 72px);
+    line-height:1.05;
+    font-weight:700;
+    letter-spacing:-2px;
+    color:#fff;
+    text-shadow:0 8px 32px rgba(0,0,0,.22);
+    font-family:ui-rounded, -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+    animation:greetingFloat 900ms cubic-bezier(.22,1,.36,1) both;
+}
+@keyframes greetingFloat{
+    from{opacity:0; transform:translateY(12px) scale(.985); filter:blur(5px)}
+    to{opacity:1; transform:none; filter:blur(0)}
+}
+.greeting-caret{
+    width:2px;
+    height:20px;
+    background:#ffc46b;
+    display:inline-block;
+    animation:caretBlink .9s ease-in-out infinite;
+}
+@keyframes caretBlink{0%,45%{opacity:1}46%,100%{opacity:0}}
+.weather-card{
+    margin-top:18px;
+    padding:18px 20px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:18px;
+    flex-wrap:wrap;
+}
+.weather-left{display:flex;align-items:center;gap:12px}
+.weather-icon{font-size:28px;line-height:1}
+.weather-label{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.4)}
+.weather-location{font-size:14px;font-weight:700;margin-top:3px}
+.weather-temp{font-size:22px;font-weight:700;color:#ffc46b}
+.weather-meta{font-size:11px;color:rgba(255,255,255,.42);margin-top:2px}
+.demo-note{color:#ffc46b !important}
+
+/* =========================================================
+GREETING POLISH
+========================================================= */
+.hero-greeting{
+    min-height:1.35em;
+    font-family:ui-rounded,-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif !important;
+    font-size:clamp(44px,6.2vw,78px) !important;
+    font-weight:650 !important;
+    letter-spacing:-.045em !important;
+    line-height:1.02 !important;
+    color:#fff !important;
+    text-shadow:0 8px 32px rgba(0,0,0,.20);
+    transform-origin:left center;
+}
+#greetingText{
+    display:inline-block;
+    min-width:7ch;
+    animation:greetingBreath 8s ease-in-out infinite;
+}
+@keyframes greetingBreath{
+    0%,100%{transform:translateY(0)}
+    50%{transform:translateY(-2px)}
+}
 
 @media(max-width:1000px){
 
@@ -1748,7 +1826,7 @@ Vageesh's <span>Portfolio</span>
 
 <div class="connection-area">
 
-<div id="connectionStatus" class="connection-status">
+<div id="connectionStatus" class="connection-status" style="display:none;">
 
 <div id="statusDot" class="status-dot"></div>
 
@@ -1758,12 +1836,25 @@ LOCKED
 
 </div>
 
-<div class="password-box">
+<div id="authControls" class="password-box">
+
+<input
+class="password-username"
+id="username"
+name="username"
+type="text"
+value="vageesh"
+autocomplete="username"
+tabindex="-1"
+aria-hidden="true"
+/>
 
 <input
 id="password"
+name="password"
 type="password"
 placeholder="Enter passcode"
+autocomplete="current-password"
 />
 
 <button
@@ -1774,6 +1865,8 @@ Unlock
 </button>
 
 </div>
+
+<div id="lastUpdated" class="weather-meta" aria-live="polite"></div>
 
 </div>
 
@@ -1791,16 +1884,9 @@ Private portfolio
 
 </div>
 
-<h1 class="hero-title">
-Your money.<br>
-<span>Your journey.</span>
-</h1>
-
-<p class="hero-subtitle">
-Financial journey —
-investments, allocation, winners, laggards,
-SIP growth and the road ahead.
-</p>
+<div class="greeting-line hero-greeting" aria-live="polite">
+    <span id="greetingText"></span>
+</div>
 
 </section>
 
@@ -2016,6 +2102,21 @@ Connect your portfolio to see this.
 <!-- HEALTH -->
 
 <div id="healthStrip" class="health-strip">
+</div>
+
+<div class="glass weather-card" id="weatherCard">
+    <div class="weather-left">
+        <div class="weather-icon" id="weatherIcon">☀️</div>
+        <div>
+            <div class="weather-label">Your location</div>
+            <div class="weather-location" id="weatherLocation">Finding your location…</div>
+            <div class="weather-meta" id="weatherMeta">Weather will appear here</div>
+        </div>
+    </div>
+    <div>
+        <div class="weather-temp" id="weatherTemp">—</div>
+        <div class="weather-meta" id="weatherCondition">Local weather</div>
+    </div>
 </div>
 
 <!-- HOLDINGS -->
@@ -2417,9 +2518,30 @@ STATE
 
 let apiData = null;
 
-let assets = [];
+/* Public demo data: intentionally fictional names. */
+const demoAssets = [
+    { Asset:"Asteron Dynamics", Category:"Equity", Invested:185000, CurrentValue:214600, Ticker:"DEMO:ASTD", Quantity:120, AveragePrice:1542 },
+    { Asset:"BlueMango Systems", Category:"Equity", Invested:132500, CurrentValue:119800, Ticker:"DEMO:BMSG", Quantity:75, AveragePrice:1767 },
+    { Asset:"NorthPeak Motors", Category:"Equity", Invested:98000, CurrentValue:108900, Ticker:"DEMO:NPMT", Quantity:140, AveragePrice:700 },
+    { Asset:"Rivera Fintech", Category:"Equity", Invested:76000, CurrentValue:91400, Ticker:"DEMO:RVFT", Quantity:200, AveragePrice:380 },
+    { Asset:"Suntrail Flexi Growth Fund", Category:"Mutual Funds", Invested:245000, CurrentValue:279800, Ticker:"DEMO:STFG" },
+    { Asset:"CedarStone Equity Fund", Category:"Mutual Funds", Invested:180000, CurrentValue:201600, Ticker:"DEMO:CSEF" },
+    { Asset:"Monsoon Balanced Advantage Fund", Category:"Mutual Funds", Invested:155000, CurrentValue:168900, Ticker:"DEMO:MBAF" },
+    { Asset:"PPF", Category:"Fixed Income", Invested:500000, CurrentValue:534800, Ticker:"DEMO:PPF" }
+];
 
-let sipConfig = [];
+const demoSipConfig = [
+    { ticker:"DEMO:STFG", sipAmount:15000, sipDay:5, fundName:"Suntrail Flexi Growth Fund" },
+    { ticker:"DEMO:CSEF", sipAmount:10000, sipDay:10, fundName:"CedarStone Equity Fund" },
+    { ticker:"DEMO:MBAF", sipAmount:7500, sipDay:15, fundName:"Monsoon Balanced Advantage Fund" }
+];
+
+let assets = [...demoAssets];
+
+let sipConfig = [...demoSipConfig];
+
+let cachedLiveData = null;
+let lastRefreshInProgress = false;
 
 let currentCategory = "All";
 
@@ -2909,31 +3031,51 @@ function normalizeSIP(){
 STATUS
 ========================================================= */
 
+let authenticatedPassword = "";
+
 function setLockedStatus(){
 
     isLive = false;
+    authenticatedPassword = "";
 
-    const status =
-        document.getElementById(
-            "connectionStatus"
-        );
+    const status = document.getElementById("connectionStatus");
+    if(status){
+        status.style.display = "none";
+        status.classList.remove("live");
+    }
 
-    status.classList.remove("live");
+    const authControls = document.getElementById("authControls");
+    if(authControls){
+        authControls.className = "password-box";
+        authControls.innerHTML = `
+            <input class="password-username" id="username" name="username" type="text" value="vageesh" autocomplete="username" tabindex="-1" aria-hidden="true">
+            <input id="password" name="password" type="password" placeholder="Enter passcode" autocomplete="current-password">
+            <button id="unlockButton" type="button" onclick="connectToSheet()">Unlock</button>
+        `;
+    }
+
+    /* Public mode always shows fictional demo holdings. */
+    assets = [...demoAssets];
+    sipConfig = [...demoSipConfig];
+    apiData = null;
 
     document.getElementById(
         "statusText"
     ).innerText =
-        "LOCKED";
+        "";
 
     document.getElementById(
         "heroStatus"
     ).innerText =
-        "Private portfolio";
+        "Demo portfolio";
 
     document.getElementById(
         "tableStatus"
     ).innerText =
-        "LOCKED";
+        "";
+
+    const updated = document.getElementById("lastUpdated");
+    if(updated) updated.innerText = "";
 
 }
 
@@ -2946,6 +3088,7 @@ function setLiveStatus(){
             "connectionStatus"
         );
 
+    status.style.display = "flex";
     status.classList.add("live");
 
     document.getElementById(
@@ -2963,170 +3106,168 @@ function setLiveStatus(){
     ).innerText =
         "LIVE DATA";
 
+    const updated = document.getElementById("lastUpdated");
+    if(updated){
+        const stamp = apiData?.updatedAt ? new Date(apiData.updatedAt) : new Date();
+        updated.innerText = "Last updated • " + stamp.toLocaleString("en-IN", {dateStyle:"medium", timeStyle:"short"});
+    }
+
+    const authControls = document.getElementById("authControls");
+    if(authControls){
+        authControls.classList.add("is-authenticated", "refresh-only");
+        authControls.innerHTML = `
+            <button id="refreshButton" type="button" onclick="refreshAuthenticatedPortfolio()" aria-label="Refresh portfolio">
+                Refresh
+            </button>
+        `;
+    }
+
 }
 
 /* =========================================================
 CONNECT TO NEW API
 ========================================================= */
 
-async function connectToSheet(){
+async function hashPasscode(value){
+    const bytes = new TextEncoder().encode(value);
+    const hash = await crypto.subtle.digest("SHA-256", bytes);
+    return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2,"0")).join("");
+}
 
-    const password =
-        document
-            .getElementById("password")
-            .value
-            .trim();
+function saveLiveCache(data, passwordHash){
+    try{
+        localStorage.setItem("portfolio_live_cache_v2", JSON.stringify(data));
+        localStorage.setItem("portfolio_pass_hash_v2", passwordHash);
+    }catch(e){ console.warn("Cache unavailable", e); }
+}
 
-    if(!password){
+function loadLiveCache(){
+    try{
+        const raw = localStorage.getItem("portfolio_live_cache_v2");
+        return raw ? JSON.parse(raw) : null;
+    }catch(e){ return null; }
+}
 
-        showToast(
-            "Enter your passcode first."
+function applyLiveData(data, showToastMessage = false){
+    apiData = data;
+    assets = buildAssetsFromAPI();
+    sipConfig = normalizeSIP();
+
+    if(!assets.length) throw new Error("API connected but no holdings were returned.");
+
+    currentCategory = "All";
+    setLiveStatus();
+    updateFilterButtons();
+    updateViewHeader();
+    renderDashboard();
+    renderSipAnalytics();
+
+    if(showToastMessage) showToast("✓ Live portfolio connected");
+}
+
+async function refreshLiveData(password, silent = false){
+    if(lastRefreshInProgress) return;
+    lastRefreshInProgress = true;
+
+    try{
+        const response = await fetch(
+            API_URL + "?passcode=" + encodeURIComponent(password) + "&t=" + Date.now(),
+            { method:"GET", cache:"no-store" }
         );
 
+        if(!response.ok) throw new Error("Connection failed");
+
+        const data = await response.json();
+
+        if(data.success === false || data.error === true || data.error === "true"){
+            throw new Error(data.message || data.error || "Invalid passcode");
+        }
+
+        const passwordHash = await hashPasscode(password);
+        saveLiveCache(data, passwordHash);
+        applyLiveData(data, !silent);
+        return true;
+    }catch(error){
+        if(!silent) throw error;
+        console.warn("Silent portfolio refresh failed:", error);
+        return false;
+    }finally{
+        lastRefreshInProgress = false;
+    }
+}
+
+async function connectToSheet(){
+    const password = document.getElementById("password").value.trim();
+
+    if(!password){
+        showToast("Enter your passcode first.");
         return;
     }
 
-    const button =
-        document.getElementById(
-            "unlockButton"
-        );
-
+    const button = document.getElementById("unlockButton");
     button.disabled = true;
-
-    button.innerText =
-        "Connecting…";
+    button.innerText = "Unlocking…";
 
     try{
-
-        const response =
-            await fetch(
-                API_URL +
-                "?passcode=" +
-                encodeURIComponent(password) +
-                "&t=" +
-                Date.now(),
-                {
-                    method:"GET",
-                    cache:"no-store"
-                }
-            );
-
-        if(!response.ok){
-
-            throw new Error(
-                "Connection failed"
-            );
-
-        }
-
-        const data =
-            await response.json();
-
-        if(
-            data.error === true ||
-            data.error === "true"
-        ){
-
-            throw new Error(
-                data.message ||
-                "Invalid passcode"
-            );
-
-        }
+        const suppliedHash = await hashPasscode(password);
+        const cachedHash = localStorage.getItem("portfolio_pass_hash_v2");
+        const cache = loadLiveCache();
 
         /*
-        NEW API STRUCTURE
-
-        We keep the entire API response.
-
-        Nothing is hardcoded.
-        */
-
-        apiData = data;
-
-        /*
-        Build website holdings dynamically
-        from the actual API arrays.
-        */
-
-        assets =
-            buildAssetsFromAPI();
-
-        /*
-        SIP_Config is also completely dynamic.
-        */
-
-        sipConfig =
-            normalizeSIP();
-
-        if(!assets.length){
-
-            throw new Error(
-                "API connected but no holdings were returned."
-            );
-
+         * FAST PATH:
+         * If this is the same authenticated session, render the cached
+         * live portfolio immediately. Then refresh silently in the background.
+         */
+        if(cache && cachedHash && suppliedHash === cachedHash){
+            authenticatedPassword = password;
+            cachedLiveData = cache;
+            applyLiveData(cache, false);
+            showToast("✓ Portfolio ready");
+            refreshLiveData(password, true);
+            return;
         }
 
-        currentCategory = "All";
-
-        setLiveStatus();
-
-        updateFilterButtons();
-
-        updateViewHeader();
-
-        renderDashboard();
-
-        renderSipAnalytics();
-
-        showToast(
-            "✓ Live portfolio connected"
-        );
-
-        console.log(
-            "Portfolio API response:",
-            data
-        );
-
+        /* First login / changed passcode: validate against Apps Script. */
+        authenticatedPassword = password;
+        await refreshLiveData(password, false);
     }catch(error){
-
         console.error(error);
-
+        button.innerText = "Unlock";
+        button.classList.remove("connected");
         setLockedStatus();
-
-        /*
-        IMPORTANT:
-        We do NOT fall back to hardcoded
-        demo stock/fund names anymore.
-        */
-
-        assets = [];
-
-        sipConfig = [];
-
-        apiData = null;
-
         renderDashboard();
-
         renderSipAnalytics();
-
         showToast(
-            error.message ===
-            "Invalid passcode"
+            error.message === "Invalid Passcode!" || error.message === "Invalid passcode"
             ? "Incorrect passcode."
-            : error.message ||
-              "Could not connect to portfolio API."
+            : error.message || "Could not connect to portfolio API."
         );
-
     }finally{
-
-        button.disabled = false;
-
-        button.innerText =
-            "Unlock";
-
+        if(!isLive){
+            const retryButton = document.getElementById("unlockButton");
+            if(retryButton){
+                retryButton.disabled = false;
+                retryButton.innerText = "Unlock";
+            }
+        }
     }
+}
 
+async function refreshAuthenticatedPortfolio(){
+    if(!authenticatedPassword) return;
+    const button = document.getElementById("refreshButton");
+    if(button){
+        button.disabled = true;
+        button.innerText = "Refreshing…";
+    }
+    try{
+        await refreshLiveData(authenticatedPassword, true);
+    }finally{
+        if(button){
+            button.disabled = false;
+            button.innerText = "Refresh";
+        }
+    }
 }
 
 /* =========================================================
@@ -4506,7 +4647,7 @@ function renderTable(
                     ${
                         isLive
                         ? "No matching holdings."
-                        : "Unlock your portfolio to view holdings."
+                        : ""
                     }
                 </td>
 
@@ -6033,6 +6174,16 @@ function openDetail(
         : ""
     );
 
+    /* Show quantity once, even though the API exposes both quantity and qty aliases. */
+    if(asset.Quantity !== undefined && asset.Quantity !== null && asset.Quantity !== ""){
+        addDetailBox(detailGrid, "Quantity", asset.Quantity);
+    }
+
+    if(asset.AveragePrice !== undefined && asset.AveragePrice !== null && asset.AveragePrice !== ""){
+        addDetailBox(detailGrid, "Average Price", money(asset.AveragePrice));
+    }
+
+
     if(rankIndex >= 0){
 
         addDetailBox(
@@ -6137,6 +6288,12 @@ function openDetail(
             "fundTicker",
             "instrument",
             "symbol",
+            "quantity",
+            "qty",
+            "averagePrice",
+            "avgPrice",
+            "livePrice",
+            "googleTicker",
             "invested",
             "totalInvested",
             "currentValue",
@@ -6328,18 +6485,110 @@ document.addEventListener(
 );
 
 /* =========================================================
+GREETING ANIMATION
+========================================================= */
+function startGreetingAnimation(){
+    const el = document.getElementById("greetingText");
+    if(!el) return;
+    const greetings = [
+        "Hello",
+        "नमस्ते",
+        "こんにちは",
+        "Hola",
+        "Bonjour",
+        "Привет",
+        "Ciao",
+        "Olá",
+        "Guten Tag",
+        "안녕하세요",
+        "你好",
+        "مرحبا",
+        "ਸਤ ਸ੍ਰੀ ਅਕਾਲ",
+        "สวัสดี",
+        "Merhaba",
+        "שלום"
+    ];
+    let wordIndex = 0, charIndex = 0, deleting = false;
+
+    function tick(){
+        const word = greetings[wordIndex];
+        el.textContent = word.slice(0, charIndex);
+        let delay = deleting ? 105 : 155;
+        if(!deleting && charIndex < word.length){
+            charIndex++;
+        }else if(!deleting){
+            deleting = true; delay = 2100;
+        }else if(charIndex > 0){
+            charIndex--; 
+        }else{
+            deleting = false;
+            wordIndex = (wordIndex + 1) % greetings.length;
+            delay = 650;
+        }
+        setTimeout(tick, delay);
+    }
+    tick();
+}
+
+/* =========================================================
+WEATHER / LOCATION
+========================================================= */
+async function loadWeatherLocation(){
+    const locationEl = document.getElementById("weatherLocation");
+    const metaEl = document.getElementById("weatherMeta");
+    const tempEl = document.getElementById("weatherTemp");
+    const conditionEl = document.getElementById("weatherCondition");
+    const iconEl = document.getElementById("weatherIcon");
+    if(!locationEl) return;
+
+    if(!navigator.geolocation){
+        locationEl.textContent = "Location unavailable";
+        metaEl.textContent = "Geolocation is not supported by this browser";
+        return;
+    }
+
+    navigator.geolocation.getCurrentPosition(async position => {
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+        try{
+            const [placeResponse, weatherResponse] = await Promise.all([
+                fetch(`https://geocoding-api.open-meteo.com/v1/reverse?latitude=${lat}&longitude=${lon}&count=1&language=en&format=json`),
+                fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code,relative_humidity_2m,wind_speed_10m&timezone=auto`)
+            ]);
+            const place = await placeResponse.json();
+            const weather = await weatherResponse.json();
+            const p = place.results?.[0];
+            const c = weather.current;
+            const label = p ? [p.name, p.admin1].filter(Boolean).join(", ") : `${lat.toFixed(2)}, ${lon.toFixed(2)}`;
+            locationEl.textContent = label;
+            tempEl.textContent = c ? `${Math.round(c.temperature_2m)}°C` : "—";
+            const code = c?.weather_code;
+            const descriptions = {0:["Clear","☀️"],1:["Mainly clear","🌤️"],2:["Partly cloudy","⛅"],3:["Overcast","☁️"],45:["Fog","🌫️"],48:["Fog","🌫️"],51:["Drizzle","🌦️"],53:["Drizzle","🌦️"],55:["Drizzle","🌧️"],61:["Rain","🌧️"],63:["Rain","🌧️"],65:["Heavy rain","🌧️"],71:["Snow","❄️"],73:["Snow","❄️"],75:["Heavy snow","❄️"],80:["Showers","🌦️"],81:["Showers","🌦️"],82:["Heavy showers","🌧️"],95:["Thunderstorm","⛈️"],96:["Thunderstorm","⛈️"],99:["Thunderstorm","⛈️"]};
+            const desc = descriptions[code] || ["Local weather","🌤️"];
+            conditionEl.textContent = desc[0];
+            iconEl.textContent = desc[1];
+            metaEl.textContent = c ? `Humidity ${c.relative_humidity_2m}% • Wind ${Math.round(c.wind_speed_10m)} km/h` : "Local weather";
+        }catch(error){
+            locationEl.textContent = "Location found";
+            metaEl.textContent = "Weather service unavailable";
+        }
+    }, () => {
+        locationEl.textContent = "Location permission needed";
+        metaEl.textContent = "Allow location access to show local weather";
+    }, {enableHighAccuracy:false, timeout:8000, maximumAge:300000});
+}
+
+/* =========================================================
 INITIAL
 ========================================================= */
 
 setLockedStatus();
-
 updateFilterButtons();
-
 updateViewHeader();
-
 renderDashboard();
-
 renderSipAnalytics();
+startGreetingAnimation();
+loadWeatherLocation();
 
 /* =========================================================
 ENTER KEY
