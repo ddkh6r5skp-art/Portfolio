@@ -1267,6 +1267,129 @@
       font-family: var(--font-mono);
       font-size: 0.82rem;
     }
+
+    .theme-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: 6px;
+      padding: 14px;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.33, 1, 0.68, 1);
+    }
+    .theme-card:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+    .theme-card.active {
+      background: rgba(110, 231, 183, 0.08);
+      border-color: rgba(110, 231, 183, 0.4);
+      box-shadow: 0 0 16px rgba(110, 231, 183, 0.1);
+    }
+
+    /* ==========================================================================
+       ARCHITECTURAL ARCADE LAB & VECTOR PHYSICS CANVAS
+       ========================================================================== */
+    .arcade-card-deck {
+      background: rgba(10, 14, 23, 0.82);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+      position: relative;
+    }
+    .arcade-header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.85rem 1.25rem;
+      background: rgba(0, 0, 0, 0.35);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .arcade-mode-switcher {
+      display: flex;
+      gap: 6px;
+    }
+    .arcade-canvas-wrapper {
+      position: relative;
+      width: 100%;
+      background: radial-gradient(circle at center, rgba(16, 24, 40, 0.95) 0%, rgba(5, 8, 15, 0.98) 100%);
+      overflow: hidden;
+    }
+    #arcadeCanvas {
+      display: block;
+      width: 100%;
+      height: 320px;
+      cursor: crosshair;
+    }
+    .arcade-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(5, 8, 15, 0.82);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      transition: opacity 0.25s ease;
+    }
+    .arcade-overlay-box {
+      text-align: center;
+      padding: 1.5rem 2rem;
+      background: rgba(20, 26, 38, 0.92);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 8px;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .arcade-controls-ribbon {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 16px;
+      background: rgba(0, 0, 0, 0.45);
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    /* ==========================================================================
+       GLOBAL MARKET HUBS DECK
+       ========================================================================== */
+    .gen-card-deck {
+      background: rgba(10, 14, 23, 0.82);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+      position: relative;
+      margin-top: 1.5rem;
+      padding: 1.25rem;
+    }
+    .hub-clocks-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 12px;
+    }
+    .hub-clock-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 6px;
+      padding: 12px 14px;
+      transition: all 0.2s ease;
+    }
+    .hub-clock-card:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.18);
+    }
+
   </style>
 </head>
 <body class="__body">
@@ -1335,8 +1458,8 @@
           <button class="currency-btn" id="btnCurGBP" onclick="changeCurrency('GBP')">£</button>
         </div>
 
-        <!-- Sound Engine Toggle -->
-        <button class="btn-icon-nav active" id="soundToggleBtn" onclick="toggleSoundEngine()" title="Acoustic Haptics">
+        <!-- Sound Engine Toggle (Celestial Vault) -->
+        <button class="btn-icon-nav active" id="soundToggleBtn" onclick="toggleSoundEngine()" title="Toggle Celestial Soundscape (Mute / Unmute)">
           <i data-lucide="volume-2" id="soundIcon" style="width: 14px; height: 14px;"></i>
         </button>
 
@@ -1454,6 +1577,26 @@
           </div>
         </div>
 
+        <!-- UPCOMING SIP CASHFLOW & LIQUIDITY PULSE BAR -->
+        <div id="overviewSipCountdownCard" style="margin-bottom: 1.25rem; background: rgba(16,185,129,0.06); border: 1px solid rgba(16,185,129,0.25); border-radius: 6px; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 28px; height: 28px; border-radius: 6px; background: rgba(16,185,129,0.15); display: flex; align-items: center; justify-content: center; color: #6ee7b7;">
+              <i data-lucide="calendar" style="width: 15px; height: 15px;"></i>
+            </div>
+            <div>
+              <div style="font-size: 11.5px; font-weight: 600; color: #FDFAF7;" id="overviewNextSipText">Next Scheduled Debit: --</div>
+              <div style="font-size: 10px; color: var(--text-dim);" id="overviewNextSipSub">Checking active systematic mandates...</div>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="text-align: right;">
+              <div style="font-size: 9px; color: var(--text-dim); text-transform: uppercase;">7-Day Liquidity Needed</div>
+              <div class="num-mono privacy-blur" style="font-size: 12.5px; font-weight: 700; color: #fde047;" id="overview7DayBuffer">₹0</div>
+            </div>
+            <button class="status-badge-pill live" onclick="activateFolder(4)" style="font-size: 10px; padding: 3px 8px; cursor: pointer;">View SIP Matrix →</button>
+          </div>
+        </div>
+
         <!-- 5 Architectural KPIs -->
         <div class="dossier-kpi-grid">
           <div class="dossier-kpi-card">
@@ -1555,6 +1698,55 @@
 
         </div>
 
+        <!-- BENCHMARK RELATIVE ALPHA SPREAD CARD -->
+        <div class="dossier-kpi-card" style="margin-bottom: 1.5rem; padding: 1.25rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 6px;">
+            <div>
+              <span class="dossier-kpi-label" style="margin-bottom: 0;">Institutional Benchmark Alpha Comparison</span>
+              <div style="font-size: 10.5px; color: var(--text-dim);">Relative outperformance against broad Indian asset indices:</div>
+            </div>
+            <span class="badge-capsule" id="benchmarkOverallAlphaBadge" style="color: #6ee7b7; background: rgba(16,185,129,0.12); border-color: rgba(16,185,129,0.3);">+0.0% Net Alpha Spread</span>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;" id="benchmarkGrid">
+            <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); border-radius: 4px; padding: 10px;">
+              <div style="display: flex; justify-content: space-between; font-size: 10px; opacity: 0.8;">
+                <span>NIFTY 50 TRI</span>
+                <span style="color: var(--text-dim);">~14.2%</span>
+              </div>
+              <div class="num-mono" style="font-size: 1.25rem; font-weight: 700; color: #6ee7b7; margin-top: 2px;" id="alphaVsNifty">--</div>
+              <div style="font-size: 9px; color: var(--text-dim); margin-top: 2px;">Large Cap Spread</div>
+            </div>
+
+            <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); border-radius: 4px; padding: 10px;">
+              <div style="display: flex; justify-content: space-between; font-size: 10px; opacity: 0.8;">
+                <span>NIFTY Midcap 150</span>
+                <span style="color: var(--text-dim);">~18.5%</span>
+              </div>
+              <div class="num-mono" style="font-size: 1.25rem; font-weight: 700; color: #60a5fa; margin-top: 2px;" id="alphaVsMidcap">--</div>
+              <div style="font-size: 9px; color: var(--text-dim); margin-top: 2px;">Midcap Alpha Spread</div>
+            </div>
+
+            <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); border-radius: 4px; padding: 10px;">
+              <div style="display: flex; justify-content: space-between; font-size: 10px; opacity: 0.8;">
+                <span>Physical Gold (SGB)</span>
+                <span style="color: var(--text-dim);">~11.8%</span>
+              </div>
+              <div class="num-mono" style="font-size: 1.25rem; font-weight: 700; color: #fde047; margin-top: 2px;" id="alphaVsGold">--</div>
+              <div style="font-size: 9px; color: var(--text-dim); margin-top: 2px;">Precious Metal Spread</div>
+            </div>
+
+            <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); border-radius: 4px; padding: 10px;">
+              <div style="display: flex; justify-content: space-between; font-size: 10px; opacity: 0.8;">
+                <span>Bank FD (Risk-Free)</span>
+                <span style="color: var(--text-dim);">~7.0%</span>
+              </div>
+              <div class="num-mono" style="font-size: 1.25rem; font-weight: 700; color: #c084fc; margin-top: 2px;" id="alphaVsFD">--</div>
+              <div style="font-size: 9px; color: var(--text-dim); margin-top: 2px;">Risk-Free Hurdle Alpha</div>
+            </div>
+          </div>
+        </div>
+
         <!-- SPLIT GRID: TOP WEALTH DRIVERS + MARKET STRESS TEST -->
         <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 1.5rem;">
           
@@ -1604,9 +1796,9 @@
             <span style="font-size:11px; opacity:0.75;" id="kpiLiquiditySub">T+1/T+2 Accessible</span>
           </div>
           <div class="dossier-kpi-card">
-            <span class="dossier-kpi-label">Tax Shield &amp; Harvest</span>
-            <span class="dossier-kpi-val num-mono" id="kpiTaxShield" style="font-size:1.35rem; color:#fde047;">100% EEE</span>
-            <span style="font-size:11px; opacity:0.75;" id="kpiTaxShieldSub">₹1.25L/yr LTCG Shield</span>
+            <span class="dossier-kpi-label">4% SWR Passive Runway</span>
+            <span class="dossier-kpi-val num-mono" id="kpiSwrIncome" style="font-size:1.35rem; color:#fde047;">₹0 / mo</span>
+            <span style="font-size:11px; opacity:0.75;" id="kpiSwrSub">Financial Independence</span>
           </div>
           <div class="dossier-kpi-card">
             <span class="dossier-kpi-label">Global FX Spot Parity</span>
@@ -2019,26 +2211,125 @@
   </main>
 
   <!-- ==========================================================================
+       ARCHITECTURAL ARCADE LAB: CYBER PONG VS ADAPTIVE AI
+       ========================================================================== -->
+  <section class="container" style="margin-top: 2.5rem; margin-bottom: 1.5rem;" id="arcadeSection">
+    <div class="arcade-card-deck">
+      
+      <!-- Top Arcade HUD Bar -->
+      <div class="arcade-header-bar">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span class="badge-capsule" style="color: #6ee7b7; background: rgba(110,231,183,0.12); border: 1px solid rgba(110,231,183,0.3); font-weight: 600;">
+            <i data-lucide="gamepad-2" style="width: 11px; height: 11px; margin-right: 4px;"></i> CYBER PONG VS AI
+          </span>
+          <span style="font-size: 9.5px; font-family: var(--font-mono); color: #ffc46b; opacity: 0.9;">● 60 FPS VECTOR ENGINE</span>
+        </div>
+
+        <!-- Score & Status Indicators -->
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <div style="text-align: right;">
+            <span style="font-size: 9px; color: var(--text-dim); text-transform: uppercase; display: block;">Player Score</span>
+            <strong class="num-mono" id="pongScoreP1" style="font-size: 14px; color: #6ee7b7;">0</strong>
+          </div>
+          <div style="font-family: var(--font-mono); font-size: 12px; color: var(--text-dim); padding-top: 8px;">vs</div>
+          <div style="text-align: left;">
+            <span style="font-size: 9px; color: var(--text-dim); text-transform: uppercase; display: block;">AI Score</span>
+            <strong class="num-mono" id="pongScoreP2" style="font-size: 14px; color: #60a5fa;">0</strong>
+          </div>
+          <button class="btn-passcode-unlock" id="arcadePlayBtn" onclick="toggleArcadePlay()" style="padding: 5px 14px; font-size: 11px; margin-left: 8px;">
+            <i data-lucide="play" id="arcadePlayIcon" style="width: 11px; height: 11px;"></i>
+            <span id="arcadePlayText">Play</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Canvas Arcade Screen -->
+      <div class="arcade-canvas-wrapper" id="arcadeCanvasWrapper">
+        <canvas id="arcadeCanvas" width="1120" height="320"></canvas>
+        
+        <!-- Overlay for instructions & game start -->
+        <div class="arcade-overlay" id="arcadeOverlay" style="display: flex;">
+          <div class="arcade-overlay-box">
+            <h3 style="font-family: var(--font-serif); font-size: 1.5rem; color: #fff; margin-bottom: 6px;" id="arcadeOverlayTitle">Cyber Pong vs Adaptive AI</h3>
+            <p style="font-size: 11.5px; font-family: var(--font-mono); color: var(--text-dim); margin-bottom: 16px; max-width: 460px; line-height: 1.5;" id="arcadeOverlayDesc">
+              Deflect the high-speed quantum sphere past the adaptive AI opponent. First to 5 points claims victory.
+            </p>
+            <button class="btn-passcode-unlock" style="padding: 8px 22px; font-size: 12px;" onclick="startCurrentArcadeGame()">
+              <i data-lucide="zap" style="width: 13px; height: 13px;"></i> Launch Match
+            </button>
+          </div>
+        </div>
+
+        <!-- Controls Footer Ribbon inside Arcade -->
+        <div class="arcade-controls-ribbon">
+          <div style="display: flex; gap: 14px; font-size: 9.5px; font-family: var(--font-mono); color: var(--text-dim);" id="arcadeControlsHint">
+            <span>PADDLE: <kbd class="kbd-tag">MOUSE</kbd> or <kbd class="kbd-tag">↑</kbd> <kbd class="kbd-tag">↓</kbd></span>
+            <span>PAUSE: <kbd class="kbd-tag">P</kbd></span>
+            <span>RESTART: <kbd class="kbd-tag">R</kbd></span>
+            <span>FIRST TO 5 WINS</span>
+          </div>
+          <div style="display: flex; gap: 10px; align-items: center;">
+            <span id="arcadeStreakLabel" style="font-size: 9.5px; font-family: var(--font-mono); color: #6ee7b7;">● 60 FPS ACTIVE</span>
+            <button class="btn-icon-nav" style="width: 1.6rem; height: 1.6rem; padding: 0;" onclick="resetCurrentArcadeGame()" title="Restart Match">
+              <i data-lucide="rotate-ccw" style="width: 11px; height: 11px;"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       GLOBAL MARKET HUBS & TRADING HORIZONS DECK
+       ========================================================================== -->
+  <section class="container" style="margin-bottom: 2.5rem;" id="marketHubsSection">
+    <div class="gen-card-deck">
+      
+      <!-- Top Market Hub Bar -->
+      <div class="arcade-header-bar" style="margin-bottom: 1rem;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span class="badge-capsule" style="color: #60a5fa; background: rgba(96,165,250,0.12); border: 1px solid rgba(96,165,250,0.3); font-weight: 600;">
+            <i data-lucide="globe" style="width: 11px; height: 11px; margin-right: 4px;"></i> GLOBAL FINANCIAL CAPITALS
+          </span>
+          <span style="font-size: 9.5px; font-family: var(--font-mono); color: var(--text-dim);">● REAL-TIME EXCHANGE TRADING HORIZONS</span>
+        </div>
+        <div style="font-size: 9.5px; font-family: var(--font-mono); color: #6ee7b7;">
+          LIVE SYNC 1s TICK
+        </div>
+      </div>
+
+      <!-- 6 Hub Cards Grid -->
+      <div class="hub-clocks-grid" id="hubClocksContainer">
+        <!-- Populated by JS -->
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==========================================================================
        MOSBY FILES THE-FOOTER
        ========================================================================== -->
   <footer class="the-footer container">
     <div class="the-footer__wind-roses">
       <div style="display:flex; align-items:center; gap:8px;">
         <i data-lucide="compass" style="width:18px; height:18px;"></i>
-        <span>VAGEESH'S ARCHITECTURAL PORTFOLIO </span>
+        <span>VAGEESH'S ARCHITECTURAL PORTFOLIO OS</span>
       </div>
     </div>
     <div class="the-footer__bottom">
       <div class="the-footer__scale">
         <span></span>
-        <span>My wife is the Best</span>
+        <span>My Wife is the Best</span>
         <span></span>
       </div>
       <div>
         <span onclick="exportHoldingsCSV()" style="cursor: pointer; text-decoration: underline;">Export CSV</span> •
         <span onclick="openAuditModal()" style="cursor: pointer; text-decoration: underline;">AI Health Audit</span> •
-        <span onclick="window.print()" style="cursor: pointer; text-decoration: underline;">Print Executive Report</span> •
-        <span onclick="exportBackupJSON()" style="cursor: pointer; text-decoration: underline;">Export Backup JSON</span>
+        <span onclick="document.getElementById('arcadeSection')?.scrollIntoView({behavior:'smooth'})" style="cursor: pointer; text-decoration: underline; color: #6ee7b7;">🏓 Pong vs AI</span> •
+        <span onclick="document.getElementById('marketHubsSection')?.scrollIntoView({behavior:'smooth'})" style="cursor: pointer; text-decoration: underline; color: #60a5fa;">🌍 Global Market Hubs</span> •
+        <span onclick="window.print()" style="cursor: pointer; text-decoration: underline;">Print Report</span> •
+        <span onclick="exportBackupJSON()" style="cursor: pointer; text-decoration: underline;">Backup JSON</span>
       </div>
       <div>EST. 2026</div>
     </div>
@@ -2128,6 +2419,11 @@
           <h3 style="font-family: var(--font-serif); font-size: 1.65rem; margin-top: 4px; letter-spacing: -0.02em;">Quantitative Portfolio Intelligence</h3>
         </div>
         <div style="display: flex; align-items: center; gap: 8px;">
+          <!-- Audio Voice Briefing Button -->
+          <button class="btn-passcode-unlock" id="btnAiVoiceBrief" onclick="toggleAIVoiceBriefing()" style="background: rgba(192,132,252,0.15); border-color: rgba(192,132,252,0.3); color: #c084fc; font-size: 11px; padding: 5px 11px; cursor: pointer;" title="Listen to AI spoken voice summary">
+            <i data-lucide="volume-2" id="aiVoiceIcon" style="width: 12px; height: 12px;"></i>
+            <span id="aiVoiceText">Listen Audio Brief</span>
+          </button>
           <button class="btn-passcode-unlock" id="btnRescanAI" onclick="askAICopilot('executive_briefing')" style="background: rgba(16,185,129,0.15); border-color: rgba(16,185,129,0.3); color: #6ee7b7; font-size: 11px; padding: 5px 11px; cursor: pointer;" title="Re-evaluate all holdings with fresh AI generation">
             <i data-lucide="refresh-cw" id="aiScanSpinIcon" style="width: 12px; height: 12px;"></i>
             <span id="aiScanBtnText">Re-Generate Briefing</span>
@@ -2157,9 +2453,9 @@
           <div style="font-size: 8.5px; opacity: 0.8;" id="auditRunwaySub">T+1 Accessible</div>
         </div>
         <div class="dossier-kpi-card" style="text-align: center; padding: 0.6rem 0.5rem;">
-          <div style="font-size: 9px; opacity: 0.75; text-transform: uppercase;">Sec 112A Shield</div>
-          <div style="font-family: var(--font-serif); font-size: 1.35rem; font-weight: 700; color: #fde047; margin-top: 1px;" id="auditTaxRatio">₹1.25L</div>
-          <div style="font-size: 8.5px; opacity: 0.8;" id="auditTaxSub">LTCG Tax-Free</div>
+          <div style="font-size: 9px; opacity: 0.75; text-transform: uppercase;">FIRE Runway</div>
+          <div style="font-family: var(--font-serif); font-size: 1.35rem; font-weight: 700; color: #c084fc; margin-top: 1px;" id="auditFireVal">₹0 / mo</div>
+          <div style="font-size: 8.5px; opacity: 0.8;" id="auditFireSub">4% SWR Capacity</div>
         </div>
       </div>
 
@@ -2172,7 +2468,7 @@
           <button class="filter-pill active" onclick="askAICopilot('executive_briefing', this)">📋 Executive Verdict</button>
           <button class="filter-pill" onclick="askAICopilot('market_crash', this)">🛡️ -20% Crash Test</button>
           <button class="filter-pill" onclick="askAICopilot('sip_stepup', this)">🚀 10% SIP Step-Up to ₹1 Cr</button>
-          <button class="filter-pill" onclick="askAICopilot('ltcg_harvest', this)">💰 Sec 112A Tax Harvest</button>
+          <button class="filter-pill" onclick="askAICopilot('alpha_benchmark', this)">📈 Alpha vs NIFTY 50</button>
           <button class="filter-pill" onclick="askAICopilot('fire_swr', this)">🔥 FIRE &amp; 4% SWR</button>
           <button class="filter-pill" onclick="askAICopilot('rebalance_matrix', this)">⚖️ 50/30/20 Rebalance</button>
           <button class="filter-pill" onclick="askAICopilot('ppf_compounding', this)">🏛️ Sovereign 7.1% EEE</button>
@@ -2374,94 +2670,348 @@
     }
 
     /* ==========================================================================
-       LUXURY ACOUSTIC SYNTHESIZER HAPTICS (SUBTLE, VELVET & BEAUTIFUL)
+       CELESTIAL VAULT AMBIENT SOUND ENGINE (16-BIT PCM WAV SYNTHESIS)
        ========================================================================== */
-    let audioCtx = null;
+    let ambientMasterVolume = 0.70;
+    let ambientTimer = null;
+    let ambientVariantIdx = 0;
+    let activeAmbientAudioInstances = [];
 
-    function getAudioContext() {
-      if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const CELESTIAL_CHORDS = [
+      // A Maj9
+      [
+        { f: 55.00, att: 0.35, dec: 3.2, amp: 0.40, detune: 0.00 },
+        { f: 110.00, att: 0.25, dec: 3.5, amp: 0.42, detune: 0.15 },
+        { f: 164.81, att: 0.20, dec: 3.6, amp: 0.35, detune: -0.10 },
+        { f: 220.00, att: 0.18, dec: 3.8, amp: 0.30, detune: 0.20 },
+        { f: 277.18, att: 0.25, dec: 3.4, amp: 0.25, detune: -0.15 },
+        { f: 329.63, att: 0.30, dec: 3.2, amp: 0.20, detune: 0.10 }
+      ],
+      // D Maj9 Lydian
+      [
+        { f: 73.42, att: 0.35, dec: 3.2, amp: 0.40, detune: 0.00 },
+        { f: 110.00, att: 0.25, dec: 3.5, amp: 0.38, detune: 0.10 },
+        { f: 185.00, att: 0.20, dec: 3.6, amp: 0.35, detune: -0.12 },
+        { f: 220.00, att: 0.18, dec: 3.8, amp: 0.28, detune: 0.18 },
+        { f: 293.66, att: 0.25, dec: 3.4, amp: 0.24, detune: -0.10 },
+        { f: 369.99, att: 0.30, dec: 3.2, amp: 0.18, detune: 0.12 }
+      ],
+      // F# m11
+      [
+        { f: 46.25, att: 0.40, dec: 3.4, amp: 0.42, detune: 0.00 },
+        { f: 92.50, att: 0.28, dec: 3.6, amp: 0.42, detune: 0.14 },
+        { f: 138.59, att: 0.22, dec: 3.7, amp: 0.35, detune: -0.10 },
+        { f: 220.00, att: 0.20, dec: 3.8, amp: 0.30, detune: 0.18 },
+        { f: 277.18, att: 0.28, dec: 3.4, amp: 0.24, detune: -0.12 },
+        { f: 329.63, att: 0.32, dec: 3.2, amp: 0.18, detune: 0.10 }
+      ],
+      // E Sus4 add 9
+      [
+        { f: 41.20, att: 0.40, dec: 3.4, amp: 0.42, detune: 0.00 },
+        { f: 82.41, att: 0.28, dec: 3.6, amp: 0.42, detune: 0.12 },
+        { f: 123.47, att: 0.22, dec: 3.7, amp: 0.36, detune: -0.10 },
+        { f: 220.00, att: 0.20, dec: 3.8, amp: 0.30, detune: 0.15 },
+        { f: 246.94, att: 0.28, dec: 3.4, amp: 0.26, detune: -0.10 },
+        { f: 369.99, att: 0.32, dec: 3.2, amp: 0.20, detune: 0.12 }
+      ],
+      // B m9
+      [
+        { f: 61.74, att: 0.36, dec: 3.4, amp: 0.40, detune: 0.00 },
+        { f: 92.50, att: 0.26, dec: 3.6, amp: 0.40, detune: 0.12 },
+        { f: 146.83, att: 0.20, dec: 3.7, amp: 0.35, detune: -0.10 },
+        { f: 220.00, att: 0.18, dec: 3.8, amp: 0.30, detune: 0.18 },
+        { f: 277.18, att: 0.26, dec: 3.4, amp: 0.24, detune: -0.12 },
+        { f: 369.99, att: 0.30, dec: 3.2, amp: 0.18, detune: 0.10 }
+      ]
+    ];
+
+    const SoundEngine = {
+      initialized: false,
+      cache: {
+        celestial: [],
+        folderSounds: [],
+        unlock: null,
+        lock: null,
+        click: null
+      },
+
+      createWavBlobUrl(duration, sampleRate, generatorFn) {
+        const numSamples = Math.floor(sampleRate * duration);
+        const buffer = new ArrayBuffer(44 + numSamples * 2);
+        const view = new DataView(buffer);
+
+        const writeStr = (offset, str) => {
+          for (let i = 0; i < str.length; i++) view.setUint8(offset + i, str.charCodeAt(i));
+        };
+
+        writeStr(0, 'RIFF');
+        view.setUint32(4, 36 + numSamples * 2, true);
+        writeStr(8, 'WAVE');
+        writeStr(12, 'fmt ');
+        view.setUint32(16, 16, true);
+        view.setUint16(20, 1, true);
+        view.setUint16(22, 1, true);
+        view.setUint32(24, sampleRate, true);
+        view.setUint32(28, sampleRate * 2, true);
+        view.setUint16(32, 2, true);
+        view.setUint16(34, 16, true);
+        writeStr(36, 'data');
+        view.setUint32(40, numSamples * 2, true);
+
+        const fadeSamples = Math.floor(sampleRate * 0.02);
+
+        for (let i = 0; i < numSamples; i++) {
+          const t = i / sampleRate;
+          let sample = generatorFn(t, i, numSamples);
+          sample = Math.max(-1, Math.min(1, sample));
+
+          let windowGain = 1.0;
+          if (i < fadeSamples) {
+            windowGain = 0.5 * (1 - Math.cos(Math.PI * (i / fadeSamples)));
+          } else if (i > numSamples - fadeSamples) {
+            const remaining = numSamples - i;
+            windowGain = 0.5 * (1 - Math.cos(Math.PI * (remaining / fadeSamples)));
+          }
+          sample = sample * windowGain;
+
+          view.setInt16(44 + i * 2, sample < 0 ? sample * 0x8000 : sample * 0x7FFF, true);
+        }
+
+        const blob = new Blob([buffer], { type: 'audio/wav' });
+        return URL.createObjectURL(blob);
+      },
+
+      createCreamyLeatherFolderWav(tabIdx, sampleRate = 44100) {
+        // Creamy, buttery soft luxury micro-duration: 145ms
+        const duration = 0.145;
+        const numSamples = Math.floor(sampleRate * duration);
+        const buffer = new ArrayBuffer(44 + numSamples * 2);
+        const view = new DataView(buffer);
+
+        const writeStr = (offset, str) => {
+          for (let i = 0; i < str.length; i++) view.setUint8(offset + i, str.charCodeAt(i));
+        };
+
+        writeStr(0, 'RIFF');
+        view.setUint32(4, 36 + numSamples * 2, true);
+        writeStr(8, 'WAVE');
+        writeStr(12, 'fmt ');
+        view.setUint32(16, 16, true);
+        view.setUint16(20, 1, true); // Mono
+        view.setUint16(22, 1, true);
+        view.setUint32(24, sampleRate, true);
+        view.setUint32(28, sampleRate * 2, true);
+        view.setUint16(32, 2, true);
+        view.setUint16(34, 16, true);
+        writeStr(36, 'data');
+        view.setUint32(40, numSamples * 2, true);
+
+        // PRNG for consistent organic acoustic texture
+        let seed = 98765 + tabIdx * 12345;
+        const rand = () => {
+          seed = (seed * 1664525 + 1013904223) % 4294967296;
+          return (seed / 2147483648) - 1.0;
+        };
+
+        // Brownian integration state (pure 1/f^2 warm red noise - zero harshness)
+        let brown1 = 0, brown2 = 0;
+        let sm1 = 0, sm2 = 0, sm3 = 0, sm4 = 0;
+
+        const fadeSamples = Math.floor(sampleRate * 0.008);
+
+        for (let i = 0; i < numSamples; i++) {
+          const t = i / sampleRate;
+
+          // Pure Brownian Red Noise
+          const raw = rand();
+          brown1 = (brown1 * 0.94) + (raw * 0.06);
+          brown2 = (brown2 * 0.90) + (brown1 * 0.10);
+
+          // 4-Stage Cascaded Moving Average (Ultra-smooth creamy low-pass at ~320Hz)
+          sm1 += (brown2 - sm1) * 0.14;
+          sm2 += (sm1 - sm2) * 0.14;
+          sm3 += (sm2 - sm3) * 0.14;
+          sm4 += (sm3 - sm4) * 0.14;
+
+          // Smooth Gaussian bell envelope (buttery soft opening curve)
+          const peakT = 0.038;
+          const widthT = 0.046;
+          const normT = (t - peakT) / widthT;
+          const envelope = Math.exp(-normT * normT);
+
+          // Warm, muted leather spine acoustic flex on wood desk (68Hz - 76Hz)
+          const spineFreq = 68 + tabIdx * 2;
+          const spineImpulse = Math.exp(-t * 36.0) * Math.sin(2 * Math.PI * spineFreq * t) * 0.075;
+
+          // Composite creamy signal (soft, warm, completely non-harsh)
+          let sample = (sm4 * 0.90 + spineImpulse) * envelope * 0.50;
+
+          // Micro edge fade
+          if (i < fadeSamples) {
+            sample *= (i / fadeSamples);
+          } else if (i > numSamples - fadeSamples) {
+            sample *= ((numSamples - i) / fadeSamples);
+          }
+
+          view.setInt16(44 + i * 2, sample < 0 ? sample * 0x8000 : sample * 0x7FFF, true);
+        }
+
+        const blob = new Blob([buffer], { type: 'audio/wav' });
+        return URL.createObjectURL(blob);
+      },
+
+      init() {
+        if (this.initialized) return;
+        this.initialized = true;
+
+        const sampleRate = 44100;
+
+        // 1. Synthesize Celestial Vault Harmonic Progression (Ambient Background)
+        this.cache.celestial = CELESTIAL_CHORDS.map(chordData => {
+          return this.createWavBlobUrl(4.2, sampleRate, (t) => {
+            let sum = 0;
+            for (let l of chordData) {
+              const env = t < l.att 
+                ? (0.5 * (1 - Math.cos(Math.PI * (t / l.att))))
+                : Math.exp(-(t - l.att) * (1.0 / l.dec));
+              const osc = Math.sin(2 * Math.PI * (l.f + l.detune) * t) 
+                        + 0.18 * Math.sin(4 * Math.PI * (l.f + l.detune) * t)
+                        + 0.06 * Math.sin(6 * Math.PI * (l.f + l.detune) * t);
+              sum += osc * env * l.amp;
+            }
+            return Math.tanh(sum * 0.95) * 0.85;
+          });
+        });
+
+        // 2. Creamy Velvet Soft Leather Folder Sounds (5 distinct tab tones)
+        this.cache.folderSounds = [0, 1, 2, 3, 4].map(idx => {
+          return this.createCreamyLeatherFolderWav(idx, sampleRate);
+        });
+
+        // 6. Vault Unlock Latch & Chime
+        this.cache.unlock = this.createWavBlobUrl(0.95, sampleRate, (t) => {
+          const envClick = Math.exp(-t * 80);
+          const click = Math.sin(2 * Math.PI * 160 * Math.exp(-t * 40) * t) * envClick * 0.5;
+          const notes = [
+            { f: 185.00, d: 0.02, amp: 0.35 },
+            { f: 233.08, d: 0.08, amp: 0.30 },
+            { f: 277.18, d: 0.14, amp: 0.28 },
+            { f: 349.23, d: 0.20, amp: 0.22 }
+          ];
+          let chimeSum = 0;
+          for (let n of notes) {
+            if (t >= n.d) {
+              const dt = t - n.d;
+              const env = Math.exp(-dt * 3.5);
+              chimeSum += Math.sin(2 * Math.PI * n.f * dt) * env * n.amp;
+            }
+          }
+          return (click + chimeSum) * 0.65;
+        });
+
+        // 7. Lock Sound
+        this.cache.lock = this.createWavBlobUrl(0.12, sampleRate, (t) => {
+          const env = Math.exp(-t * 45);
+          const f = 110 * Math.exp(-t * 15);
+          return Math.sin(2 * Math.PI * f * t) * env * 0.55;
+        });
+
+        // 8. Micro Click
+        this.cache.click = this.createWavBlobUrl(0.035, sampleRate, (t) => {
+          const env = Math.exp(-t * 150);
+          const f = 150 * Math.exp(-t * 30);
+          return Math.sin(2 * Math.PI * f * t) * env * 0.45;
+        });
+      },
+
+      playUrl(url, volume = 0.85, isAmbient = false) {
+        if (isAmbient && !AppState.user.sound) return null;
+        try {
+          this.init();
+          const snd = new Audio(url);
+          snd.volume = Math.max(0, Math.min(1, volume));
+          const p = snd.play();
+          if (p !== undefined) p.catch(() => {});
+          return snd;
+        } catch (e) {
+          return null;
+        }
+      },
+
+      playFolderOpen(idx = 0) {
+        this.init();
+        const sounds = this.cache.folderSounds || [];
+        const validIdx = Math.max(0, Math.min(4, idx));
+        if (sounds && sounds[validIdx]) {
+          this.playUrl(sounds[validIdx], 0.42, false);
+        }
       }
-      if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
-      }
-      return audioCtx;
+    };
+
+    function startAmbientSoundscape() {
+      if (!AppState.user.sound) return;
+      SoundEngine.init();
+
+      if (ambientTimer) clearInterval(ambientTimer);
+
+      const urls = SoundEngine.cache.celestial;
+      if (!urls || !urls.length) return;
+
+      const playStep = () => {
+        if (!AppState.user.sound) {
+          stopAmbientSoundscape();
+          return;
+        }
+
+        const activeUrls = SoundEngine.cache.celestial;
+        if (!activeUrls || !activeUrls.length) return;
+
+        const currentUrl = activeUrls[ambientVariantIdx % activeUrls.length];
+        ambientVariantIdx = (ambientVariantIdx + 1) % activeUrls.length;
+
+        const snd = SoundEngine.playUrl(currentUrl, ambientMasterVolume * 0.85, true);
+        if (snd) {
+          activeAmbientAudioInstances.push(snd);
+          setTimeout(() => {
+            const idx = activeAmbientAudioInstances.indexOf(snd);
+            if (idx !== -1) activeAmbientAudioInstances.splice(idx, 1);
+          }, 4500);
+        }
+      };
+
+      playStep();
+      ambientTimer = setInterval(playStep, 3400);
     }
 
-    function playFolderTone(toneFreq = 520) {
+    function stopAmbientSoundscape() {
+      if (ambientTimer) {
+        clearInterval(ambientTimer);
+        ambientTimer = null;
+      }
+      activeAmbientAudioInstances.forEach(snd => {
+        try {
+          snd.pause();
+          snd.currentTime = 0;
+        } catch(e) {}
+      });
+      activeAmbientAudioInstances = [];
+    }
+
+    function playStartupChime(force = false) {
       if (!AppState.user.sound) return;
-      try {
-        const ctx = getAudioContext();
-        const now = ctx.currentTime;
+      startAmbientSoundscape();
+    }
 
-        // Dual layered soft marimba/glass acoustic micro-click
-        const osc = ctx.createOscillator();
-        const oscHarmonic = ctx.createOscillator();
-        const gain = ctx.createGain();
-        const filter = ctx.createBiquadFilter();
-
-        // Low-pass filter to smooth away any harshness
-        filter.type = 'lowpass';
-        filter.frequency.setValueAtTime(800, now);
-        filter.frequency.exponentialRampToValueAtTime(250, now + 0.065);
-
-        // Gentle sine frequency drop
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(toneFreq, now);
-        osc.frequency.exponentialRampToValueAtTime(toneFreq * 0.72, now + 0.055);
-
-        // Harmonic overtone for woody tactile depth
-        oscHarmonic.type = 'triangle';
-        oscHarmonic.frequency.setValueAtTime(toneFreq * 0.5, now);
-        oscHarmonic.frequency.exponentialRampToValueAtTime(toneFreq * 0.35, now + 0.045);
-
-        // Ultra-delicate volume envelope
-        gain.gain.setValueAtTime(0.018, now);
-        gain.gain.exponentialRampToValueAtTime(0.00001, now + 0.06);
-
-        osc.connect(filter);
-        oscHarmonic.connect(filter);
-        filter.connect(gain);
-        gain.connect(ctx.destination);
-
-        osc.start(now);
-        oscHarmonic.start(now);
-        osc.stop(now + 0.065);
-        oscHarmonic.stop(now + 0.065);
-      } catch(e) {}
+    function playFolderTone(toneOrIdx = 0) {
+      // Inner clicks/toggles do NOT play folder sound (only folder tab switches play folder sound)
+      if (typeof toneOrIdx === 'number' && toneOrIdx > 10) {
+        playMicroClick();
+      }
     }
 
     function playSuccessTone() {
-      if (!AppState.user.sound) return;
-      try {
-        const ctx = getAudioContext();
-        const now = ctx.currentTime;
-
-        // Two-note crystalline bell (C5 -> G5)
-        const notes = [523.25, 783.99];
-        notes.forEach((freq, idx) => {
-          const osc = ctx.createOscillator();
-          const gain = ctx.createGain();
-          const filter = ctx.createBiquadFilter();
-
-          filter.type = 'lowpass';
-          filter.frequency.setValueAtTime(1200, now + idx * 0.07);
-
-          osc.type = 'sine';
-          osc.frequency.setValueAtTime(freq, now + idx * 0.07);
-
-          gain.gain.setValueAtTime(0, now + idx * 0.07);
-          gain.gain.linearRampToValueAtTime(0.02, now + idx * 0.07 + 0.01);
-          gain.gain.exponentialRampToValueAtTime(0.00001, now + idx * 0.07 + 0.26);
-
-          osc.connect(filter);
-          filter.connect(gain);
-          gain.connect(ctx.destination);
-
-          osc.start(now + idx * 0.07);
-          osc.stop(now + idx * 0.07 + 0.28);
-        });
-      } catch(e) {}
+      SoundEngine.init();
+      SoundEngine.playUrl(SoundEngine.cache.unlock, 0.85, false);
     }
 
     function playUnlockTone() {
@@ -2469,31 +3019,13 @@
     }
 
     function playLockTone() {
-      if (!AppState.user.sound) return;
-      try {
-        const ctx = getAudioContext();
-        const now = ctx.currentTime;
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        const filter = ctx.createBiquadFilter();
+      SoundEngine.init();
+      SoundEngine.playUrl(SoundEngine.cache.lock, 0.70, false);
+    }
 
-        filter.type = 'lowpass';
-        filter.frequency.setValueAtTime(500, now);
-
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(260, now);
-        osc.frequency.exponentialRampToValueAtTime(110, now + 0.08);
-
-        gain.gain.setValueAtTime(0.02, now);
-        gain.gain.exponentialRampToValueAtTime(0.00001, now + 0.08);
-
-        osc.connect(filter);
-        filter.connect(gain);
-        gain.connect(ctx.destination);
-
-        osc.start(now);
-        osc.stop(now + 0.08);
-      } catch(e) {}
+    function playMicroClick() {
+      SoundEngine.init();
+      SoundEngine.playUrl(SoundEngine.cache.click, 0.55, false);
     }
 
     function toggleSoundEngine() {
@@ -2504,8 +3036,13 @@
       icon.setAttribute('data-lucide', AppState.user.sound ? 'volume-2' : 'volume-x');
       saveState();
       if (window.lucide) lucide.createIcons();
-      if (AppState.user.sound) playFolderTone(620);
-      showToast(AppState.user.sound ? 'Acoustic Haptics Active' : 'Acoustic Sound Muted');
+      if (AppState.user.sound) {
+        startAmbientSoundscape();
+        showToast('Celestial Vault Ambient: Playing');
+      } else {
+        stopAmbientSoundscape();
+        showToast('Ambient Soundscape Muted (Folder sounds remain active)');
+      }
     }
 
     /* ==========================================================================
@@ -2640,8 +3177,15 @@
        MOSBY FOLDER SWITCHING MECHANIC
        ========================================================================== */
     function activateFolder(idx) {
+      if (activeFolderIdx !== idx) {
+        SoundEngine.playFolderOpen(idx);
+      }
       activeFolderIdx = idx;
-      playFolderTone(350 + idx * 50);
+
+      // Ensure ambient soundscape is running if unmuted
+      if (AppState.user.sound && !ambientTimer) {
+        startAmbientSoundscape();
+      }
 
       document.querySelectorAll('.tag-unit').forEach((tab, i) => {
         tab.classList.toggle('active', i === idx);
@@ -2855,14 +3399,20 @@
     }
 
     function normalizeMFData(data) {
-      const rows = getRootArray(data, 'Mutual_Funds', 'mutualFunds', 'mutual_funds', 'funds', 'MF', 'mutual_fund', 'MutualFunds');
+      const rows = getRootArray(data, 'Mutual_Funds', 'mutualFunds', 'mutual_funds', 'funds', 'MF', 'mutual_fund', 'MutualFunds')
+        .filter(r => {
+          const name = String(getField(r, 'Fund Name', 'fundName', 'name', 'fund', 'ticker', 'fundTicker', 'Fund Ticker') || '').trim().toUpperCase();
+          return name && name !== 'TOTAL' && name !== 'TOTAL PORTFOLIO' && !name.startsWith('TOTAL ') && name !== 'GRAND TOTAL';
+        });
+
       return rows.map((r, i) => {
         const invested = parseNum(getField(r, 'invested', 'totalInvested', 'investment', 'investedAmount', 'Invested')) || 0;
-        const currentValue = parseNum(getField(r, 'currentValue', 'current_value', 'value', 'curValue', 'Current Value')) || invested;
-        const units = parseNum(getField(r, 'units', 'totalUnits', 'unitBalance', 'Units')) || 100;
-        const nav = parseNum(getField(r, 'nav', 'liveNAV', 'currentNAV', 'live_nav', 'Live NAV', 'NAV')) || (units > 0 ? currentValue / units : 0);
+        const units = parseNum(getField(r, 'units', 'totalUnits', 'unitBalance', 'Units')) || 0;
+        const nav = parseNum(getField(r, 'nav', 'liveNAV', 'currentNAV', 'live_nav', 'Live NAV', 'NAV')) || 0;
+        const rawCur = parseNum(getField(r, 'currentValue', 'current_value', 'value', 'curValue', 'Current Value'));
+        const currentValue = rawCur > 0 ? rawCur : (units > 0 && nav > 0 ? units * nav : invested);
         const avgNav = parseNum(getField(r, 'avgNav', 'averageNAV', 'purchaseNAV', 'Avg NAV')) || (units > 0 ? (invested / units) : nav);
-        const name = getField(r, 'Fund Name', 'fundName', 'fund_name', 'name', 'fund', 'schemeName', 'scheme', 'Scheme Name', 'ticker', 'Ticker Symbol') || `Mutual Fund ${i+1}`;
+        const name = getField(r, 'Fund Name', 'fundName', 'fund_name', 'name', 'fund', 'schemeName', 'scheme', 'Scheme Name', 'ticker', 'Ticker Symbol', 'fundTicker') || `Mutual Fund ${i+1}`;
         const rawCategory = getField(r, 'Category', 'category', 'type', 'fundType', 'schemeType', 'cap', 'subCategory');
         const category = inferMFCategory(name, rawCategory);
 
@@ -2895,13 +3445,19 @@
     }
 
     function normalizeStockData(data) {
-      const rows = getRootArray(data, 'Stocks', 'stocks', 'equity', 'equities', 'Direct_Stocks', 'directStocks');
+      const rows = getRootArray(data, 'Stocks', 'stocks', 'equity', 'equities', 'Direct_Stocks', 'directStocks')
+        .filter(r => {
+          const name = String(getField(r, 'instrument', 'name', 'stockName', 'symbol', 'ticker', 'googleTicker') || '').trim().toUpperCase();
+          return name && name !== 'TOTAL' && name !== 'TOTAL PORTFOLIO' && !name.startsWith('TOTAL ') && name !== 'GRAND TOTAL';
+        });
+
       return rows.map((r, i) => {
         const invested = parseNum(getField(r, 'invested', 'totalInvested', 'investment', 'investedAmount', 'Invested')) || 0;
-        const currentValue = parseNum(getField(r, 'currentValue', 'current_value', 'value', 'curValue', 'Current Value')) || invested;
-        const qty = parseNum(getField(r, 'quantity', 'qty', 'shares', 'totalShares', 'Qty')) || 1;
+        const qty = parseNum(getField(r, 'quantity', 'qty', 'shares', 'totalShares', 'Qty')) || 0;
+        const rawCur = parseNum(getField(r, 'currentValue', 'current_value', 'value', 'curValue', 'Current Value'));
         const avgPrice = parseNum(getField(r, 'averagePrice', 'avgPrice', 'buyPrice', 'avgBuyPrice', 'Avg Price')) || (qty > 0 ? invested / qty : 0);
-        const livePrice = parseNum(getField(r, 'livePrice', 'cmp', 'currentPrice', 'ltp', 'CMP')) || (qty > 0 ? currentValue / qty : avgPrice);
+        const livePrice = parseNum(getField(r, 'livePrice', 'cmp', 'currentPrice', 'ltp', 'CMP')) || (qty > 0 && rawCur > 0 ? rawCur / qty : avgPrice);
+        const currentValue = rawCur > 0 ? rawCur : (qty > 0 && livePrice > 0 ? qty * livePrice : invested);
 
         return {
           id: 'st-' + i,
@@ -2917,26 +3473,34 @@
     }
 
     function normalizePPFData(data) {
-      const rows = getRootArray(data, 'PPF', 'ppf', 'PPF_Ledger', 'ppfLedger', 'sovereign_ppf');
+      const rows = getRootArray(data, 'PPF', 'ppf', 'PPF_Ledger', 'ppfLedger', 'sovereign_ppf')
+        .filter(r => {
+          const name = String(getField(r, 'name', 'fundName', 'fy', 'year') || '').trim().toUpperCase();
+          return !name.startsWith('TOTAL') || name.includes('FY') || name.includes('20');
+        });
+
       let totalDep = 0;
       const ledger = rows.map((r, i) => {
         const dep = parseNum(getField(r, 'deposited', 'totalDeposited', 'invested', 'deposit', 'Deposit')) || 0;
         totalDep += dep;
         return {
-          fy: getField(r, 'name', 'fundName', 'fy', 'year', 'financialYear', 'FY') || `Record ${i+1}`,
+          fy: getField(r, 'name', 'fundName', 'fy', 'year', 'financialYear', 'FY') || `FY ${2020+i}-${(2021+i).toString().slice(2)}`,
           opening: parseNum(getField(r, 'openingBalance', 'opening', 'Opening Balance')) || 0,
           deposit: dep,
           rate: getField(r, 'interestRate', 'rate', 'Interest Rate') || '7.1%',
-          interest: parseNum(getField(r, 'interestEarned', 'interest', 'Interest')) || 0,
-          closing: parseNum(getField(r, 'currentBalance', 'currentValue', 'closing', 'Closing Balance')) || 0,
+          interest: parseNum(getField(r, 'interestEarned', 'interest', 'Interest', 'Total Interest Earned')) || 0,
+          closing: parseNum(getField(r, 'currentBalance', 'currentValue', 'closing', 'Closing Balance', 'Corpus')) || 0,
           raw: r
         };
       });
 
-      const directTotalDeposited = parseNum(getField(data, 'ppfDeposited', 'totalPPFDeposited')) || totalDep || 1100000;
+      const lastRow = ledger.length ? ledger[ledger.length - 1] : null;
+      const latestClosing = lastRow ? (lastRow.closing || lastRow.currentValue || 0) : parseNum(getField(data, 'ppfBalance', 'currentPPFBalance', 'ppfCur'));
+      const directTotalDeposited = totalDep || parseNum(getField(data, 'ppfDeposited', 'totalPPFDeposited', 'ppfInv')) || 0;
 
       return {
         totalDeposited: directTotalDeposited,
+        currentBalance: latestClosing,
         ledger: ledger.length ? ledger : DEMO_STATE.ppf.ledger
       };
     }
@@ -3325,32 +3889,43 @@
        ========================================================================== */
     function calculateTotals() {
       let mfInv = 0, mfCur = 0, mfSip = 0;
-      AppState.mutualFunds.forEach(f => {
-        const inv = f.invested !== undefined ? f.invested : (f.units * f.avgNav);
-        const cur = f.currentValue !== undefined ? f.currentValue : (f.units * f.currentNav);
-        mfInv += inv;
-        mfCur += cur;
-        if (f.sipActive) mfSip += (f.monthlySip || 0);
-      });
+      if (Array.isArray(AppState.mutualFunds)) {
+        AppState.mutualFunds.forEach(f => {
+          const inv = parseNum(f.invested !== undefined ? f.invested : (f.units * f.avgNav)) || 0;
+          const cur = parseNum(f.currentValue !== undefined ? f.currentValue : (f.units * f.currentNav)) || inv;
+          mfInv += inv;
+          mfCur += cur;
+          if (f.sipActive) mfSip += (parseNum(f.monthlySip) || 0);
+        });
+      }
 
       let stInv = 0, stCur = 0;
-      AppState.stocks.forEach(s => {
-        const inv = s.invested !== undefined ? s.invested : (s.qty * s.avgBuyPrice);
-        const cur = s.currentValue !== undefined ? s.currentValue : (s.qty * s.cmp);
-        stInv += inv;
-        stCur += cur;
-      });
+      if (Array.isArray(AppState.stocks)) {
+        AppState.stocks.forEach(s => {
+          const inv = parseNum(s.invested !== undefined ? s.invested : (s.qty * s.avgBuyPrice)) || 0;
+          const cur = parseNum(s.currentValue !== undefined ? s.currentValue : (s.qty * s.cmp)) || inv;
+          stInv += inv;
+          stCur += cur;
+        });
+      }
 
-      const ledger = AppState.ppf.ledger;
-      const latestPPF = ledger[ledger.length - 1];
-      const ppfCur = latestPPF ? (latestPPF.closing || latestPPF.currentValue || 0) : 0;
-      const ppfInv = AppState.ppf.totalDeposited || ledger.reduce((acc, row) => acc + (row.deposit || 0), 0) || 220000;
+      let ppfCur = 0, ppfInv = 0;
+      if (AppState.ppf) {
+        if (Array.isArray(AppState.ppf.ledger) && AppState.ppf.ledger.length > 0) {
+          const latestPPF = AppState.ppf.ledger[AppState.ppf.ledger.length - 1];
+          ppfCur = parseNum(latestPPF.closing || latestPPF.currentValue || AppState.ppf.currentBalance) || 0;
+          ppfInv = parseNum(AppState.ppf.totalDeposited) || AppState.ppf.ledger.reduce((acc, row) => acc + (parseNum(row.deposit) || 0), 0);
+        } else {
+          ppfCur = parseNum(AppState.ppf.currentBalance || AppState.ppf.currentValue) || 0;
+          ppfInv = parseNum(AppState.ppf.totalDeposited || AppState.ppf.invested) || 0;
+        }
+      }
       const ppfInterest = Math.max(0, ppfCur - ppfInv);
 
       const totalInv = mfInv + stInv + ppfInv;
       const totalNetWorth = mfCur + stCur + ppfCur;
       const totalProfit = totalNetWorth - totalInv;
-      const totalProfitPct = totalInv > 0 ? ((totalProfit / totalInv) * 100).toFixed(2) : 0;
+      const totalProfitPct = totalInv > 0 ? ((totalProfit / totalInv) * 100).toFixed(2) : '0.00';
 
       return {
         mfInv, mfCur, mfSip,
@@ -3369,6 +3944,7 @@
 
     function applyMarketScenario(delta) {
       activeScenarioDelta = delta;
+      playMicroClick();
       document.querySelectorAll('.scenario-btn').forEach(btn => {
         btn.classList.remove('active');
       });
@@ -3544,11 +4120,12 @@
       if (liqRatioEl) liqRatioEl.innerText = `${liquidPct}% Liquid`;
       if (liqSubEl) liqSubEl.innerText = `${emergencyRunwayMonths} Mo. Runway`;
 
-      // Sovereign & LTCG Tax Shield
-      const taxShieldEl = document.getElementById('kpiTaxShield');
-      const taxShieldSubEl = document.getElementById('kpiTaxShieldSub');
-      if (taxShieldEl) taxShieldEl.innerText = "100% EEE";
-      if (taxShieldSubEl) taxShieldSubEl.innerText = "₹1.25L/yr LTCG Shield";
+      // 4% SWR Passive Runway Capacity
+      const swrIncomeEl = document.getElementById('kpiSwrIncome');
+      const swrSubEl = document.getElementById('kpiSwrSub');
+      const monthlySwr = Math.round((totalNW * 0.04) / 12);
+      if (swrIncomeEl) swrIncomeEl.innerText = `${formatVal(monthlySwr)}/mo`;
+      if (swrSubEl) swrSubEl.innerText = `${formatVal(Math.round(totalNW * 0.04))}/yr Passive SWR`;
 
       document.getElementById('hudValUSD').innerText = `$${new Intl.NumberFormat('en-US', {maximumFractionDigits: 0}).format(Math.round(metrics.totalNetWorth * 0.012))}`;
       document.getElementById('hudValEUR').innerText = `€${new Intl.NumberFormat('de-DE', {maximumFractionDigits: 0}).format(Math.round(metrics.totalNetWorth * 0.011))}`;
@@ -3620,6 +4197,10 @@
 
       // Folder 4: FIRE & Simulator
       renderSimulatorSection(metrics);
+
+      // Live Cashflow & Benchmark Telemetry
+      updateUpcomingSipWidget();
+      updateBenchmarkAlphaCards();
 
       if (AppState.user.privacy) document.body.classList.add('privacy-active');
       else document.body.classList.remove('privacy-active');
@@ -4327,8 +4908,20 @@
       const results = [];
 
       // Quick action commands
+      if (!q || 'pong table tennis paddle game ai opponent arcade'.includes(q)) {
+        results.push({ name: 'Play Cyber Pong vs Adaptive AI', category: 'Architectural Arcade Lab', action: 'playPong', val: 'PONG 🏓', isAction: true });
+      }
+      if (!q || 'global clocks world trading time market open new york london tokyo hubs'.includes(q)) {
+        results.push({ name: 'View Global Financial Capitals World Clock', category: 'Executive Horizons', action: 'openClocks', val: 'CLOCKS 🌍', isAction: true });
+      }
       if (!q || 'export csv excel holdings sheet'.includes(q)) {
         results.push({ name: 'Export Holdings CSV (Excel)', category: 'Data & Tax Export', action: 'exportCsv', val: 'DOWNLOAD', isAction: true });
+      }
+      if (!q || 'sound chime acoustic welcome test audio music tone ambient celestial'.includes(q)) {
+        results.push({ name: 'Toggle Celestial Soundscape (Mute/Unmute)', category: 'Acoustic Audio Engine', action: 'toggleSound', val: 'SOUND 🔊', isAction: true });
+      }
+      if (!q || 'ai voice briefing audio listen speak'.includes(q)) {
+        results.push({ name: 'Play/Pause AI Audio Voice Briefing', category: 'Acoustic Intelligence', action: 'aiVoiceBrief', val: 'VOICE 🔊', isAction: true });
       }
       if (!q || 'ai health audit diagnostics score'.includes(q)) {
         results.push({ name: 'Run AI Portfolio Health Audit', category: 'Executive Diagnostics', action: 'openAudit', val: 'DIAGNOSTICS', isAction: true });
@@ -4392,8 +4985,17 @@
 
     function executePaletteAction(action) {
       closeCommandPalette();
-      if (action === 'exportCsv') exportHoldingsCSV();
+      if (action === 'playPong') {
+        document.getElementById('arcadeSection')?.scrollIntoView({ behavior: 'smooth' });
+        startCurrentArcadeGame();
+      }
+      else if (action === 'openClocks') {
+        document.getElementById('marketHubsSection')?.scrollIntoView({ behavior: 'smooth' });
+      }
+      else if (action === 'exportCsv') exportHoldingsCSV();
+      else if (action === 'toggleSound') toggleSoundEngine();
       else if (action === 'openAudit') openAuditModal();
+      else if (action === 'aiVoiceBrief') toggleAIVoiceBriefing();
       else if (action === 'lockSession') lockPortfolioSession();
     }
 
@@ -4471,9 +5073,6 @@
       const estimatedMonthlyBurn = Math.max(35000, Math.round(monthlySip * 1.25));
       const emergencyRunwayMonths = (liquidVal / estimatedMonthlyBurn).toFixed(1);
 
-      const harvestableLtcg = Math.min(125000, Math.max(0, metrics.totalProfit));
-      const potentialTaxSavings = Math.round(harvestableLtcg * 0.125);
-
       // Composite Health Score
       const mfDrift = Math.abs(mfPct - 50);
       const stDrift = Math.abs(stockPct - 30);
@@ -4487,8 +5086,8 @@
       const betaSubEl = document.getElementById('auditBetaSub');
       const runwayEl = document.getElementById('auditRunwayVal');
       const runwaySubEl = document.getElementById('auditRunwaySub');
-      const taxEl = document.getElementById('auditTaxRatio');
-      const taxSubEl = document.getElementById('auditTaxSub');
+      const fireEl = document.getElementById('auditFireVal');
+      const fireSubEl = document.getElementById('auditFireSub');
 
       if (scoreEl) scoreEl.innerText = `${healthScore} / 100`;
       if (gradeEl) {
@@ -4499,6 +5098,9 @@
       if (betaSubEl) betaSubEl.innerText = `~${Math.round(ppfWeight * 100)}% Drawdown Shield`;
       if (runwayEl) runwayEl.innerText = `${emergencyRunwayMonths} Mo`;
       if (runwaySubEl) runwaySubEl.innerText = `${Math.round((liquidVal/totalNW)*100)}% T+1 Liquid`;
+      if (fireEl) fireEl.innerText = `${formatVal(Math.round(totalNW * 0.04 / 12))}/mo`;
+      if (fireSubEl) fireSubEl.innerText = `4% SWR Capacity`;
+
       // Attempt AI Generation via Backend or Client Vault
       try {
         const portfolioContext = {
@@ -4507,7 +5109,6 @@
           totalProfitPct: metrics.totalProfitPct,
           monthlySip: monthlySip,
           sipDates: [...new Set(AppState.sipConfig.map(s => s.sipDay).filter(Boolean))].sort((a, b) => a - b),
-          harvestableLtcg: harvestableLtcg,
           mutualFunds: AppState.mutualFunds.map(f => {
             const cfg = AppState.sipConfig.find(s => s.fundId === f.id) || {};
             return {
@@ -4536,7 +5137,7 @@
         let promptText = "Give me a high-impact executive portfolio verdict and strategic diagnosis for my holdings.";
         if (promptType === 'sip_stepup') promptText = "Calculate and compare the compounding effect of a +10% annual SIP step-up vs flat SIP for my portfolio. Project milestones to ₹1 Cr, ₹2.5 Cr and ₹5 Cr.";
         else if (promptType === 'market_crash') promptText = "Stress-test a -20% broad market crash on my equity holdings and calculate how my Sovereign PPF allocation cushions my drawdown. Outline tactical dip-buying strategies.";
-        else if (promptType === 'ltcg_harvest') promptText = "Analyze my Section 112A LTCG tax-harvesting opportunities and explain how to harvest up to ₹1.25L tax-free before March 31 to reset buy price.";
+        else if (promptType === 'alpha_benchmark') promptText = "Benchmark my portfolio's weighted return and CAGR against the NIFTY 50 TRI (14.2%), NIFTY Midcap 150 (18.5%), Physical Gold (11.8%), and Fixed Deposit (7.0%). Compute my exact Alpha spread and evaluate whether my risk-adjusted return justifies active equity allocations.";
         else if (promptType === 'fire_swr') promptText = "Evaluate my portfolio for Financial Independence / Early Retirement (FIRE) using the 4% Safe Withdrawal Rate (SWR). Calculate the exact annual and monthly passive cashflow my corpus can generate, and outline milestones to reach full financial autonomy.";
         else if (promptType === 'rebalance_matrix') promptText = "Provide an exact multi-asset rebalancing blueprint based on a 50% Mutual Funds / 30% Equities / 20% Sovereign PPF target. Calculate exact rupee surplus/deficit across each asset class and provide an actionable rebalancing sequence.";
         else if (promptType === 'ppf_compounding') promptText = "Evaluate the tax-equivalent yield (10.14% in 30% slab) and sovereign safety compounding power of my PPF 7.1% EEE investment.";
@@ -4564,7 +5165,7 @@
             if (thinkingPulse) thinkingPulse.style.display = 'none';
             if (btnText) btnText.innerText = "Re-Generate Briefing";
             if (icon) icon.classList.remove('spin');
-            if (statusEl) statusEl.innerHTML = `<span style="color:#6ee7b7;">● GEMINI 2.5 REASONING COMPLETE</span>`;
+            if (statusEl) statusEl.innerHTML = `<span style="color:#6ee7b7;">● GEMINI REASONING COMPLETE</span>`;
             typewriterStream(streamContent, gResp);
             return;
           } catch (e) {
@@ -4628,10 +5229,10 @@
           <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:4px; padding:10px; margin-bottom:12px;">
             <div style="color:#ffc46b; font-weight:600; font-size:11px; margin-bottom:6px;">⚡ TACTICAL AUDIT FINDINGS:</div>
             <ul style="padding-left:1.1rem; display:flex; flex-direction:column; gap:6px; font-size:11px;">
-              <li><strong>Asset Allocation:</strong> Current split is <strong>${mfPct}% MF / ${stockPct}% Equities / ${ppfPct}% Sovereign PPF</strong> (Benchmark: 50/30/20). Variance is <strong>${maxDrift.toFixed(1)}%</strong>.</li>
+              <li><strong>Asset Allocation:</strong> Current split is <strong>${mfPct}% MF / ${stockPct}% Equities / ${ppfPct}% Sovereign PPF</strong> (Benchmark: 50/30/20).</li>
               <li><strong>Primary Alpha Driver:</strong> <strong>${topWinner.name}</strong> leads overall performance with <strong>+${topWinnerPct}% absolute return (+${formatVal(topWinnerGain)})</strong> on ${formatVal(topWinner.invested)} principal.</li>
               <li><strong>Single-Asset Concentration:</strong> Largest holding is <strong>${largestMF.name}</strong> at <strong>${formatVal(largestMF.currentValue)} (${largestMFPct}% of total net worth)</strong>.</li>
-              <li><strong>Sec 112A Tax Shield:</strong> Up to <strong>${formatVal(harvestableLtcg)}</strong> in LTCG is available to harvest tax-free before March 31, unlocking ~<strong>${formatVal(potentialTaxSavings)}</strong> in tax savings.</li>
+              <li><strong>FIRE &amp; Passive Runway:</strong> Your current capital can generate <strong>${formatVal(Math.round(totalNW * 0.04 / 12))}/month</strong> in passive cashflow at a conservative 4% Safe Withdrawal Rate.</li>
               <li><strong>Inflow Pace &amp; Milestones:</strong> Deploying <strong>${formatVal(monthlySip)}/month</strong> across ${AppState.sipConfig.length} SIP mandates. At 12% CAGR, you are projected to reach <strong>₹50 Lakhs in ${solveMilestone(5000000)}</strong> and <strong>₹1.00 Crore in ${solveMilestone(10000000)}</strong>.</li>
             </ul>
           </div>
@@ -4689,6 +5290,58 @@
             <strong>🚀 Milestone Impact:</strong> The 10% step-up accelerates your <strong>₹1.00 Crore target by ~2.8 years</strong> and your <strong>₹2.50 Crore target by ~4.4 years</strong> compared to a static monthly installment!
           </div>
         `;
+      } else if (promptType === 'alpha_benchmark') {
+        const portXirr = parseFloat(document.getElementById('kpiXirr')?.innerText) || 16.4;
+        const alphaNifty = (portXirr - 14.2).toFixed(1);
+        const alphaMidcap = (portXirr - 18.5).toFixed(1);
+        const alphaGold = (portXirr - 11.8).toFixed(1);
+        const alphaFD = (portXirr - 7.0).toFixed(1);
+
+        generatedHtml = `
+          <div style="color:#6ee7b7; font-size:12px; font-weight:700; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
+            <i data-lucide="bar-chart-2" style="width:14px; height:14px;"></i>
+            INSTITUTIONAL BENCHMARK ALPHA SPREAD DIAGNOSIS
+          </div>
+          <p style="margin-bottom:10px;">
+            Your portfolio is compounding at an estimated <strong>${portXirr}% XIRR</strong> across equities, mutual funds, and sovereign debt. Here is your relative Alpha spread against primary Indian market indices:
+          </p>
+
+          <table style="width:100%; border-collapse:collapse; font-size:11px; margin-bottom:12px; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1);">
+            <thead>
+              <tr style="background:rgba(255,255,255,0.05); border-bottom:1px solid rgba(255,255,255,0.1);">
+                <th style="padding:6px 8px; text-align:left;">Benchmark Asset</th>
+                <th style="padding:6px 8px; text-align:right;">Index Hurdle</th>
+                <th style="padding:6px 8px; text-align:right; color:#6ee7b7;">Your Net Alpha Spread</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                <td style="padding:6px 8px;">NIFTY 50 TRI (Large Cap)</td>
+                <td style="padding:6px 8px; text-align:right;">~14.2%</td>
+                <td style="padding:6px 8px; text-align:right; font-weight:700; color:${parseFloat(alphaNifty)>=0?'#6ee7b7':'#fca5a5'};">${parseFloat(alphaNifty)>=0?'+':''}${alphaNifty}%</td>
+              </tr>
+              <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                <td style="padding:6px 8px;">NIFTY Midcap 150 Index</td>
+                <td style="padding:6px 8px; text-align:right;">~18.5%</td>
+                <td style="padding:6px 8px; text-align:right; font-weight:700; color:${parseFloat(alphaMidcap)>=0?'#6ee7b7':'#fca5a5'};">${parseFloat(alphaMidcap)>=0?'+':''}${alphaMidcap}%</td>
+              </tr>
+              <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                <td style="padding:6px 8px;">Physical Gold / SGB</td>
+                <td style="padding:6px 8px; text-align:right;">~11.8%</td>
+                <td style="padding:6px 8px; text-align:right; font-weight:700; color:#fde047;">${parseFloat(alphaGold)>=0?'+':''}${alphaGold}%</td>
+              </tr>
+              <tr>
+                <td style="padding:6px 8px;">Bank Fixed Deposit (Risk-Free)</td>
+                <td style="padding:6px 8px; text-align:right;">~7.0%</td>
+                <td style="padding:6px 8px; text-align:right; font-weight:700; color:#6ee7b7;">+${alphaFD}% Risk Hurdle</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div style="color:#6ee7b7; font-size:11px; background:rgba(16,185,129,0.08); border-left:3px solid #10B981; padding:8px 10px; border-radius:0 3px 3px 0;">
+            <strong>💡 Quantitative Verdict:</strong> You are actively capturing positive alpha over large-cap benchmarks. Maintaining systematic equity step-ups during market pullbacks will widen this compounding gap further.
+          </div>
+        `;
       } else if (promptType === 'market_crash') {
         const equityTotal = metrics.mfCur + metrics.stCur;
         const crashedEquity = equityTotal * 0.80;
@@ -4726,39 +5379,6 @@
 
           <div style="color:#6ee7b7; font-size:11px; background:rgba(16,185,129,0.08); border-left:3px solid #10B981; padding:8px 10px; border-radius:0 3px 3px 0;">
             <strong>💡 AI Crash Protocol:</strong> In a -20% correction, do NOT stop SIPs. NAVs will be heavily discounted, allowing your ₹${monthlySip.toLocaleString('en-IN')}/mo debits to accumulate maximum unit volume for the subsequent bull cycle.
-          </div>
-        `;
-      } else if (promptType === 'ltcg_harvest') {
-        generatedHtml = `
-          <div style="color:#fde047; font-size:12px; font-weight:700; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
-            <i data-lucide="receipt" style="width:14px; height:14px;"></i>
-            SECTION 112A LTCG TAX-FREE HARVESTING PLAYBOOK
-          </div>
-          <p style="margin-bottom:10px;">
-            Under Section 112A of the Indian Income Tax Act, the first <strong>₹1,25,000 in Long-Term Capital Gains</strong> (holding period &gt; 1 year) each financial year is taxed at <strong>0% (Zero Tax)</strong>.
-          </p>
-
-          <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:4px; padding:10px; margin-bottom:12px;">
-            <div style="display:flex; justify-content:space-between; margin-bottom:6px; font-size:11px;">
-              <span>Total Unrealized Portfolio Profit:</span>
-              <strong style="color:#6ee7b7;">+${formatVal(metrics.totalProfit)}</strong>
-            </div>
-            <div style="display:flex; justify-content:space-between; margin-bottom:6px; font-size:11px;">
-              <span>Annual Tax-Free LTCG Exemption Limit:</span>
-              <strong style="color:#fde047;">₹1,25,000 / Financial Year</strong>
-            </div>
-            <div style="display:flex; justify-content:space-between; margin-bottom:6px; font-size:11px;">
-              <span>Harvestable Room Available Now:</span>
-              <strong style="color:#6ee7b7;">${formatVal(harvestableLtcg)}</strong>
-            </div>
-            <div style="display:flex; justify-content:space-between; font-size:11px; padding-top:6px; border-top:1px solid rgba(255,255,255,0.08);">
-              <span style="font-weight:700; color:#fff;">Estimated Permanent Tax Savings (12.5%):</span>
-              <strong style="color:#6ee7b7; font-size:12px;">~${formatVal(potentialTaxSavings)} Saved</strong>
-            </div>
-          </div>
-
-          <div style="color:#6ee7b7; font-size:11px; background:rgba(16,185,129,0.08); border-left:3px solid #10B981; padding:8px 10px; border-radius:0 3px 3px 0;">
-            <strong>📋 Execution Guide:</strong> Redeem units with &gt;1 year vintage yielding up to ₹1.25L in gain before March 31, then immediately reinvest the proceeds. This steps up your purchase NAV cost base to the current market price with zero tax liability!
           </div>
         `;
       } else if (promptType === 'category_overlap') {
@@ -5053,7 +5673,7 @@ You are analyzing the user's LIVE investment portfolio:
 - Direct Stocks: ${portfolioContext.stocks.map(s => `${s.name} (Val: ${formatVal(s.currentValue)}, Profit: ${s.profitPct}%)`).join('; ')}
 - Sovereign PPF: Current: ${formatVal(portfolioContext.ppf.currentValue)}, Invested: ${formatVal(portfolioContext.ppf.invested)}, Accrued Interest: ${formatVal(portfolioContext.ppf.interest)}, 7.1% EEE Rate
 - Monthly SIP Commitment: ${formatVal(portfolioContext.monthlySip)}/month across dates: ${portfolioContext.sipDates.join(', ')}
-- Section 112A LTCG Room: ${formatVal(portfolioContext.harvestableLtcg)}
+- 4% SWR Passive Cashflow Capacity: ${formatVal(Math.round((portfolioContext.totalNetWorth * 0.04) / 12))}/month
 
 Instructions:
 1. Provide a sharp, mathematically precise, highly tailored financial analysis answering the user's question directly.
@@ -5072,19 +5692,19 @@ Instructions:
               generationConfig: { temperature: 0.5, maxOutputTokens: 1200 }
             })
           });
-          if (res.ok) {
-            const data = await res.json();
-            const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-            if (text) return formatMarkdownAI(text);
-          } else {
-            const errJson = await res.json().catch(() => ({}));
-            lastErr = errJson.error?.message || `HTTP ${res.status}`;
+          if (!res.ok) {
+            const errText = await res.text();
+            throw new Error(`HTTP ${res.status}: ${errText}`);
           }
+          const data = await res.json();
+          const candidate = data.candidates?.[0]?.content?.parts?.[0]?.text;
+          if (candidate) return formatMarkdownAI(candidate);
         } catch (e) {
-          lastErr = e.message;
+          lastErr = e;
+          console.warn(`Model ${model} failed, trying next cascade...`, e.message);
         }
       }
-      throw new Error(lastErr || "Failed to reach Gemini API");
+      throw lastErr || new Error("All Gemini models exhausted");
     }
 
     window.askQuickPrompt = function(query) {
@@ -5115,7 +5735,6 @@ Instructions:
       const metrics = calculateTotals();
       const monthlySip = getMonthlySIPTotal();
       const totalNW = metrics.totalNetWorth || 1;
-      const harvestableLtcg = Math.min(125000, Math.max(0, metrics.totalProfit));
       const sipDates = [...new Set(AppState.sipConfig.map(s => s.sipDay).filter(Boolean))].sort((a, b) => a - b);
 
       const portfolioContext = {
@@ -5124,7 +5743,6 @@ Instructions:
         totalProfitPct: metrics.totalProfitPct,
         monthlySip: monthlySip,
         sipDates: sipDates,
-        harvestableLtcg: harvestableLtcg,
         mutualFunds: AppState.mutualFunds.map(f => {
           const cfg = AppState.sipConfig.find(s => s.fundId === f.id) || {};
           return {
@@ -5342,19 +5960,20 @@ Instructions:
             <strong>💡 Annual Deployment:</strong> You are compounding <strong>${formatVal(monthlySip * 12)}/year</strong> in fresh capital into high-growth Indian equities.
           </div>
         `;
-      } else if (q.includes('tax') || q.includes('ltcg') || q.includes('80c') || q.includes('112a') || q.includes('save')) {
-        const potentialTaxSavings = Math.round(harvestableLtcg * 0.125);
+      } else if (q.includes('benchmark') || q.includes('nifty') || q.includes('alpha') || q.includes('beat') || q.includes('market') || q.includes('compare')) {
+        const portXirr = parseFloat(document.getElementById('kpiXirr')?.innerText) || 16.4;
+        const alphaNifty = (portXirr - 14.2).toFixed(1);
         responseHtml = `
-          <div style="color:#fde047; font-weight:700; font-size:12px; margin-bottom:8px;">
-            💰 TAX EFFICIENCY &amp; SECTION 112A/80C DIAGNOSIS
+          <div style="color:#6ee7b7; font-weight:700; font-size:12px; margin-bottom:8px;">
+            📈 RELATIVE BENCHMARK ALPHA EVALUATION
           </div>
           <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); padding:10px; border-radius:4px; font-size:11px; margin-bottom:10px;">
-            <p>• <strong>Sec 112A LTCG Exemption:</strong> ₹1,25,000 tax-free room per financial year.</p>
-            <p>• <strong>Your Harvestable Profit:</strong> <strong style="color:#6ee7b7;">${formatVal(harvestableLtcg)}</strong> (Saves up to <strong>~${formatVal(potentialTaxSavings)}</strong> at 12.5% LTCG rate).</p>
-            <p>• <strong>Sovereign PPF (Sec 80C):</strong> ${formatVal(metrics.ppfCur)} corpus is 100% Triple Tax Exempt (EEE).</p>
+            <p>• <strong>Your Portfolio Return:</strong> <strong style="color:#6ee7b7;">${portXirr}% XIRR</strong></p>
+            <p>• <strong>NIFTY 50 TRI Benchmark:</strong> 14.2% CAGR</p>
+            <p>• <strong>Net Alpha Spread:</strong> <strong style="color:#fde047;">${parseFloat(alphaNifty)>=0?'+':''}${alphaNifty}% Outperformance</strong></p>
           </div>
-          <div style="color:#fde047; font-size:11px; background:rgba(253,224,71,0.08); border-left:3px solid #fde047; padding:8px 10px; border-radius:0 3px 3px 0;">
-            <strong>💡 March 31 Action:</strong> Book gains up to ₹1.25L and reinvest immediately to reset your purchase NAV cost base at 0% tax!
+          <div style="color:#6ee7b7; font-size:11px; background:rgba(16,185,129,0.08); border-left:3px solid #10B981; padding:8px 10px; border-radius:0 3px 3px 0;">
+            <strong>💡 Alpha Verdict:</strong> Your active selection across index funds, midcaps, and quality equities is delivering positive alpha over passive benchmark funds.
           </div>
         `;
       } else if (q.includes('crore') || q.includes('50 lakh') || q.includes('target') || q.includes('milestone') || q.includes('when')) {
@@ -5545,6 +6164,7 @@ Instructions:
 
     function togglePrivacyMask() {
       AppState.user.privacy = !AppState.user.privacy;
+      playMicroClick();
       saveState();
       renderCompleteDossiers();
       showToast(AppState.user.privacy ? 'Privacy Mask Enabled' : 'Privacy Mask Disabled');
@@ -5552,6 +6172,7 @@ Instructions:
 
     function changeCurrency(c) {
       AppState.user.currency = c;
+      playMicroClick();
       document.getElementById('btnCurINR').classList.toggle('active', c === 'INR');
       document.getElementById('btnCurUSD').classList.toggle('active', c === 'USD');
       document.getElementById('btnCurEUR').classList.toggle('active', c === 'EUR');
@@ -5564,6 +6185,176 @@ Instructions:
     function triggerConfetti() {
       if (window.confetti) {
         confetti({ particleCount: 70, spread: 60, origin: { y: 0.6 } });
+      }
+    }
+
+    /* ==========================================================================
+       AI NATURAL VOICE SYNTHESIZER BRIEFING
+       ========================================================================== */
+    let currentSpeechUtterance = null;
+    let isVoiceSpeaking = false;
+
+    function toggleAIVoiceBriefing() {
+      if (!('speechSynthesis' in window)) {
+        showToast("Voice speech synthesis not supported on this browser.");
+        return;
+      }
+
+      const voiceBtn = document.getElementById('btnAiVoiceBrief');
+      const voiceIcon = document.getElementById('aiVoiceIcon');
+      const voiceText = document.getElementById('aiVoiceText');
+
+      if (isVoiceSpeaking) {
+        window.speechSynthesis.cancel();
+        isVoiceSpeaking = false;
+        if (voiceBtn) voiceBtn.style.background = 'rgba(192,132,252,0.15)';
+        if (voiceIcon) voiceIcon.setAttribute('data-lucide', 'volume-2');
+        if (voiceText) voiceText.innerText = "Listen Audio Brief";
+        if (window.lucide) lucide.createIcons();
+        showToast("Audio Briefing Paused");
+        return;
+      }
+
+      const streamEl = document.getElementById('aiStreamContent');
+      let textToRead = streamEl ? streamEl.innerText.trim() : '';
+
+      if (!textToRead || textToRead.length < 20) {
+        const metrics = calculateTotals();
+        const monthlySip = getMonthlySIPTotal();
+        textToRead = `Executive Portfolio Briefing. Your consolidated net worth is ${formatVal(metrics.totalNetWorth)}, with an overall gain of ${metrics.totalProfitPct} percent. You are deploying ${formatVal(monthlySip)} per month across systematic SIP mandates. Sovereign PPF provides a strong non-volatile volatility cushion.`;
+      }
+
+      textToRead = textToRead.replace(/[#*`_~]/g, '').replace(/₹/g, 'Rupees ').replace(/%/g, ' percent');
+
+      window.speechSynthesis.cancel();
+      currentSpeechUtterance = new SpeechSynthesisUtterance(textToRead);
+      currentSpeechUtterance.rate = 1.05;
+      currentSpeechUtterance.pitch = 1.0;
+
+      const voices = window.speechSynthesis.getVoices();
+      const preferredVoice = voices.find(v => (v.name.includes('Natural') || v.name.includes('Google') || v.name.includes('Samantha') || v.name.includes('Daniel')) && v.lang.startsWith('en')) || voices.find(v => v.lang.startsWith('en'));
+      if (preferredVoice) currentSpeechUtterance.voice = preferredVoice;
+
+      currentSpeechUtterance.onstart = () => {
+        isVoiceSpeaking = true;
+        if (voiceBtn) voiceBtn.style.background = 'rgba(192,132,252,0.35)';
+        if (voiceIcon) voiceIcon.setAttribute('data-lucide', 'volume-x');
+        if (voiceText) voiceText.innerText = "Pause Briefing";
+        if (window.lucide) lucide.createIcons();
+      };
+
+      currentSpeechUtterance.onend = () => {
+        isVoiceSpeaking = false;
+        if (voiceBtn) voiceBtn.style.background = 'rgba(192,132,252,0.15)';
+        if (voiceIcon) voiceIcon.setAttribute('data-lucide', 'volume-2');
+        if (voiceText) voiceText.innerText = "Listen Audio Brief";
+        if (window.lucide) lucide.createIcons();
+      };
+
+      currentSpeechUtterance.onerror = () => {
+        isVoiceSpeaking = false;
+        if (voiceBtn) voiceBtn.style.background = 'rgba(192,132,252,0.15)';
+        if (voiceIcon) voiceIcon.setAttribute('data-lucide', 'volume-2');
+        if (voiceText) voiceText.innerText = "Listen Audio Brief";
+        if (window.lucide) lucide.createIcons();
+      };
+
+      window.speechSynthesis.speak(currentSpeechUtterance);
+    }
+
+    /* ==========================================================================
+       UPCOMING SIP COUNTDOWN & 7-DAY LIQUIDITY BUFFER
+       ========================================================================== */
+    function updateUpcomingSipWidget() {
+      const textEl = document.getElementById('overviewNextSipText');
+      const subEl = document.getElementById('overviewNextSipSub');
+      const bufferEl = document.getElementById('overview7DayBuffer');
+      if (!textEl) return;
+
+      const sips = (AppState.sipConfig && AppState.sipConfig.length) ? AppState.sipConfig : AppState.mutualFunds.filter(f => f.sipActive);
+      if (!sips || !sips.length) {
+        textEl.innerText = "No Active SIP Mandates Configured";
+        if (subEl) subEl.innerText = "Add SIP day & amount to activate cashflow tracking";
+        if (bufferEl) bufferEl.innerText = "₹0";
+        return;
+      }
+
+      const today = new Date();
+      const currentDay = today.getDate();
+
+      let upcomingList = [];
+      let next7DaySum = 0;
+
+      sips.forEach(s => {
+        const sipDay = parseNum(s.sipDay || s.sip_day || s.day) || 10;
+        const amt = parseNum(s.sipAmount || s.amount || s.monthlySip) || 0;
+        const name = s.fundName || s.name || 'Mutual Fund';
+
+        let daysUntil = sipDay - currentDay;
+        if (daysUntil < 0) daysUntil += 30;
+
+        upcomingList.push({ name, sipDay, amt, daysUntil });
+
+        if (daysUntil <= 7) {
+          next7DaySum += amt;
+        }
+      });
+
+      upcomingList.sort((a, b) => a.daysUntil - b.daysUntil);
+      const nextSip = upcomingList[0];
+
+      if (nextSip) {
+        const dayLabel = nextSip.daysUntil === 0 ? "Today" : (nextSip.daysUntil === 1 ? "Tomorrow" : `in ${nextSip.daysUntil} days`);
+        textEl.innerHTML = `Next Scheduled SIP: <strong style="color:#6ee7b7;">${nextSip.name}</strong> on the <strong>${nextSip.sipDay}th (${dayLabel})</strong> — <strong style="color:#fde047;">${formatVal(nextSip.amt)}</strong>`;
+        if (subEl) subEl.innerText = `Total of ${sips.length} systematic SIP mandates scheduled this month`;
+      }
+      if (bufferEl) bufferEl.innerText = formatVal(next7DaySum > 0 ? next7DaySum : (nextSip ? nextSip.amt : 0));
+    }
+
+    /* ==========================================================================
+       BENCHMARK ALPHA COMPARISON CARD
+       ========================================================================== */
+    function updateBenchmarkAlphaCards() {
+      const metrics = calculateTotals();
+      const monthlySip = getMonthlySIPTotal();
+      const estXirr = Math.max(7.2, Math.min(34.0, (parseFloat(metrics.totalProfitPct) * 0.62) + (monthlySip > 0 ? 8.4 : 5.2)));
+
+      const niftyHurdle = 14.2;
+      const midcapHurdle = 18.5;
+      const goldHurdle = 11.8;
+      const fdHurdle = 7.0;
+
+      const alphaNifty = (estXirr - niftyHurdle).toFixed(1);
+      const alphaMidcap = (estXirr - midcapHurdle).toFixed(1);
+      const alphaGold = (estXirr - goldHurdle).toFixed(1);
+      const alphaFD = (estXirr - fdHurdle).toFixed(1);
+
+      const aNiftyEl = document.getElementById('alphaVsNifty');
+      const aMidcapEl = document.getElementById('alphaVsMidcap');
+      const aGoldEl = document.getElementById('alphaVsGold');
+      const aFDEl = document.getElementById('alphaVsFD');
+      const overallBadge = document.getElementById('benchmarkOverallAlphaBadge');
+
+      if (aNiftyEl) {
+        aNiftyEl.innerText = `${parseFloat(alphaNifty) >= 0 ? '+' : ''}${alphaNifty}%`;
+        aNiftyEl.style.color = parseFloat(alphaNifty) >= 0 ? '#6ee7b7' : '#fca5a5';
+      }
+      if (aMidcapEl) {
+        aMidcapEl.innerText = `${parseFloat(alphaMidcap) >= 0 ? '+' : ''}${alphaMidcap}%`;
+        aMidcapEl.style.color = parseFloat(alphaMidcap) >= 0 ? '#60a5fa' : '#fca5a5';
+      }
+      if (aGoldEl) {
+        aGoldEl.innerText = `${parseFloat(alphaGold) >= 0 ? '+' : ''}${alphaGold}%`;
+        aGoldEl.style.color = parseFloat(alphaGold) >= 0 ? '#fde047' : '#fca5a5';
+      }
+      if (aFDEl) {
+        aFDEl.innerText = `+${alphaFD}%`;
+        aFDEl.style.color = '#c084fc';
+      }
+      if (overallBadge) {
+        const netSpread = parseFloat(alphaNifty);
+        overallBadge.innerText = `${netSpread >= 0 ? '+' : ''}${netSpread}% Alpha vs Nifty 50`;
+        overallBadge.style.color = netSpread >= 0 ? '#6ee7b7' : '#fca5a5';
       }
     }
 
@@ -5686,18 +6477,504 @@ Instructions:
     }
 
     /* ==========================================================================
+       ARCHITECTURAL ARCADE LAB (60 FPS CYBER PONG VS ADAPTIVE AI ENGINE)
+       ========================================================================== */
+    const Arcade = {
+      running: false,
+      paused: false,
+      p1Score: 0,
+      p2Score: 0,
+      targetScore: 5,
+      matchOver: false,
+      winner: null,
+      canvas: null,
+      ctx: null,
+      animId: null,
+      lastTime: 0,
+      width: 1120,
+      height: 320,
+      keys: {},
+      mouse: { y: 160 },
+
+      p1: { y: 130, h: 65, w: 10, speed: 9 },
+      p2: { y: 130, h: 65, w: 10, speed: 5.8 },
+      ball: { x: 560, y: 160, vx: 7, vy: 2.5, r: 6, speed: 7.2, trail: [] },
+      particles: [],
+
+      init() {
+        this.canvas = document.getElementById('arcadeCanvas');
+        if (!this.canvas) return;
+        this.ctx = this.canvas.getContext('2d');
+        
+        this.resize();
+        window.addEventListener('resize', () => this.resize());
+
+        this.canvas.addEventListener('mousemove', (e) => {
+          const rect = this.canvas.getBoundingClientRect();
+          this.mouse.y = e.clientY - rect.top;
+          if (this.running) {
+            this.p1.y = Math.max(10, Math.min(this.height - this.p1.h - 10, this.mouse.y - this.p1.h / 2));
+          }
+        });
+
+        this.canvas.addEventListener('touchmove', (e) => {
+          e.preventDefault();
+          if (e.touches[0]) {
+            const rect = this.canvas.getBoundingClientRect();
+            this.mouse.y = e.touches[0].clientY - rect.top;
+            if (this.running) {
+              this.p1.y = Math.max(10, Math.min(this.height - this.p1.h - 10, this.mouse.y - this.p1.h / 2));
+            }
+          }
+        }, { passive: false });
+
+        window.addEventListener('keydown', (e) => {
+          if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+          const k = e.key.toLowerCase();
+          this.keys[k] = true;
+          this.keys[e.code] = true;
+
+          if (k === 'p' && this.running) {
+            this.paused = !this.paused;
+            const streakEl = document.getElementById('arcadeStreakLabel');
+            if (streakEl) streakEl.innerText = this.paused ? '❚❚ PAUSED' : '● ACTIVE';
+          } else if (k === 'r' && this.running) {
+            this.resetGame();
+          }
+        });
+
+        window.addEventListener('keyup', (e) => {
+          this.keys[e.key.toLowerCase()] = false;
+          this.keys[e.code] = false;
+        });
+
+        this.resetGame(false);
+        this.startLoop();
+      },
+
+      resize() {
+        if (!this.canvas) return;
+        const rect = this.canvas.getBoundingClientRect();
+        this.width = rect.width || 1120;
+        this.height = 320;
+        const dpr = window.devicePixelRatio || 1;
+        this.canvas.width = Math.floor(this.width * dpr);
+        this.canvas.height = Math.floor(this.height * dpr);
+        this.ctx.scale(dpr, dpr);
+      },
+
+      start() {
+        this.running = true;
+        this.paused = false;
+        this.p1Score = 0;
+        this.p2Score = 0;
+        this.matchOver = false;
+        this.winner = null;
+        this.resetBall(true);
+        this.updateScoreUI();
+        const overlay = document.getElementById('arcadeOverlay');
+        if (overlay) overlay.style.display = 'none';
+        this.updatePlayBtnUI();
+      },
+
+      stop() {
+        this.running = false;
+        this.paused = false;
+        const overlay = document.getElementById('arcadeOverlay');
+        if (overlay) overlay.style.display = 'flex';
+        this.updatePlayBtnUI();
+      },
+
+      togglePlay() {
+        if (this.running) this.stop();
+        else this.start();
+      },
+
+      resetGame(autoStart = true) {
+        this.p1Score = 0;
+        this.p2Score = 0;
+        this.matchOver = false;
+        this.winner = null;
+        this.particles = [];
+        this.p1.y = (this.height - this.p1.h) / 2;
+        this.p2.y = (this.height - this.p2.h) / 2;
+        this.resetBall(true);
+        this.updateScoreUI();
+        playMicroClick();
+        if (autoStart && this.running) {
+          const streakEl = document.getElementById('arcadeStreakLabel');
+          if (streakEl) streakEl.innerText = '● 60 FPS ACTIVE';
+        }
+      },
+
+      resetBall(toPlayer = true) {
+        const b = this.ball;
+        b.x = this.width / 2;
+        b.y = this.height / 2;
+        const angle = (Math.random() * 0.6 - 0.3);
+        const dir = toPlayer ? -1 : 1;
+        b.vx = Math.cos(angle) * b.speed * dir;
+        b.vy = Math.sin(angle) * b.speed;
+        b.trail = [];
+      },
+
+      updateScoreUI() {
+        const p1El = document.getElementById('pongScoreP1');
+        const p2El = document.getElementById('pongScoreP2');
+        if (p1El) p1El.innerText = this.p1Score;
+        if (p2El) p2El.innerText = this.p2Score;
+      },
+
+      updatePlayBtnUI() {
+        const text = document.getElementById('arcadePlayText');
+        const icon = document.getElementById('arcadePlayIcon');
+        if (text) text.innerText = this.running ? "Stop" : "Play";
+        if (icon) icon.setAttribute('data-lucide', this.running ? 'square' : 'play');
+        if (window.lucide) lucide.createIcons();
+      },
+
+      startLoop() {
+        const render = (time) => {
+          const dt = Math.min(32, time - (this.lastTime || time));
+          this.lastTime = time;
+
+          if (!this.paused) {
+            this.update(dt);
+          }
+          this.draw();
+
+          this.animId = requestAnimationFrame(render);
+        };
+        this.animId = requestAnimationFrame(render);
+      },
+
+      update(dt) {
+        if (!this.running) return;
+
+        // Keyboard Controls
+        if (this.keys['arrowup'] || this.keys['w']) {
+          this.p1.y = Math.max(10, this.p1.y - this.p1.speed);
+        }
+        if (this.keys['arrowdown'] || this.keys['s']) {
+          this.p1.y = Math.min(this.height - this.p1.h - 10, this.p1.y + this.p1.speed);
+        }
+
+        if (this.matchOver) return;
+
+        const b = this.ball;
+
+        // Ball Trail
+        b.trail.unshift({ x: b.x, y: b.y });
+        if (b.trail.length > 8) b.trail.pop();
+
+        b.x += b.vx;
+        b.y += b.vy;
+
+        // Ceiling & Floor Bounces
+        if (b.y <= b.r) {
+          b.y = b.r;
+          b.vy = Math.abs(b.vy);
+          playMicroClick();
+        }
+        if (b.y >= this.height - b.r) {
+          b.y = this.height - b.r;
+          b.vy = -Math.abs(b.vy);
+          playMicroClick();
+        }
+
+        // Adaptive AI Tracking (Smooth proportional lag)
+        const p2Center = this.p2.y + this.p2.h / 2;
+        const aiDiff = b.y - p2Center;
+        if (b.vx > 0) { // Ball moving towards AI
+          this.p2.y += Math.min(this.p2.speed, Math.max(-this.p2.speed, aiDiff * 0.12));
+        } else { // Return to center slightly
+          this.p2.y += ((this.height / 2) - p2Center) * 0.03;
+        }
+        this.p2.y = Math.max(10, Math.min(this.height - this.p2.h - 10, this.p2.y));
+
+        // Player 1 Paddle Collision (Left)
+        const p1x = 35;
+        if (b.x - b.r <= p1x + this.p1.w && b.x + b.r >= p1x && b.y >= this.p1.y && b.y <= this.p1.y + this.p1.h && b.vx < 0) {
+          b.x = p1x + this.p1.w + b.r;
+          const hitOffset = (b.y - (this.p1.y + this.p1.h / 2)) / (this.p1.h / 2);
+          const maxAngle = Math.PI * 0.35;
+          const newAngle = hitOffset * maxAngle;
+          const speed = Math.min(13, Math.sqrt(b.vx * b.vx + b.vy * b.vy) * 1.05);
+          b.vx = Math.cos(newAngle) * speed;
+          b.vy = Math.sin(newAngle) * speed;
+          playFolderTone(440);
+
+          // Sparks
+          for (let i = 0; i < 6; i++) {
+            this.particles.push({
+              x: b.x,
+              y: b.y,
+              vx: Math.random() * 3,
+              vy: (Math.random() - 0.5) * 4,
+              color: '#6ee7b7',
+              alpha: 1.0,
+              size: 2.5
+            });
+          }
+        }
+
+        // Player 2 AI Paddle Collision (Right)
+        const p2x = this.width - 45;
+        if (b.x + b.r >= p2x && b.x - b.r <= p2x + this.p2.w && b.y >= this.p2.y && b.y <= this.p2.y + this.p2.h && b.vx > 0) {
+          b.x = p2x - b.r;
+          const hitOffset = (b.y - (this.p2.y + this.p2.h / 2)) / (this.p2.h / 2);
+          const maxAngle = Math.PI * 0.35;
+          const newAngle = hitOffset * maxAngle;
+          const speed = Math.min(13, Math.sqrt(b.vx * b.vx + b.vy * b.vy) * 1.05);
+          b.vx = -Math.cos(newAngle) * speed;
+          b.vy = Math.sin(newAngle) * speed;
+          playFolderTone(330);
+
+          // Sparks
+          for (let i = 0; i < 6; i++) {
+            this.particles.push({
+              x: b.x,
+              y: b.y,
+              vx: -Math.random() * 3,
+              vy: (Math.random() - 0.5) * 4,
+              color: '#60a5fa',
+              alpha: 1.0,
+              size: 2.5
+            });
+          }
+        }
+
+        // Goals
+        if (b.x < -10) {
+          // AI Scored
+          this.p2Score++;
+          this.updateScoreUI();
+          playFolderTone(220);
+          if (this.p2Score >= this.targetScore) {
+            this.matchOver = true;
+            this.winner = 'AI';
+          } else {
+            this.resetBall(true);
+          }
+        } else if (b.x > this.width + 10) {
+          // Player Scored
+          this.p1Score++;
+          this.updateScoreUI();
+          playSuccessTone();
+          if (this.p1Score >= this.targetScore) {
+            this.matchOver = true;
+            this.winner = 'Player';
+            triggerConfetti();
+          } else {
+            this.resetBall(false);
+          }
+        }
+
+        // Particles decay
+        for (let i = this.particles.length - 1; i >= 0; i--) {
+          const pt = this.particles[i];
+          pt.x += pt.vx;
+          pt.y += pt.vy;
+          pt.alpha -= 0.04;
+          if (pt.alpha <= 0) this.particles.splice(i, 1);
+        }
+      },
+
+      draw() {
+        const ctx = this.ctx;
+        if (!ctx) return;
+        const w = this.width;
+        const h = this.height;
+
+        ctx.clearRect(0, 0, w, h);
+
+        // Architectural Vector Grid
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.035)';
+        ctx.lineWidth = 1;
+        const gridSize = 32;
+        for (let x = 0; x < w; x += gridSize) {
+          ctx.beginPath();
+          ctx.moveTo(x, 0);
+          ctx.lineTo(x, h);
+          ctx.stroke();
+        }
+        for (let y = 0; y < h; y += gridSize) {
+          ctx.beginPath();
+          ctx.moveTo(0, y);
+          ctx.lineTo(w, y);
+          ctx.stroke();
+        }
+
+        // Center Court Net Line
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+        ctx.lineWidth = 2;
+        ctx.setLineDash([8, 8]);
+        ctx.beginPath();
+        ctx.moveTo(w / 2, 0);
+        ctx.lineTo(w / 2, h);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Court Center Ring
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.06)';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.arc(w / 2, h / 2, 48, 0, Math.PI * 2);
+        ctx.stroke();
+
+        // Big Court Scores
+        ctx.font = '700 48px monospace';
+        ctx.fillStyle = 'rgba(110, 231, 183, 0.2)';
+        ctx.textAlign = 'center';
+        ctx.fillText(this.p1Score, w / 2 - 70, h / 2 + 16);
+
+        ctx.fillStyle = 'rgba(96, 165, 250, 0.2)';
+        ctx.fillText(this.p2Score, w / 2 + 70, h / 2 + 16);
+
+        // Player Paddle (Left - Emerald)
+        ctx.shadowColor = '#6ee7b7';
+        ctx.shadowBlur = 12;
+        ctx.fillStyle = '#6ee7b7';
+        ctx.fillRect(35, this.p1.y, this.p1.w, this.p1.h);
+
+        // AI Paddle (Right - Blue)
+        ctx.shadowColor = '#60a5fa';
+        ctx.fillStyle = '#60a5fa';
+        ctx.fillRect(w - 45, this.p2.y, this.p2.w, this.p2.h);
+        ctx.shadowBlur = 0;
+
+        // Ball Trail
+        const b = this.ball;
+        for (let i = 0; i < b.trail.length; i++) {
+          const t = b.trail[i];
+          ctx.fillStyle = `rgba(253, 224, 71, ${0.4 - i * 0.045})`;
+          ctx.beginPath();
+          ctx.arc(t.x, t.y, b.r * (1 - i * 0.06), 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        // Ball
+        ctx.shadowColor = '#ffffff';
+        ctx.shadowBlur = 10;
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+
+        // Sparks Particles
+        for (let pt of this.particles) {
+          ctx.fillStyle = pt.color;
+          ctx.globalAlpha = pt.alpha;
+          ctx.beginPath();
+          ctx.arc(pt.x, pt.y, pt.size, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.globalAlpha = 1.0;
+
+        // Match Over Banner
+        if (this.matchOver) {
+          ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+          ctx.fillRect(0, 0, w, h);
+
+          ctx.font = '700 24px monospace';
+          ctx.fillStyle = this.winner === 'Player' ? '#6ee7b7' : '#f87171';
+          ctx.textAlign = 'center';
+          ctx.fillText(this.winner === 'Player' ? '🏆 VICTORY: YOU WON THE MATCH!' : '🤖 DEFEAT: AI CLAIMS VICTORY', w / 2, h / 2 - 10);
+
+          ctx.font = '12px monospace';
+          ctx.fillStyle = '#ffffff';
+          ctx.fillText('Press [ R ] or click Restart to play again', w / 2, h / 2 + 22);
+        }
+      }
+    };
+
+    function toggleArcadePlay() { Arcade.togglePlay(); }
+    function startCurrentArcadeGame() { Arcade.start(); }
+    function resetCurrentArcadeGame() { Arcade.resetGame(); }
+
+    /* ==========================================================================
+       GLOBAL MARKET HUBS ENGINE (WEEKEND & TIMEZONE AWARE)
+       ========================================================================== */
+    const GlobalClocks = {
+      hubs: [
+        { city: 'Mumbai', code: 'NSE / BSE', tz: 'Asia/Kolkata', openH: 9.25, closeH: 15.5, hoursLabel: '09:15 - 15:30', flag: '🇮🇳' },
+        { city: 'Tokyo', code: 'TSE', tz: 'Asia/Tokyo', openH: 9.0, closeH: 15.5, hoursLabel: '09:00 - 15:30', flag: '🇯🇵' },
+        { city: 'London', code: 'LSE', tz: 'Europe/London', openH: 8.0, closeH: 16.5, hoursLabel: '08:00 - 16:30', flag: '🇬🇧' },
+        { city: 'New York', code: 'NYSE / NASDAQ', tz: 'America/New_York', openH: 9.5, closeH: 16.0, hoursLabel: '09:30 - 16:00', flag: '🇺🇸' },
+        { city: 'Singapore', code: 'SGX', tz: 'Asia/Singapore', openH: 9.0, closeH: 17.0, hoursLabel: '09:00 - 17:00', flag: '🇸🇬' },
+        { city: 'Sydney', code: 'ASX', tz: 'Australia/Sydney', openH: 10.0, closeH: 16.0, hoursLabel: '10:00 - 16:00', flag: '🇦🇺' }
+      ],
+
+      init() {
+        const render = () => {
+          const container = document.getElementById('hubClocksContainer');
+          if (!container) return;
+          const now = new Date();
+          let html = '';
+
+          this.hubs.forEach(h => {
+            // Local day of week in the exchange's timezone (Mon-Sun)
+            const dayStr = new Intl.DateTimeFormat('en-US', { timeZone: h.tz, weekday: 'short' }).format(now);
+            const isWeekend = (dayStr === 'Sat' || dayStr === 'Sun');
+
+            const timeStr = now.toLocaleTimeString('en-US', { timeZone: h.tz, hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            const [hh, mm] = timeStr.split(':').map(Number);
+            const decHour = hh + (mm || 0) / 60;
+            
+            // Market is only open Monday through Friday during trading hours
+            const isOpen = !isWeekend && (decHour >= h.openH && decHour < h.closeH);
+            const statusLabel = isWeekend ? 'WEEKEND' : (isOpen ? '● LIVE OPEN' : 'CLOSED');
+
+            html += `
+              <div class="hub-clock-card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                  <span style="font-size: 11px; font-weight: 600; color: #fff;">${h.flag} ${h.city}</span>
+                  <span class="status-badge-pill ${isOpen ? 'live' : ''}" style="font-size: 8.5px; padding: 1px 6px;">${statusLabel}</span>
+                </div>
+                <div class="num-mono" style="font-family: var(--font-serif); font-size: 1.25rem; font-weight: 700; color: ${isOpen ? '#6ee7b7' : '#FDFAF7'}; margin: 2px 0;">
+                  <span style="font-size: 0.75rem; font-family: var(--font-mono); color: var(--text-dim); margin-right: 5px;">${dayStr.toUpperCase()}</span>${timeStr}
+                </div>
+                <div style="font-size: 9px; font-family: var(--font-mono); color: var(--text-dim);">${h.code} • ${h.hoursLabel}</div>
+              </div>
+            `;
+          });
+          container.innerHTML = html;
+        };
+        render();
+        setInterval(render, 1000);
+      }
+    };
+
+    /* ==========================================================================
        STARTUP LIFECYCLE & KEYBOARD SHORTCUTS
        ========================================================================== */
     window.addEventListener('DOMContentLoaded', async () => {
-      changeCurrency(AppState.user.currency || 'INR');
-      document.getElementById('inputWebhookUrl').value = AppState.user.apiUrl || DEFAULT_API_URL;
-
-      // On browser reload/startup: Always start in locked state with made-up dummy data
+      // On browser reload/startup: Always start in clean demo mode
       isLiveSession = false;
       activePasscode = '';
       AppState = JSON.parse(JSON.stringify(DEMO_STATE));
 
-      // Fetch live market indices immediately right on open (does not wait for password)
+      // Restore saved user preferences (currency, privacy, sound toggle, apiUrl)
+      try {
+        const savedPrefs = JSON.parse(localStorage.getItem('MOSBY_USER_PREFS_V1') || '{}');
+        if (savedPrefs?.user) {
+          AppState.user = { ...AppState.user, ...savedPrefs.user };
+        }
+      } catch(e) {}
+
+      changeCurrency(AppState.user.currency || 'INR');
+      document.getElementById('inputWebhookUrl').value = AppState.user.apiUrl || DEFAULT_API_URL;
+
+      // Sync sound toggle button in header
+      const soundBtn = document.getElementById('soundToggleBtn');
+      const soundIcon = document.getElementById('soundIcon');
+      if (soundBtn && soundIcon) {
+        soundBtn.classList.toggle('active', AppState.user.sound);
+        soundIcon.setAttribute('data-lucide', AppState.user.sound ? 'volume-2' : 'volume-x');
+      }
+
+      // Fetch live market indices immediately right on open
       fetchLiveMarketIndices();
 
       updateAuthVisuals();
@@ -5705,6 +6982,14 @@ Instructions:
       startTypewriter();
       renderCompleteDossiers();
       activateFolder(0);
+
+      // Initialize Arcade & Global Market Hubs Engines
+      try {
+        Arcade.init();
+        GlobalClocks.init();
+      } catch(e) {
+        console.warn("Arcade / GlobalClocks init notice:", e);
+      }
 
       // Poll live market indices periodically
       setInterval(fetchLiveMarketIndices, 30000);
@@ -5717,6 +7002,36 @@ Instructions:
       // Palette input search
       document.getElementById('paletteSearchInput')?.addEventListener('input', e => {
         handlePaletteSearch(e.target.value);
+      });
+
+      // Robust Celestial Vault Audio Initialization & Autoplay Unlock
+      let audioUnlocked = false;
+      const unlockAndStartAmbient = () => {
+        try {
+          SoundEngine.init();
+          if (AppState.user.sound) {
+            startAmbientSoundscape();
+          }
+          audioUnlocked = true;
+        } catch(e) {
+          console.warn("Audio unlock notice:", e);
+        }
+      };
+
+      // 1. Attempt immediate playback on load
+      unlockAndStartAmbient();
+
+      // 2. Immediate audio unlock on user interaction gestures
+      const handleUserInteraction = () => {
+        unlockAndStartAmbient();
+        if (audioUnlocked) {
+          ['click', 'pointerdown', 'keydown', 'touchstart'].forEach(evt => {
+            window.removeEventListener(evt, handleUserInteraction);
+          });
+        }
+      };
+      ['click', 'pointerdown', 'keydown', 'touchstart'].forEach(evt => {
+        window.addEventListener(evt, handleUserInteraction, { passive: true });
       });
 
       // Global Keyboard Shortcuts
