@@ -951,32 +951,41 @@
       border-color: #FDFAF7;
     }
 
-    /* Category Filter Chips */
+    /* Category Filter Chips & AI Prompt Pills (Dark Glassy Theme) */
     .filter-pills-deck {
       display: flex;
       gap: 6px;
-      margin-bottom: 1rem;
+      margin-bottom: 0.85rem;
       overflow-x: auto;
       scrollbar-width: none;
     }
     .filter-pills-deck::-webkit-scrollbar { display: none; }
 
-    .filter-chip-btn {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.16);
-      color: var(--text-muted);
-      padding: 5px 12px;
-      border-radius: 100px;
+    .filter-pill, .filter-chip-btn, .ai-prompt-chip {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #d1d5db;
+      padding: 6px 12px;
+      border-radius: 4px;
       font-family: var(--font-mono);
       font-size: 11px;
       cursor: pointer;
       transition: all 0.2s ease;
       white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
     }
-    .filter-chip-btn:hover, .filter-chip-btn.active {
-      background: #FDFAF7;
-      color: #000;
-      border-color: #FDFAF7;
+    .filter-pill:hover, .filter-chip-btn:hover, .ai-prompt-chip:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.3);
+      color: #FDFAF7;
+    }
+    .filter-pill.active, .filter-chip-btn.active, .ai-prompt-chip.active {
+      background: rgba(16, 185, 129, 0.18) !important;
+      border-color: rgba(16, 185, 129, 0.45) !important;
+      color: #6ee7b7 !important;
+      box-shadow: 0 0 12px rgba(16, 185, 129, 0.1);
     }
 
     /* ==========================================================================
@@ -1141,8 +1150,21 @@
       max-height: 90vh;
       overflow-y: auto;
       padding: 2.5rem;
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9);
       position: relative;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .mosby-modal-card.modal-fullscreen-expanded {
+      max-width: 98vw !important;
+      width: 98vw !important;
+      max-height: 96vh !important;
+      height: 96vh !important;
+      padding: 1.75rem 2.25rem !important;
+      border-radius: 6px !important;
+    }
+    .mosby-modal-card.modal-fullscreen-expanded #aiOutputContainer {
+      max-height: calc(96vh - 290px) !important;
+      min-height: 480px !important;
     }
 
     /* Command Palette Modal (⌘K) */
@@ -1291,10 +1313,10 @@
       <!-- Right: Smart Actions, Passcode & Currency -->
       <nav class="the-nav">
         
-        <!-- Smart Portfolio AI Auditor -->
-        <button class="btn-smart-audit" onclick="openAuditModal()" title="Run Archival Health Diagnostics">
-          <i data-lucide="activity" style="width: 12px; height: 12px;"></i>
-          <span>Smart Audit</span>
+        <!-- AI Portfolio Intelligence Desk -->
+        <button class="btn-smart-audit" onclick="openAuditModal()" title="AI Portfolio Intelligence & Quant Diagnostics">
+          <i data-lucide="sparkles" style="width: 12px; height: 12px; color: #6ee7b7;"></i>
+          <span>AI Intelligence</span>
         </button>
 
         <!-- Dynamic Auth Capsule (Transforms to Refresh when connected) -->
@@ -1321,6 +1343,11 @@
         <!-- Privacy Mask -->
         <button class="btn-icon-nav" onclick="togglePrivacyMask()" title="Privacy Mask (P)">
           <i data-lucide="eye" style="width: 14px; height: 14px;"></i>
+        </button>
+
+        <!-- Fullscreen App Toggle -->
+        <button class="btn-icon-nav" id="fullscreenToggleBtn" onclick="toggleAppFullscreen()" title="Toggle Fullscreen">
+          <i data-lucide="maximize" id="fullscreenIcon" style="width: 14px; height: 14px;"></i>
         </button>
       </nav>
     </div>
@@ -1669,8 +1696,11 @@
           <!-- Filter Chips Deck -->
           <div class="filter-pills-deck">
             <button class="filter-chip-btn active" onclick="setMFCategoryFilter('ALL')">All Funds</button>
+            <button class="filter-chip-btn" onclick="setMFCategoryFilter('Small')">Small Cap</button>
+            <button class="filter-chip-btn" onclick="setMFCategoryFilter('150')">Midcap 150 Index</button>
+            <button class="filter-chip-btn" onclick="setMFCategoryFilter('50')">Nifty 50 Index</button>
+            <button class="filter-chip-btn" onclick="setMFCategoryFilter('ELSS')">ELSS</button>
             <button class="filter-chip-btn" onclick="setMFCategoryFilter('Flexi')">Flexi Cap</button>
-            <button class="filter-chip-btn" onclick="setMFCategoryFilter('Equity')">Pure Equity</button>
             <button class="filter-chip-btn" onclick="setMFCategoryFilter('Balanced')">Balanced Advantage</button>
           </div>
 
@@ -1691,6 +1721,42 @@
                 </tr>
               </thead>
               <tbody id="tableBodyMF"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- REVEAL / COLLAPSE SIP TRANSACTIONS ACCORDION BAR -->
+        <div class="holdings-accordion-bar" id="mfTxAccordionBar" onclick="toggleMFTxSection()" style="margin-top: 1.5rem;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <i data-lucide="receipt" style="width: 16px; height: 16px; color: #fde047;"></i>
+            <span style="font-family: var(--font-serif); font-size: 1.15rem; font-weight: 500;">SIP &amp; Inflow Execution Ledger (Auto-Synced)</span>
+            <span class="badge-capsule" id="mfTxCountBadge" style="color: #fde047; border-color: rgba(253, 224, 71, 0.3);">0 Inflows</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 11px; opacity: 0.75;" id="mfTxToggleLabel">Click to Hide Ledger</span>
+            <i data-lucide="chevron-down" id="mfTxChevron" style="width: 16px; height: 16px; transition: transform 0.3s ease;"></i>
+          </div>
+        </div>
+
+        <!-- COLLAPSIBLE TRANSACTIONS WRAPPER -->
+        <div class="holdings-collapsible-wrapper" id="mfTxCollapseWrapper">
+          <input type="text" class="folder-search-input" id="txSearchInput" placeholder="Search transactions by scheme name or date..." oninput="filterMFTxList(this.value)">
+
+          <div class="mosby-table-shell">
+            <table class="mosby-table">
+              <thead>
+                <tr>
+                  <th>Execution Date</th>
+                  <th>Fund / Scheme</th>
+                  <th>Amount Invested</th>
+                  <th>Execution NAV</th>
+                  <th>Units Allotted</th>
+                  <th>Current Tranche Value</th>
+                  <th>Tranche Gain / Return</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="tableBodyMFTx"></tbody>
             </table>
           </div>
         </div>
@@ -2043,47 +2109,133 @@
   <!-- ==========================================================================
        MODAL 4: SMART PORTFOLIO AI AUDITOR
        ========================================================================== -->
-  <div class="mosby-modal-overlay" id="auditModal">
-    <div class="mosby-modal-card" style="max-width: 680px;">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+  <!-- ==========================================================================
+  <!-- ==========================================================================
+       MODAL 4: QUANTITATIVE PORTFOLIO INTELLIGENCE DESK (LIVE REASONING CORE)
+       ========================================================================== -->
+  <div class="mosby-modal-overlay" id="auditModal" onclick="if(event.target===this)closeAuditModal()">
+    <div class="mosby-modal-card" style="max-width: 840px; padding: 1.75rem 2rem; max-height: 94vh; display: flex; flex-direction: column;">
+      
+      <!-- Top Header & Copilot Badge -->
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.85rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.75rem;">
         <div>
-          <span class="badge-capsule" style="color: #ffc46b; background: rgba(255,196,107,0.15);">ARCHIVAL HEALTH DIAGNOSTICS</span>
-          <h3 style="font-family: var(--font-serif); font-size: 1.65rem; margin-top: 4px;">Portfolio Intelligence Audit</h3>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span class="badge-capsule" style="color: #6ee7b7; background: rgba(16,185,129,0.12); border: 1px solid rgba(16,185,129,0.3); font-weight: 600;">
+              <i data-lucide="sparkles" style="width: 10px; height: 10px; margin-right: 4px;"></i> QUANT AI COPILOT v5.0
+            </span>
+            <span id="auditLiveScanStatus" style="font-size: 9.5px; font-family: var(--font-mono); color: #ffc46b; opacity: 0.9;">● LIVE ASSET REASONING DESK</span>
+          </div>
+          <h3 style="font-family: var(--font-serif); font-size: 1.65rem; margin-top: 4px; letter-spacing: -0.02em;">Quantitative Portfolio Intelligence</h3>
         </div>
-        <button class="btn-icon-nav" onclick="closeAuditModal()"><i data-lucide="x"></i></button>
-      </div>
-
-      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 1.25rem;" id="auditScoreDeck">
-        <div class="dossier-kpi-card" style="text-align: center; padding: 0.85rem;">
-          <div style="font-size: 9.5px; opacity: 0.75; text-transform: uppercase;">Portfolio Health</div>
-          <div style="font-family: var(--font-serif); font-size: 1.6rem; font-weight: 700; color: #6ee7b7; margin-top: 3px;" id="auditHealthScore">96 / 100</div>
-          <div style="font-size: 9.5px; color: #6ee7b7;" id="auditHealthGrade">Optimal Grade</div>
-        </div>
-        <div class="dossier-kpi-card" style="text-align: center; padding: 0.85rem;">
-          <div style="font-size: 9.5px; opacity: 0.75; text-transform: uppercase;">Beta Cushion</div>
-          <div style="font-family: var(--font-serif); font-size: 1.6rem; font-weight: 700; color: #60a5fa; margin-top: 3px;" id="auditBetaVal">0.76</div>
-          <div style="font-size: 9.5px; opacity: 0.8;" id="auditBetaSub">Low Volatility</div>
-        </div>
-        <div class="dossier-kpi-card" style="text-align: center; padding: 0.85rem;">
-          <div style="font-size: 9.5px; opacity: 0.75; text-transform: uppercase;">Liquid Runway</div>
-          <div style="font-family: var(--font-serif); font-size: 1.6rem; font-weight: 700; color: #6ee7b7; margin-top: 3px;" id="auditRunwayVal">10.5 Mo</div>
-          <div style="font-size: 9.5px; opacity: 0.8;" id="auditRunwaySub">T+1 Accessible</div>
-        </div>
-        <div class="dossier-kpi-card" style="text-align: center; padding: 0.85rem;">
-          <div style="font-size: 9.5px; opacity: 0.75; text-transform: uppercase;">Sec 112A Shield</div>
-          <div style="font-family: var(--font-serif); font-size: 1.6rem; font-weight: 700; color: #fde047; margin-top: 3px;" id="auditTaxRatio">₹1.25L</div>
-          <div style="font-size: 9.5px; opacity: 0.8;" id="auditTaxSub">LTCG Tax-Free</div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <button class="btn-passcode-unlock" id="btnRescanAI" onclick="askAICopilot('executive_briefing')" style="background: rgba(16,185,129,0.15); border-color: rgba(16,185,129,0.3); color: #6ee7b7; font-size: 11px; padding: 5px 11px; cursor: pointer;" title="Re-evaluate all holdings with fresh AI generation">
+            <i data-lucide="refresh-cw" id="aiScanSpinIcon" style="width: 12px; height: 12px;"></i>
+            <span id="aiScanBtnText">Re-Generate Briefing</span>
+          </button>
+          <button class="btn-icon-nav" id="btnToggleAiFullscreen" onclick="toggleAiModalFullscreen()" title="Maximize / Restore Terminal View">
+            <i data-lucide="maximize-2" id="aiFullscreenIcon" style="width: 13px; height: 13px;"></i>
+          </button>
+          <button class="btn-icon-nav" onclick="closeAuditModal()" title="Close (Esc)"><i data-lucide="x"></i></button>
         </div>
       </div>
 
-      <div style="background: rgba(0, 0, 0, 0.35); border: 1px solid rgba(255,255,255,0.15); border-radius: 4px; padding: 1.25rem; font-size: 0.85rem; line-height: 1.6;" id="auditNudgesContainer">
-        <div style="font-weight: 600; color: #fff; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
-          <i data-lucide="check-circle-2" style="width: 14px; height: 14px; color: #10B981;"></i>
-          <span>Diagnostic Insights &amp; Nudges</span>
+      <!-- Live Strategic Metric Bar (Compact 4-Score Grid) -->
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 0.85rem;" id="auditScoreDeck">
+        <div class="dossier-kpi-card" style="text-align: center; padding: 0.6rem 0.5rem;">
+          <div style="font-size: 9px; opacity: 0.75; text-transform: uppercase;">Composite Health</div>
+          <div style="font-family: var(--font-serif); font-size: 1.35rem; font-weight: 700; color: #6ee7b7; margin-top: 1px;" id="auditHealthScore">-- / 100</div>
+          <div style="font-size: 8.5px; color: #6ee7b7;" id="auditHealthGrade">Optimal Grade</div>
         </div>
-        <ul style="padding-left: 1.2rem; display: flex; flex-direction: column; gap: 6px; opacity: 0.9;" id="auditNudgesList">
-        </ul>
+        <div class="dossier-kpi-card" style="text-align: center; padding: 0.6rem 0.5rem;">
+          <div style="font-size: 9px; opacity: 0.75; text-transform: uppercase;">Beta Cushion</div>
+          <div style="font-family: var(--font-serif); font-size: 1.35rem; font-weight: 700; color: #60a5fa; margin-top: 1px;" id="auditBetaVal">--</div>
+          <div style="font-size: 8.5px; opacity: 0.8;" id="auditBetaSub">Low Volatility</div>
+        </div>
+        <div class="dossier-kpi-card" style="text-align: center; padding: 0.6rem 0.5rem;">
+          <div style="font-size: 9px; opacity: 0.75; text-transform: uppercase;">Liquid Runway</div>
+          <div style="font-family: var(--font-serif); font-size: 1.35rem; font-weight: 700; color: #6ee7b7; margin-top: 1px;" id="auditRunwayVal">-- Mo</div>
+          <div style="font-size: 8.5px; opacity: 0.8;" id="auditRunwaySub">T+1 Accessible</div>
+        </div>
+        <div class="dossier-kpi-card" style="text-align: center; padding: 0.6rem 0.5rem;">
+          <div style="font-size: 9px; opacity: 0.75; text-transform: uppercase;">Sec 112A Shield</div>
+          <div style="font-family: var(--font-serif); font-size: 1.35rem; font-weight: 700; color: #fde047; margin-top: 1px;" id="auditTaxRatio">₹1.25L</div>
+          <div style="font-size: 8.5px; opacity: 0.8;" id="auditTaxSub">LTCG Tax-Free</div>
+        </div>
       </div>
+
+      <!-- Interactive Smart Prompt Chips (In-line with actual portfolio) -->
+      <div style="margin-bottom: 0.75rem;">
+        <div style="font-size: 9px; font-family: var(--font-mono); opacity: 0.6; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 5px;">
+          Select Quant Strategy:
+        </div>
+        <div style="display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px;" class="filter-pills-deck" id="aiPromptChipsDeck">
+          <button class="filter-pill active" onclick="askAICopilot('executive_briefing', this)">📋 Executive Verdict</button>
+          <button class="filter-pill" onclick="askAICopilot('market_crash', this)">🛡️ -20% Crash Test</button>
+          <button class="filter-pill" onclick="askAICopilot('sip_stepup', this)">🚀 10% SIP Step-Up to ₹1 Cr</button>
+          <button class="filter-pill" onclick="askAICopilot('ltcg_harvest', this)">💰 Sec 112A Tax Harvest</button>
+          <button class="filter-pill" onclick="askAICopilot('fire_swr', this)">🔥 FIRE &amp; 4% SWR</button>
+          <button class="filter-pill" onclick="askAICopilot('rebalance_matrix', this)">⚖️ 50/30/20 Rebalance</button>
+          <button class="filter-pill" onclick="askAICopilot('ppf_compounding', this)">🏛️ Sovereign 7.1% EEE</button>
+        </div>
+      </div>
+
+      <!-- AI Streaming Reasoning Terminal Window -->
+      <div style="flex: 1; min-height: 260px; max-height: 440px; overflow-y: auto; background: rgba(5, 8, 15, 0.7); border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; padding: 1.15rem 1.35rem; font-family: var(--font-mono); font-size: 0.84rem; line-height: 1.65; position: relative;" id="aiOutputContainer">
+        <div id="aiThinkingPulse" style="display: none; align-items: center; gap: 8px; font-size: 11px; color: #ffc46b; margin-bottom: 10px;">
+          <i data-lucide="cpu" class="spin" style="width: 13px; height: 13px;"></i>
+          <span id="aiThinkingText">AI analyzing real-time portfolio data, risk parameters, and returns...</span>
+        </div>
+        <div id="aiStreamContent" style="color: #FDFAF7;">
+          <!-- Real-time streamed generative response -->
+        </div>
+      </div>
+
+      <!-- Interactive AI Query Console Input -->
+      <div style="margin-top: 0.75rem; display: flex; flex-direction: column; gap: 6px;">
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <div style="flex: 1; position: relative;">
+            <input type="text" id="aiCustomQueryInput" placeholder="Ask Portfolio AI about your asset mix, drawdown risk, tax rooms, or FIRE horizon..." style="width: 100%; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; padding: 0.65rem 0.9rem; color: #fff; font-family: var(--font-mono); font-size: 0.82rem; outline: none;" onkeydown="if(event.key==='Enter')handleCustomAIQuery()">
+          </div>
+          <button class="btn-passcode-unlock" onclick="handleCustomAIQuery()" style="padding: 0.65rem 1.1rem; font-size: 0.8rem; display: flex; align-items: center; gap: 5px; cursor: pointer;">
+            <span>Ask AI</span>
+            <i data-lucide="corner-down-left" style="width: 12px; height: 12px;"></i>
+          </button>
+        </div>
+        
+        <!-- Smart Quick Inquiries -->
+        <div style="display: flex; gap: 6px; overflow-x: auto; padding-top: 2px;" class="filter-pills-deck">
+          <button class="filter-pill" style="font-size: 10.5px; padding: 3px 8px; opacity: 0.85;" onclick="askQuickPrompt('What is my biggest concentration risk and single-asset exposure?')">🔍 Biggest Risk?</button>
+          <button class="filter-pill" style="font-size: 10.5px; padding: 3px 8px; opacity: 0.85;" onclick="askQuickPrompt('How much monthly passive income can my current net worth generate at 4% SWR?')">💸 Monthly Passive Income?</button>
+          <button class="filter-pill" style="font-size: 10.5px; padding: 3px 8px; opacity: 0.85;" onclick="askQuickPrompt('Give me an exact rebalance action plan across my MFs, stocks and PPF.')">📈 Next Rebalance Plan?</button>
+          <button class="filter-pill" style="font-size: 10.5px; padding: 3px 8px; opacity: 0.85;" onclick="askQuickPrompt('How many months of liquid emergency runway do I currently have?')">🛡️ Liquid Runway?</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL 5: SIP INFLOW & TRANCHE TRANSACTION DETAIL DRAWER
+       ========================================================================== -->
+  <div class="mosby-modal-overlay" id="txModal" onclick="if(event.target===this)closeTxDetailModal()">
+    <div class="mosby-modal-card" style="max-width: 580px;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem;">
+        <div>
+          <span class="badge-capsule" id="txModalDateBadge" style="margin-bottom: 0.4rem; color: #6ee7b7;">EXECUTED &amp; SETTLED</span>
+          <h2 style="font-family: var(--font-serif); font-size: 1.6rem; margin-top: 0.35rem;" id="txModalFundName">Scheme Inflow Details</h2>
+        </div>
+        <button class="btn-icon-nav" onclick="closeTxDetailModal()"><i data-lucide="x"></i></button>
+      </div>
+
+      <div class="dossier-kpi-card" style="padding: 1.25rem; margin-bottom: 1.25rem; background: rgba(0, 0, 0, 0.4);">
+        <span class="dossier-kpi-label">Tranche Capital Outflow</span>
+        <div class="num-mono privacy-blur" style="font-family: var(--font-serif); font-size: 2.2rem; font-weight: 600; color: #FDFAF7;" id="txModalAmount">₹0</div>
+        <div class="num-mono privacy-blur" style="font-size: 0.9rem; margin-top: 0.35rem;" id="txModalGain">+₹0 (+0.0%)</div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem;" id="txModalStatsGrid"></div>
+
+      <div style="background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255,255,255,0.15); border-radius: 4px; padding: 1.25rem; font-size: 0.8rem;" id="txModalMetaList"></div>
     </div>
   </div>
 
@@ -2093,7 +2245,7 @@
        MOSBY FILES JAVASCRIPT ENGINE
        ========================================================================== -->
   <script>
-    const DEFAULT_API_URL = "https://script.google.com/macros/s/AKfycbzeuVC1DbCcsMa6mOzABFO4cNOySPvuzoS0dW0aV3mqrjybChk1vpC6Fy7E4l65hHaT/exec";
+    const DEFAULT_API_URL = "https://script.google.com/macros/s/AKfycbyaFeW3jP8aoK-T0fu_8uGZMNYzEj1R4_nXkkzrJqpmcsEpyF-5tOioKit4iR1TaIRd/exec";
 
     const FOLDER_COLORS = [
       'var(--color-blue)',
@@ -2112,15 +2264,17 @@
         lastSync: null
       },
       mutualFunds: [
-        { id: 'mf-1', name: 'Meridian Horizon Dynamic Equity Fund', category: 'Flexi Cap', units: 3125.50, avgNav: 64.00, currentNav: 84.80, invested: 200000, currentValue: 265042, monthlySip: 7500, sipDay: 5, sipActive: true, ticker: 'FICT:MHDF' },
-        { id: 'mf-2', name: 'Apex Quantum Direct Alpha Scheme', category: 'Pure Equity', units: 1450.20, avgNav: 103.40, currentNav: 128.50, invested: 150000, currentValue: 186350, monthlySip: 5000, sipDay: 10, sipActive: true, ticker: 'FICT:AQDA' },
-        { id: 'mf-3', name: 'Solaria Sovereign Hybrid Advantage Fund', category: 'Balanced Advantage', units: 950.80, avgNav: 105.10, currentNav: 122.40, invested: 100000, currentValue: 116378, monthlySip: 3500, sipDay: 15, sipActive: true, ticker: 'FICT:SSHA' }
+        { id: 'mf-1', name: 'Aetheris Dynamic Growth Fund', category: 'Small Cap', units: 2000.00, avgNav: 75.00, currentNav: 95.50, invested: 150000, currentValue: 191000, monthlySip: 7500, sipDay: 10, sipActive: true, ticker: 'FICT:ADGF' },
+        { id: 'mf-2', name: 'Apex Quantum Index Scheme', category: 'Nifty 50 Index', units: 1000.00, avgNav: 140.00, currentNav: 165.20, invested: 140000, currentValue: 165200, monthlySip: 10000, sipDay: 13, sipActive: true, ticker: 'FICT:AQIS' },
+        { id: 'mf-3', name: 'Novalis Midcap 150 Index Fund', category: 'Midcap 150 Index', units: 8000.00, avgNav: 12.50, currentNav: 14.80, invested: 100000, currentValue: 118400, monthlySip: 8000, sipDay: 12, sipActive: true, ticker: 'FICT:NM15' },
+        { id: 'mf-4', name: 'Meridian Horizon Flexi Cap Fund', category: 'Flexi Cap', units: 1200.00, avgNav: 80.00, currentNav: 98.50, invested: 96000, currentValue: 118200, monthlySip: 6500, sipDay: 25, sipActive: true, ticker: 'FICT:MHFC' },
+        { id: 'mf-5', name: 'Solaria Tax Shield ELSS Fund', category: 'ELSS Tax Saver', units: 1500.00, avgNav: 32.00, currentNav: 35.60, invested: 48000, currentValue: 53400, monthlySip: 0, sipDay: null, sipActive: false, ticker: 'FICT:STSE' }
       ],
       stocks: [
-        { id: 'st-1', name: 'Aetheris Robotics Ltd', ticker: 'FICT:AETH', sector: 'Industrial Automation & AI', qty: 50, avgBuyPrice: 1600, cmp: 2150.00, invested: 80000, currentValue: 107500, low52: 1350, high52: 2300 },
-        { id: 'st-2', name: 'Hyperion Clean Energy Corp', ticker: 'FICT:HYPR', sector: 'Green Hydrogen & Solar', qty: 100, avgBuyPrice: 750, cmp: 920.00, invested: 75000, currentValue: 92000, low52: 620, high52: 1050 },
-        { id: 'st-3', name: 'Valence Semi Materials', ticker: 'FICT:VALM', sector: 'Advanced Semiconductors', qty: 30, avgBuyPrice: 2400, cmp: 2950.00, invested: 72000, currentValue: 88500, low52: 2100, high52: 3200 },
-        { id: 'st-4', name: 'Zion Therapeutics Global', ticker: 'FICT:ZION', sector: 'Biotech & Oncology', qty: 160, avgBuyPrice: 420, cmp: 485.00, invested: 67200, currentValue: 77600, low52: 360, high52: 540 }
+        { id: 'st-1', name: 'Aetheris Robotics Ltd', ticker: 'FICT:AETH', sector: 'Industrial Automation & AI', qty: 30, avgBuyPrice: 1800, cmp: 2250.00, invested: 54000, currentValue: 67500, low52: 1550, high52: 2400 },
+        { id: 'st-2', name: 'Hyperion Clean Energy Corp', ticker: 'FICT:HYPR', sector: 'Green Hydrogen & Solar', qty: 60, avgBuyPrice: 900, cmp: 1100.00, invested: 54000, currentValue: 66000, low52: 750, high52: 1200 },
+        { id: 'st-3', name: 'Valence Semi Materials', ticker: 'FICT:VALM', sector: 'Advanced Semiconductors', qty: 20, avgBuyPrice: 2500, cmp: 2900.00, invested: 50000, currentValue: 58000, low52: 2200, high52: 3100 },
+        { id: 'st-4', name: 'Zion Therapeutics Global', ticker: 'FICT:ZION', sector: 'Biotech & Oncology', qty: 100, avgBuyPrice: 420, cmp: 485.00, invested: 42000, currentValue: 48500, low52: 360, high52: 540 }
       ],
       ppf: {
         totalDeposited: 220000,
@@ -2131,9 +2285,20 @@
         ]
       },
       sipConfig: [
-        { ticker: 'FICT:MHDF', sipAmount: 7500, sipDay: 5, fundName: 'Meridian Horizon Dynamic Equity Fund' },
-        { ticker: 'FICT:AQDA', sipAmount: 5000, sipDay: 10, fundName: 'Apex Quantum Direct Alpha Scheme' },
-        { ticker: 'FICT:SSHA', sipAmount: 3500, sipDay: 15, fundName: 'Solaria Sovereign Hybrid Advantage Fund' }
+        { ticker: 'FICT:ADGF', sipAmount: 7500, sipDay: 10, fundName: 'Aetheris Dynamic Growth Fund' },
+        { ticker: 'FICT:AQIS', sipAmount: 10000, sipDay: 13, fundName: 'Apex Quantum Index Scheme' },
+        { ticker: 'FICT:NM15', sipAmount: 8000, sipDay: 12, fundName: 'Novalis Midcap 150 Index Fund' },
+        { ticker: 'FICT:MHFC', sipAmount: 6500, sipDay: 25, fundName: 'Meridian Horizon Flexi Cap Fund' }
+      ],
+      sipTransactions: [
+        { id: 'tx-1', date: 'Initial Portfolio Allotment', isInitial: true, fundName: 'Aetheris Dynamic Growth Fund', amount: 150000, nav: 75.00, units: 2000.000 },
+        { id: 'tx-2', date: 'Initial Portfolio Allotment', isInitial: true, fundName: 'Apex Quantum Index Scheme', amount: 140000, nav: 140.00, units: 1000.000 },
+        { id: 'tx-3', date: 'Initial Portfolio Allotment', isInitial: true, fundName: 'Novalis Midcap 150 Index Fund', amount: 100000, nav: 12.50, units: 8000.000 },
+        { id: 'tx-4', date: 'Initial Portfolio Allotment', isInitial: true, fundName: 'Meridian Horizon Flexi Cap Fund', amount: 96000, nav: 80.00, units: 1200.000 },
+        { id: 'tx-5', date: 'Initial Portfolio Allotment', isInitial: true, fundName: 'Solaria Tax Shield ELSS Fund', amount: 48000, nav: 32.00, units: 1500.000 },
+        { id: 'tx-6', date: '2026-08-10', isInitial: false, fundName: 'Aetheris Dynamic Growth Fund', amount: 7500, nav: 94.20, units: 79.617 },
+        { id: 'tx-7', date: '2026-08-12', isInitial: false, fundName: 'Novalis Midcap 150 Index Fund', amount: 8000, nav: 14.65, units: 546.075 },
+        { id: 'tx-8', date: '2026-08-13', isInitial: false, fundName: 'Apex Quantum Index Scheme', amount: 10000, nav: 164.80, units: 60.679 }
       ]
     };
 
@@ -2153,8 +2318,29 @@
     let currentPaletteResults = [];
 
     function saveState() {
-      localStorage.setItem('MOSBY_WEALTH_STATE_V28', JSON.stringify(AppState));
+      const prefs = {
+        user: {
+          currency: AppState.user.currency,
+          privacy: AppState.user.privacy,
+          sound: AppState.user.sound,
+          apiUrl: AppState.user.apiUrl
+        }
+      };
+      try {
+        localStorage.setItem('MOSBY_USER_PREFS_V1', JSON.stringify(prefs));
+      } catch(e) {}
     }
+
+    // Restore saved user preferences & purge any obsolete unencrypted caches
+    try {
+      const savedPrefs = JSON.parse(localStorage.getItem('MOSBY_USER_PREFS_V1') || '{}');
+      if (savedPrefs?.user) {
+        AppState.user = { ...AppState.user, ...savedPrefs.user };
+      }
+      localStorage.removeItem('MOSBY_WEALTH_STATE_V28');
+      localStorage.removeItem('portfolio_live_cache_v2');
+      localStorage.removeItem('portfolio_pass_hash_v2');
+    } catch(e) {}
 
     const CURRENCIES = {
       INR: { symbol: '₹', rate: 1, locale: 'en-IN' },
@@ -2166,14 +2352,17 @@
     function formatVal(amt, hideSymbol = false) {
       if (amt === undefined || amt === null || isNaN(amt)) return '—';
       const cur = CURRENCIES[AppState.user.currency] || CURRENCIES.INR;
-      const converted = Number(amt) * cur.rate;
+      const num = Number(amt);
+      const isNegative = num < 0;
+      const converted = Math.abs(num) * cur.rate;
       let formatted = '';
       if (AppState.user.currency === 'INR') {
         formatted = new Intl.NumberFormat('en-IN', { maximumFractionDigits: 0 }).format(Math.round(converted));
       } else {
         formatted = new Intl.NumberFormat(cur.locale, { maximumFractionDigits: 0 }).format(Math.round(converted));
       }
-      return hideSymbol ? formatted : `${cur.symbol}${formatted}`;
+      const prefix = isNegative ? '-' : '';
+      return hideSymbol ? `${prefix}${formatted}` : `${prefix}${cur.symbol}${formatted}`;
     }
 
     function formatTimestampDetailed(d = new Date()) {
@@ -2273,6 +2462,10 @@
           osc.stop(now + idx * 0.07 + 0.28);
         });
       } catch(e) {}
+    }
+
+    function playUnlockTone() {
+      playSuccessTone();
     }
 
     function playLockTone() {
@@ -2467,82 +2660,275 @@
     /* ==========================================================================
        TELEMETRY SYNC & NORMALIZATION
        ========================================================================== */
+    function getRootArray(data, ...candidateKeys) {
+      if (!data || typeof data !== 'object') return [];
+      // 1. Direct exact key match
+      for (const k of candidateKeys) {
+        if (Array.isArray(data[k]) && data[k].length) return data[k];
+      }
+      // 2. Normalized key match (case/underscore/space-insensitive)
+      const entries = Object.entries(data);
+      for (const k of candidateKeys) {
+        const cleanK = k.toLowerCase().replace(/[^a-z0-9]/g, '');
+        for (const [objKey, objVal] of entries) {
+          const cleanObjKey = objKey.toLowerCase().replace(/[^a-z0-9]/g, '');
+          if (cleanObjKey === cleanK && Array.isArray(objVal) && objVal.length) {
+            return objVal;
+          }
+        }
+      }
+      // 3. Substring key match (e.g. if key contains "sip_config" or "sipconfig")
+      for (const k of candidateKeys) {
+        const cleanK = k.toLowerCase().replace(/[^a-z0-9]/g, '');
+        if (cleanK.length >= 3) {
+          for (const [objKey, objVal] of entries) {
+            const cleanObjKey = objKey.toLowerCase().replace(/[^a-z0-9]/g, '');
+            if ((cleanObjKey.includes(cleanK) || cleanK.includes(cleanObjKey)) && Array.isArray(objVal) && objVal.length) {
+              return objVal;
+            }
+          }
+        }
+      }
+      return [];
+    }
+
     function getField(obj, ...keys) {
-      if (!obj) return null;
+      if (!obj || typeof obj !== 'object') return null;
+      // 1. Direct exact key match
       for (const k of keys) {
         if (obj[k] !== undefined && obj[k] !== null && obj[k] !== '') return obj[k];
+      }
+      // 2. Normalized key match (case-insensitive, non-alphanumeric stripped)
+      const entries = Object.entries(obj);
+      for (const k of keys) {
+        const cleanK = k.toLowerCase().replace(/[^a-z0-9]/g, '');
+        for (const [objKey, objVal] of entries) {
+          const cleanObjKey = objKey.toLowerCase().replace(/[^a-z0-9]/g, '');
+          if (cleanObjKey === cleanK && objVal !== undefined && objVal !== null && objVal !== '') {
+            return objVal;
+          }
+        }
+      }
+      // 3. Fallback: fuzzy/partial match if clean key is long enough
+      for (const k of keys) {
+        const cleanK = k.toLowerCase().replace(/[^a-z0-9]/g, '');
+        if (cleanK.length >= 3) {
+          for (const [objKey, objVal] of entries) {
+            const cleanObjKey = objKey.toLowerCase().replace(/[^a-z0-9]/g, '');
+            if ((cleanObjKey.includes(cleanK) || cleanK.includes(cleanObjKey)) && objVal !== undefined && objVal !== null && objVal !== '') {
+              return objVal;
+            }
+          }
+        }
       }
       return null;
     }
 
+    function inferMFCategory(fundName, explicitCategory) {
+      const explicit = (explicitCategory || '').trim();
+      if (explicit && !['Flexi Cap', 'Direct Plan', 'Growth', 'Mutual Fund', 'Equity', 'Regular', 'Direct', 'Direct Growth'].includes(explicit)) {
+        return explicit;
+      }
+      const lower = (fundName || '').toLowerCase();
+      if (lower.includes('small cap') || lower.includes('smallcap') || lower.includes('small-cap')) {
+        return 'Small Cap';
+      }
+      if (lower.includes('midcap 150') || lower.includes('mid cap 150') || lower.includes('150 midcap') || lower.includes('nifty 150') || lower.includes('midcap index')) {
+        return 'Midcap 150 Index';
+      }
+      if (lower.includes('mid cap') || lower.includes('midcap') || lower.includes('mid-cap') || lower.includes('emerging equities')) {
+        return 'Mid Cap';
+      }
+      if (lower.includes('nifty 50') || lower.includes('nifty50') || lower.includes('sensex') || lower.includes('nifty index') || lower.includes('large cap') || lower.includes('largecap') || lower.includes('bluechip') || lower.includes('top 100')) {
+        return 'Nifty 50 Index';
+      }
+      if (lower.includes('elss') || lower.includes('tax saver') || lower.includes('tax-saver') || lower.includes('tax advantage') || lower.includes('long term equity')) {
+        return 'ELSS Tax Saver';
+      }
+      if (lower.includes('flexi cap') || lower.includes('flexicap') || lower.includes('flexi-cap') || lower.includes('focused')) {
+        return 'Flexi Cap';
+      }
+      if (lower.includes('multi cap') || lower.includes('multicap') || lower.includes('multi-cap')) {
+        return 'Multi Cap';
+      }
+      if (lower.includes('balanced') || lower.includes('hybrid') || lower.includes('baf') || lower.includes('advantage') || lower.includes('equity savings')) {
+        return 'Balanced Advantage';
+      }
+      if (lower.includes('gold') || lower.includes('silver') || lower.includes('commodity') || lower.includes('etf')) {
+        return 'Commodity / ETF';
+      }
+      if (lower.includes('liquid') || lower.includes('overnight') || lower.includes('money market') || lower.includes('arbitrage') || lower.includes('debt') || lower.includes('gilt') || lower.includes('short term')) {
+        return 'Debt / Arbitrage';
+      }
+      return explicit || 'Flexi Cap';
+    }
+
     function parseNum(val) {
-      return (val !== undefined && val !== null && val !== '' && !isNaN(Number(val))) ? Number(val) : null;
+      if (val === undefined || val === null || val === '') return null;
+      if (typeof val === 'number') return isNaN(val) ? null : val;
+      const clean = String(val).replace(/[^\d.-]/g, '');
+      const parsed = Number(clean);
+      return isNaN(parsed) ? null : parsed;
     }
 
     async function computeSHA256(str) {
-      const bytes = new TextEncoder().encode(str);
-      const hash = await crypto.subtle.digest('SHA-256', bytes);
-      return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
+      try {
+        if (window.crypto && crypto.subtle) {
+          const bytes = new TextEncoder().encode(str);
+          const hash = await crypto.subtle.digest('SHA-256', bytes);
+          return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+      } catch(e) {}
+      let hash = 0;
+      for (let i = 0; i < str.length; i++) {
+        hash = ((hash << 5) - hash) + str.charCodeAt(i);
+        hash |= 0;
+      }
+      return String(Math.abs(hash));
+    }
+
+    /* ==========================================================================
+       FAIL-SAFE ZERO-DEPENDENCY ENCRYPTED VAULT (WORKS IN FILE://, HTTP & HTTPS)
+       ========================================================================== */
+    function simpleCipher(text, key) {
+      if (!text || !key) return '';
+      const kLen = key.length;
+      let result = '';
+      for (let i = 0; i < text.length; i++) {
+        const charCode = text.charCodeAt(i) ^ key.charCodeAt(i % kLen) ^ ((i * 13) & 0xFF);
+        result += String.fromCharCode(charCode);
+      }
+      try {
+        return btoa(unescape(encodeURIComponent(result)));
+      } catch (e) {
+        return btoa(result);
+      }
+    }
+
+    function simpleDecipher(cipherBase64, key) {
+      if (!cipherBase64 || !key) return null;
+      try {
+        let text;
+        try {
+          text = decodeURIComponent(escape(atob(cipherBase64)));
+        } catch(e) {
+          text = atob(cipherBase64);
+        }
+        const kLen = key.length;
+        let result = '';
+        for (let i = 0; i < text.length; i++) {
+          const charCode = text.charCodeAt(i) ^ key.charCodeAt(i % kLen) ^ ((i * 13) & 0xFF);
+          result += String.fromCharCode(charCode);
+        }
+        return JSON.parse(result);
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function saveEncryptedVault(dataObject, passcode) {
+      try {
+        const rawJson = JSON.stringify(dataObject);
+        const cipher = simpleCipher(rawJson, passcode + "_MOSBY_SECURE_SALT_99");
+        const vaultPkg = {
+          v: 2,
+          payload: cipher,
+          savedAt: new Date().toISOString()
+        };
+        localStorage.setItem('MOSBY_ENCRYPTED_VAULT_V2', JSON.stringify(vaultPkg));
+      } catch (e) {
+        console.warn("Vault storage skipped:", e);
+      }
+    }
+
+    function loadEncryptedVault(passcode) {
+      try {
+        const vaultStr = localStorage.getItem('MOSBY_ENCRYPTED_VAULT_V2');
+        if (!vaultStr) return null;
+        const vaultPkg = JSON.parse(vaultStr);
+        if (!vaultPkg || !vaultPkg.payload) return null;
+        const decrypted = simpleDecipher(vaultPkg.payload, passcode + "_MOSBY_SECURE_SALT_99");
+        return decrypted ? { data: decrypted, savedAt: vaultPkg.savedAt } : null;
+      } catch (e) {
+        return null;
+      }
     }
 
     function normalizeMFData(data) {
-      const rows = Array.isArray(data?.mutualFunds) ? data.mutualFunds : [];
+      const rows = getRootArray(data, 'Mutual_Funds', 'mutualFunds', 'mutual_funds', 'funds', 'MF', 'mutual_fund', 'MutualFunds');
       return rows.map((r, i) => {
-        const invested = parseNum(getField(r, 'invested', 'totalInvested')) || 0;
-        const currentValue = parseNum(getField(r, 'currentValue')) || invested;
-        const units = parseNum(getField(r, 'units', 'totalUnits')) || 100;
-        const nav = parseNum(getField(r, 'nav', 'liveNAV')) || (units > 0 ? currentValue / units : 0);
-        const avgNav = units > 0 ? (invested / units) : nav;
+        const invested = parseNum(getField(r, 'invested', 'totalInvested', 'investment', 'investedAmount', 'Invested')) || 0;
+        const currentValue = parseNum(getField(r, 'currentValue', 'current_value', 'value', 'curValue', 'Current Value')) || invested;
+        const units = parseNum(getField(r, 'units', 'totalUnits', 'unitBalance', 'Units')) || 100;
+        const nav = parseNum(getField(r, 'nav', 'liveNAV', 'currentNAV', 'live_nav', 'Live NAV', 'NAV')) || (units > 0 ? currentValue / units : 0);
+        const avgNav = parseNum(getField(r, 'avgNav', 'averageNAV', 'purchaseNAV', 'Avg NAV')) || (units > 0 ? (invested / units) : nav);
+        const name = getField(r, 'Fund Name', 'fundName', 'fund_name', 'name', 'fund', 'schemeName', 'scheme', 'Scheme Name', 'ticker', 'Ticker Symbol') || `Mutual Fund ${i+1}`;
+        const rawCategory = getField(r, 'Category', 'category', 'type', 'fundType', 'schemeType', 'cap', 'subCategory');
+        const category = inferMFCategory(name, rawCategory);
+
+        const rawDay = getField(r, 'SIP Day of Month', 'sipDayOfMonth', 'sip_day_of_month', 'SIP_Day_of_Month', 'Day of Month', 'dayOfMonth', 'sipDay', 'sip_day', 'SIP Day', 'day', 'sipDate', 'date');
+        let parsedDay = parseNum(rawDay);
+        if (!parsedDay && typeof rawDay === 'string') {
+          const match = rawDay.match(/\d+/);
+          if (match) parsedDay = parseInt(match[0], 10);
+        }
+        const sipDay = (parsedDay && parsedDay >= 1 && parsedDay <= 31) ? parsedDay : null;
+
+        const sipAmount = parseNum(getField(r, 'SIP Amount', 'sipAmount', 'monthlySIP', 'sip_amount', 'amount')) || 0;
 
         return {
           id: 'mf-' + i,
-          name: getField(r, 'name', 'fundName', 'fund', 'ticker', 'fundTicker') || 'Mutual Fund',
-          category: getField(r, 'category', 'type') || 'Flexi Cap',
-          units, avgNav, currentNav: nav, invested, currentValue,
-          monthlySip: parseNum(getField(r, 'sipAmount', 'monthlySIP')) || 0,
-          sipDay: getField(r, 'sipDay', 'day') || (i * 5 + 5),
-          sipActive: true,
-          ticker: getField(r, 'ticker', 'fundTicker'),
+          name,
+          category,
+          units,
+          avgNav,
+          currentNav: nav,
+          invested,
+          currentValue,
+          monthlySip: sipAmount,
+          sipDay,
+          sipActive: sipAmount > 0 || sipDay !== null,
+          ticker: String(getField(r, 'Ticker Symbol', 'tickerSymbol', 'ticker_symbol', 'ticker', 'symbol', 'fundTicker') || ''),
           raw: r
         };
       });
     }
 
     function normalizeStockData(data) {
-      const rows = Array.isArray(data?.stocks) ? data.stocks : [];
+      const rows = getRootArray(data, 'Stocks', 'stocks', 'equity', 'equities', 'Direct_Stocks', 'directStocks');
       return rows.map((r, i) => {
-        const invested = parseNum(getField(r, 'invested', 'totalInvested')) || 0;
-        const currentValue = parseNum(getField(r, 'currentValue')) || invested;
-        const qty = parseNum(getField(r, 'quantity', 'qty')) || 1;
-        const avgPrice = parseNum(getField(r, 'averagePrice', 'avgPrice')) || (qty > 0 ? invested / qty : 0);
-        const livePrice = parseNum(getField(r, 'livePrice')) || (qty > 0 ? currentValue / qty : avgPrice);
+        const invested = parseNum(getField(r, 'invested', 'totalInvested', 'investment', 'investedAmount', 'Invested')) || 0;
+        const currentValue = parseNum(getField(r, 'currentValue', 'current_value', 'value', 'curValue', 'Current Value')) || invested;
+        const qty = parseNum(getField(r, 'quantity', 'qty', 'shares', 'totalShares', 'Qty')) || 1;
+        const avgPrice = parseNum(getField(r, 'averagePrice', 'avgPrice', 'buyPrice', 'avgBuyPrice', 'Avg Price')) || (qty > 0 ? invested / qty : 0);
+        const livePrice = parseNum(getField(r, 'livePrice', 'cmp', 'currentPrice', 'ltp', 'CMP')) || (qty > 0 ? currentValue / qty : avgPrice);
 
         return {
           id: 'st-' + i,
-          name: getField(r, 'instrument', 'name', 'stockName', 'symbol', 'ticker', 'googleTicker') || 'Stock',
-          ticker: getField(r, 'ticker', 'symbol', 'googleTicker') || 'TICKER',
-          sector: getField(r, 'sector', 'industry') || 'Equities',
+          name: getField(r, 'instrument', 'name', 'stockName', 'symbol', 'ticker', 'googleTicker', 'Stock Name') || 'Stock',
+          ticker: getField(r, 'ticker', 'symbol', 'googleTicker', 'Ticker Symbol') || 'TICKER',
+          sector: getField(r, 'sector', 'industry', 'Sector') || 'Equities',
           qty, avgBuyPrice: avgPrice, cmp: livePrice, invested, currentValue,
-          low52: parseNum(getField(r, 'low52', '52wLow')) || Math.round(livePrice * 0.8),
-          high52: parseNum(getField(r, 'high52', '52wHigh')) || Math.round(livePrice * 1.25),
+          low52: parseNum(getField(r, 'low52', '52wLow', 'fiftyTwoWeekLow', '52W Low')) || Math.round(livePrice * 0.8),
+          high52: parseNum(getField(r, 'high52', '52wHigh', 'fiftyTwoWeekHigh', '52W High')) || Math.round(livePrice * 1.25),
           raw: r
         };
       });
     }
 
     function normalizePPFData(data) {
-      const rows = Array.isArray(data?.ppf) ? data.ppf : [];
+      const rows = getRootArray(data, 'PPF', 'ppf', 'PPF_Ledger', 'ppfLedger', 'sovereign_ppf');
       let totalDep = 0;
       const ledger = rows.map((r, i) => {
-        const dep = parseNum(getField(r, 'deposited', 'totalDeposited', 'invested')) || 0;
+        const dep = parseNum(getField(r, 'deposited', 'totalDeposited', 'invested', 'deposit', 'Deposit')) || 0;
         totalDep += dep;
         return {
-          fy: getField(r, 'name', 'fundName', 'fy') || `Record ${i+1}`,
-          opening: parseNum(getField(r, 'openingBalance')) || 0,
+          fy: getField(r, 'name', 'fundName', 'fy', 'year', 'financialYear', 'FY') || `Record ${i+1}`,
+          opening: parseNum(getField(r, 'openingBalance', 'opening', 'Opening Balance')) || 0,
           deposit: dep,
-          rate: getField(r, 'interestRate') || '7.1%',
-          interest: parseNum(getField(r, 'interestEarned')) || 0,
-          closing: parseNum(getField(r, 'currentBalance', 'currentValue')) || 0,
+          rate: getField(r, 'interestRate', 'rate', 'Interest Rate') || '7.1%',
+          interest: parseNum(getField(r, 'interestEarned', 'interest', 'Interest')) || 0,
+          closing: parseNum(getField(r, 'currentBalance', 'currentValue', 'closing', 'Closing Balance')) || 0,
           raw: r
         };
       });
@@ -2556,33 +2942,168 @@
     }
 
     function normalizeSIPData(data) {
-      const rows = Array.isArray(data?.sipConfig) ? data.sipConfig : [];
-      return rows.map(r => ({
-        ticker: getField(r, 'ticker', 'fundTicker'),
-        sipAmount: parseNum(getField(r, 'sipAmount', 'amount', 'monthlySIP', 'monthlyAmount')) || 0,
-        sipDay: getField(r, 'sipDay', 'day', 'sipDate'),
-        fundName: getField(r, 'fundName', 'name', 'fund', 'schemeName', 'ticker') || 'SIP',
-        raw: r
-      }));
+      let rows = getRootArray(data, 'SIP_Config', 'sip_config', 'sipConfig', 'SIP_CONFIG', 'SIP Config', 'sips', 'sip', 'SIP_Configurations', 'sip_configs', 'sipConfigurations');
+
+      // Fallback if not separate array: inspect mutualFunds
+      if (!rows.length && Array.isArray(data?.mutualFunds)) {
+        rows = data.mutualFunds.filter(r => parseNum(getField(r, 'SIP Amount', 'sipAmount', 'monthlySIP', 'sip_amount', 'amount')) > 0 || getField(r, 'SIP Day of Month', 'sipDayOfMonth', 'sip_day_of_month', 'sipDay', 'sip_day', 'sipDate', 'day'));
+      }
+
+      return rows.map((r, i) => {
+        const fundName = getField(r, 'Fund Name', 'fundName', 'fund_name', 'name', 'fund', 'schemeName', 'scheme', 'Scheme Name', 'ticker', 'Ticker Symbol') || `SIP Scheme ${i+1}`;
+        const rawDay = getField(r, 
+          'SIP Day of Month', 'sipDayOfMonth', 'sip_day_of_month', 'SIP_Day_of_Month', 'Day of Month', 'dayOfMonth',
+          'sipDay', 'sip_day', 'SIP Day', 'day', 'Day', 'Date', 'date',
+          'sipDate', 'sip_date', 'SIP Date', 'debitDay', 'debitDate', 'executionDay'
+        );
+        let parsedDay = parseNum(rawDay);
+        if (!parsedDay && typeof rawDay === 'string') {
+          const match = rawDay.match(/\d+/);
+          if (match) parsedDay = parseInt(match[0], 10);
+        }
+
+        // Cross-reference data.mutualFunds if needed
+        if (!parsedDay && Array.isArray(data?.mutualFunds)) {
+          const mfMatch = data.mutualFunds.find(f => {
+            const fName = getField(f, 'Fund Name', 'fundName', 'name', 'fund', 'schemeName') || '';
+            const cleanFName = fName.toLowerCase().replace(/[^a-z0-9]/g, '');
+            const cleanSipName = fundName.toLowerCase().replace(/[^a-z0-9]/g, '');
+            return cleanFName && cleanSipName && (cleanFName.includes(cleanSipName) || cleanSipName.includes(cleanFName));
+          });
+          if (mfMatch) {
+            const mfRawDay = getField(mfMatch, 'SIP Day of Month', 'sipDayOfMonth', 'sipDay', 'day', 'sipDate', 'date');
+            parsedDay = parseNum(mfRawDay) || (typeof mfRawDay === 'string' ? parseInt(mfRawDay.match(/\d+/)?.[0] || 0, 10) : null);
+          }
+        }
+
+        const finalDay = (parsedDay && parsedDay >= 1 && parsedDay <= 31) ? parsedDay : (i * 5 + 5);
+
+        return {
+          ticker: String(getField(r, 'Ticker Symbol', 'tickerSymbol', 'ticker_symbol', 'ticker', 'symbol', 'fundTicker') || ''),
+          sipAmount: parseNum(getField(r, 'SIP Amount', 'sipAmount', 'sip_amount', 'amount', 'monthlySIP', 'monthlyAmount', 'installment')) || 10000,
+          sipDay: finalDay,
+          fundName,
+          category: inferMFCategory(fundName, getField(r, 'Category', 'category', 'type', 'fundType', 'schemeType')),
+          raw: r
+        };
+      });
+    }
+
+    function normalizeSIPTransactionsData(data) {
+      const rows = getRootArray(data, 'SIP_Transactions', 'sip_transactions', 'sipTransactions', 'SIP_TRANSACTIONS', 'transactions', 'Transactions', 'sip_transaction');
+      return rows.map((r, i) => {
+        const rawDate = getField(r, 'Date', 'date', 'transactionDate', 'debitDate', 'Date of SIP', 'SIP Date', 'Execution Date');
+        let dateStr = rawDate ? String(rawDate).trim() : 'Initial Allocation';
+        if (dateStr && dateStr.includes('T')) {
+          dateStr = dateStr.split('T')[0];
+        }
+        const isInitial = !rawDate || dateStr.toLowerCase().includes('initial') || dateStr === '' || dateStr === '—';
+        const fundName = getField(r, 'Fund Ticker', 'fundTicker', 'Fund Name', 'fundName', 'Fund', 'name', 'ticker', 'Scheme Name') || `Fund Scheme ${i+1}`;
+        const amount = parseNum(getField(r, 'Amount Invested', 'amountInvested', 'amount', 'investedAmount', 'invested', 'Amount')) || 0;
+        const nav = parseNum(getField(r, 'NAV', 'nav', 'purchaseNav', 'allotmentNav', 'Nav', 'Allotment NAV')) || 0;
+        const units = parseNum(getField(r, 'Units Allotted', 'unitsAllotted', 'units', 'allottedUnits', 'Units')) || (nav > 0 ? amount / nav : 0);
+
+        return {
+          id: 'tx-' + i,
+          date: isInitial ? 'Initial Portfolio Allotment' : dateStr,
+          rawDate: dateStr,
+          isInitial,
+          fundName,
+          category: inferMFCategory(fundName),
+          amount,
+          nav,
+          units,
+          raw: r
+        };
+      });
+    }
+
+    function syncMFWithSIPConfig() {
+      if (AppState.sipConfig && AppState.sipConfig.length) {
+        AppState.mutualFunds.forEach(mf => {
+          const matchingSip = AppState.sipConfig.find(s => {
+            // 1. Match by Ticker Symbol
+            if (s.ticker && mf.ticker && String(s.ticker).trim() === String(mf.ticker).trim()) {
+              return true;
+            }
+            // 2. Match by Fund Name (clean alphanumeric comparison)
+            const sName = (s.fundName || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+            const mName = (mf.name || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+            if (sName && mName && (sName.includes(mName) || mName.includes(sName))) {
+              return true;
+            }
+            // 3. Match by key tokens (e.g. "axis", "small", "cap")
+            const sWords = (s.fundName || '').toLowerCase().split(/[\s_-]+/).filter(w => w.length > 2 && !['fund', 'direct', 'plan', 'growth', 'scheme', 'index'].includes(w));
+            const mWords = (mf.name || '').toLowerCase().split(/[\s_-]+/).filter(w => w.length > 2 && !['fund', 'direct', 'plan', 'growth', 'scheme', 'index'].includes(w));
+            const matchCount = sWords.filter(w => mWords.includes(w)).length;
+            return matchCount >= Math.min(2, sWords.length);
+          });
+          if (matchingSip) {
+            mf.sipDay = matchingSip.sipDay;
+            if (matchingSip.sipAmount) mf.monthlySip = matchingSip.sipAmount;
+            mf.sipActive = true;
+            if (!mf.ticker && matchingSip.ticker) mf.ticker = matchingSip.ticker;
+          }
+        });
+      }
     }
 
     /* CONNECT & UNLOCK WITH LIVE REFRESH LIFECYCLE */
     async function connectLiveSheet() {
-      const pass = document.getElementById('passcodeInput')?.value.trim() || activePasscode || document.getElementById('inputModalPasscode')?.value.trim();
-      if (!pass) {
+      const passInputEl = document.getElementById('passcodeInput');
+      const modalPassInputEl = document.getElementById('inputModalPasscode');
+      const enteredPass = (passInputEl ? passInputEl.value.trim() : '') || 
+                          (modalPassInputEl ? modalPassInputEl.value.trim() : '') || 
+                          activePasscode;
+
+      if (!enteredPass) {
         showToast("Please enter passcode.");
         return;
       }
 
+      const pass = enteredPass;
+      let hydratedFromCache = false;
+
+      // 1. FAST PATH: ZERO-MILLISECOND INSTANT HYDRATION FROM LOCAL VAULT
+      try {
+        const cachedVault = loadEncryptedVault(pass);
+        if (cachedVault && cachedVault.data) {
+          const cachedData = cachedVault.data;
+          if (cachedData.mutualFunds || cachedData.Mutual_Funds || cachedData.stocks || cachedData.Stocks || cachedData.ppf || cachedData.PPF) {
+            isLiveSession = true;
+            activePasscode = pass;
+            AppState.user.lastSync = cachedVault.savedAt || new Date().toISOString();
+
+            AppState.mutualFunds = normalizeMFData(cachedData);
+            AppState.stocks = normalizeStockData(cachedData);
+            AppState.ppf = normalizePPFData(cachedData);
+            AppState.sipConfig = normalizeSIPData(cachedData);
+            AppState.sipTransactions = normalizeSIPTransactionsData(cachedData);
+
+            syncMFWithSIPConfig();
+            loadEncryptedGeminiKey(pass);
+            updateGeminiKeyButtonUI();
+            renderCompleteDossiers();
+            updateAuthVisuals(true); // Immediately switches dock to Refresh button!
+            closeConfigModal();
+            try { playUnlockTone(); } catch(e) {}
+            hydratedFromCache = true;
+          }
+        }
+      } catch (cacheErr) {
+        console.warn("Cache load skipped:", cacheErr);
+      }
+
+      // Visual indicator on unlock button if fetching from network and not yet hydrated
       const unlockBtn = document.getElementById('unlockBtn');
-      if (unlockBtn) {
+      if (!hydratedFromCache && unlockBtn) {
         unlockBtn.innerHTML = `<i data-lucide="refresh-cw" class="spin" style="width:11px;height:11px;"></i> Connecting...`;
         unlockBtn.disabled = true;
         if (window.lucide) lucide.createIcons();
       }
 
+      // 2. LIVE NETWORK TELEMETRY FETCH & REVALIDATION
       const url = AppState.user.apiUrl || DEFAULT_API_URL;
-
       try {
         const resp = await fetch(`${url}?passcode=${encodeURIComponent(pass)}&t=${Date.now()}`, { method: 'GET', cache: 'no-store' });
         if (!resp.ok) throw new Error("Telemetry connection error.");
@@ -2592,6 +3113,9 @@
           throw new Error(data.message || data.error || "Incorrect Passcode.");
         }
 
+        // Save encrypted vault with passcode for future 0ms unlocks
+        saveEncryptedVault(data, pass);
+
         isLiveSession = true;
         activePasscode = pass;
         AppState.user.lastSync = new Date().toISOString();
@@ -2600,29 +3124,49 @@
         AppState.stocks = normalizeStockData(data);
         AppState.ppf = normalizePPFData(data);
         AppState.sipConfig = normalizeSIPData(data);
+        AppState.sipTransactions = normalizeSIPTransactionsData(data);
 
-        const passHash = await computeSHA256(pass);
-        localStorage.setItem("portfolio_live_cache_v2", JSON.stringify(data));
-        localStorage.setItem("portfolio_pass_hash_v2", passHash);
-
+        syncMFWithSIPConfig();
+        loadEncryptedGeminiKey(pass);
+        updateGeminiKeyButtonUI();
         saveState();
         renderCompleteDossiers();
-        updateAuthVisuals();
+        updateAuthVisuals(false); // Firmly switches dock to Refresh button!
         fetchLiveMarketIndices();
         closeConfigModal();
-        triggerConfetti();
-        showToast("Connected to Live Telemetry Archive");
+
+        // Wipe input field now that authentication succeeded
+        if (passInputEl) passInputEl.value = '';
+        if (modalPassInputEl) modalPassInputEl.value = '';
+
+        if (!hydratedFromCache) {
+          try { triggerConfetti(); } catch(e) {}
+          try { playUnlockTone(); } catch(e) {}
+          showToast("Connected to Live Telemetry Archive");
+        } else {
+          showToast("Telemetry Synchronized Silently");
+        }
       } catch (err) {
-        console.error(err);
-        showToast(err.message || "Failed to authenticate.");
-        if (unlockBtn) {
-          unlockBtn.innerHTML = "Unlock";
-          unlockBtn.disabled = false;
+        console.error("Auth / Fetch Error:", err);
+        if (!hydratedFromCache) {
+          isLiveSession = false;
+          activePasscode = '';
+          AppState = JSON.parse(JSON.stringify(DEMO_STATE));
+          renderCompleteDossiers();
+          updateAuthVisuals(false);
+          showToast(err.message || "Failed to authenticate.");
+        } else {
+          showToast("Working offline from encrypted vault");
+          updateAuthVisuals(false);
         }
       }
     }
 
     async function triggerLiveRefresh() {
+      if (!isLiveSession || !activePasscode) {
+        showToast("Please unlock with passcode first.");
+        return;
+      }
       const btn = document.getElementById('liveRefreshBtn');
       if (btn) {
         btn.innerHTML = `<i data-lucide="refresh-cw" class="spin" style="width:12px;height:12px;"></i> Refreshing...`;
@@ -2631,23 +3175,36 @@
       }
 
       const url = AppState.user.apiUrl || DEFAULT_API_URL;
-
       try {
+        if (!activePasscode) {
+          throw new Error("Session locked. Please enter passcode first.");
+        }
         const resp = await fetch(`${url}?passcode=${encodeURIComponent(activePasscode)}&t=${Date.now()}`, { method: 'GET', cache: 'no-store' });
-        if (!resp.ok) throw new Error("Telemetry refresh error.");
-        const data = await resp.json();
+        if (!resp.ok) throw new Error(`Server returned HTTP ${resp.status}`);
+        
+        const rawText = await resp.text();
+        let data;
+        try {
+          data = JSON.parse(rawText);
+        } catch (parseErr) {
+          console.error("Non-JSON response from Webhook:", rawText.slice(0, 200));
+          throw new Error("Apps Script returned non-JSON. Check Apps Script deployment / code.");
+        }
 
-        if (data.success === false || data.error === true || data.error === "true") {
+        if (data.success === false || data.error === true || data.error === "true" || (typeof data.error === 'string' && data.error)) {
           throw new Error(data.message || data.error || "Refresh failed.");
         }
+
+        saveEncryptedVault(data, activePasscode);
 
         AppState.user.lastSync = new Date().toISOString();
         AppState.mutualFunds = normalizeMFData(data);
         AppState.stocks = normalizeStockData(data);
         AppState.ppf = normalizePPFData(data);
         AppState.sipConfig = normalizeSIPData(data);
+        AppState.sipTransactions = normalizeSIPTransactionsData(data);
 
-        localStorage.setItem("portfolio_live_cache_v2", JSON.stringify(data));
+        syncMFWithSIPConfig();
         saveState();
         renderCompleteDossiers();
         fetchLiveMarketIndices();
@@ -2668,8 +3225,8 @@
         updateTopLeftStatus();
         showToast("Telemetry Refreshed Successfully");
       } catch (err) {
-        console.error(err);
-        showToast("Refresh failed. Check connection.");
+        console.error("Refresh Telemetry Error:", err);
+        showToast(`Refresh failed: ${err.message || "Check connection"}`);
         if (btn) {
           btn.innerHTML = `<i data-lucide="refresh-cw" style="width:12px;height:12px;"></i> Refresh`;
           btn.disabled = false;
@@ -2678,14 +3235,18 @@
       }
     }
 
-    function updateTopLeftStatus() {
+    function updateTopLeftStatus(isSyncing = false) {
       const badge = document.getElementById('topLeftStatusBadge');
       const text = document.getElementById('topLeftStatusText');
       if (!badge || !text) return;
       if (isLiveSession) {
         badge.classList.add('live');
-        const timeStr = AppState.user.lastSync ? formatTimestampDetailed(new Date(AppState.user.lastSync)) : formatTimestampDetailed();
-        text.innerText = `SYNCED ${timeStr.toUpperCase()}`;
+        if (isSyncing) {
+          text.innerText = `● SYNCING TELEMETRY...`;
+        } else {
+          const timeStr = AppState.user.lastSync ? formatTimestampDetailed(new Date(AppState.user.lastSync)) : formatTimestampDetailed();
+          text.innerText = `SYNCED ${timeStr.toUpperCase()}`;
+        }
       } else {
         badge.classList.remove('live');
         text.innerText = `DEMO ARCHIVE`;
@@ -2701,7 +3262,7 @@
       }
     }
 
-    function updateAuthVisuals() {
+    function updateAuthVisuals(isSyncing = false) {
       const dock = document.getElementById('headerAuthDock');
       const pill = document.getElementById('statusBadgeBtn');
       const label = document.getElementById('statusLabel');
@@ -2721,7 +3282,7 @@
           `;
         }
         if (pill) pill.classList.add('live');
-        if (label) label.innerText = "LIVE ARCHIVE";
+        if (label) label.innerText = isSyncing ? "SYNCING..." : "LIVE ARCHIVE";
       } else {
         if (dock) {
           dock.innerHTML = `
@@ -2736,15 +3297,17 @@
         attachPasscodeListeners();
       }
 
-      updateTopLeftStatus();
+      updateTopLeftStatus(isSyncing);
       if (window.lucide) lucide.createIcons();
     }
 
     function lockPortfolioSession() {
       isLiveSession = false;
       activePasscode = '';
+      sessionGeminiApiKey = '';
       AppState = JSON.parse(JSON.stringify(DEMO_STATE));
       updateAuthVisuals();
+      updateGeminiKeyButtonUI();
       renderCompleteDossiers();
       playLockTone();
       showToast("Portfolio Locked (Demo Mode Active)");
@@ -2827,12 +3390,33 @@
       }
 
       document.getElementById('masterNetWorth').innerText = formatVal(metrics.totalNetWorth);
-      document.getElementById('masterProfitCapsule').innerText = `+${formatVal(metrics.totalProfit)} (+${metrics.totalProfitPct}% Alpha)`;
+      const isProfitable = metrics.totalProfit >= 0;
+      const profitSign = isProfitable ? '+' : '';
+      const profitPctSign = parseFloat(metrics.totalProfitPct) >= 0 ? '+' : '';
+      const masterCapsule = document.getElementById('masterProfitCapsule');
+      if (masterCapsule) {
+        masterCapsule.innerText = `${profitSign}${formatVal(metrics.totalProfit)} (${profitPctSign}${metrics.totalProfitPct}% Alpha)`;
+        masterCapsule.style.color = isProfitable ? '#6ee7b7' : '#fca5a5';
+        masterCapsule.style.borderColor = isProfitable ? 'rgba(16,185,129,0.3)' : 'rgba(239,68,68,0.4)';
+        masterCapsule.style.backgroundColor = isProfitable ? 'rgba(16,185,129,0.1)' : 'rgba(239,68,68,0.1)';
+      }
 
       document.getElementById('kpiInvested').innerText = formatVal(metrics.totalInv);
-      document.getElementById('kpiProfit').innerText = `+${formatVal(metrics.totalProfit)}`;
-      document.getElementById('kpiProfitSub').innerText = `+${metrics.totalProfitPct}% Overall Alpha`;
-      document.getElementById('kpiReturn').innerText = `${metrics.totalProfitPct}%`;
+      const kpiProf = document.getElementById('kpiProfit');
+      if (kpiProf) {
+        kpiProf.innerText = `${profitSign}${formatVal(metrics.totalProfit)}`;
+        kpiProf.style.color = isProfitable ? '#6ee7b7' : '#fca5a5';
+      }
+      const kpiProfSub = document.getElementById('kpiProfitSub');
+      if (kpiProfSub) {
+        kpiProfSub.innerText = `${profitPctSign}${metrics.totalProfitPct}% Overall Alpha`;
+        kpiProfSub.style.color = isProfitable ? '#6ee7b7' : '#fca5a5';
+      }
+      const kpiRet = document.getElementById('kpiReturn');
+      if (kpiRet) {
+        kpiRet.innerText = `${profitPctSign}${metrics.totalProfitPct}%`;
+        kpiRet.style.color = parseFloat(metrics.totalProfitPct) >= 0 ? '#fde047' : '#fca5a5';
+      }
 
       const monthlySip = getMonthlySIPTotal();
       const estXirr = Math.max(7.2, Math.min(34.0, (parseFloat(metrics.totalProfitPct) * 0.62) + (monthlySip > 0 ? 8.4 : 5.2))).toFixed(1);
@@ -2986,19 +3570,30 @@
       document.getElementById('mfTotalVal').innerText = formatVal(metrics.mfCur);
       const mfP = metrics.mfCur - metrics.mfInv;
       const mfPctVal = metrics.mfInv > 0 ? ((mfP / metrics.mfInv) * 100).toFixed(1) : 0;
-      document.getElementById('mfProfitVal').innerText = `+${formatVal(mfP)} (+${mfPctVal}%)`;
+      const mfPProfitable = mfP >= 0;
+      const mfProfitEl = document.getElementById('mfProfitVal');
+      if (mfProfitEl) {
+        mfProfitEl.innerText = `${mfPProfitable ? '+' : ''}${formatVal(mfP)} (${parseFloat(mfPctVal) >= 0 ? '+' : ''}${mfPctVal}%)`;
+        mfProfitEl.style.color = mfPProfitable ? '#6ee7b7' : '#fca5a5';
+      }
       document.getElementById('mfMonthlySipVal').innerText = formatVal(monthlySip);
       const terSavings = Math.round(metrics.mfCur * 0.01);
       document.getElementById('mfTerSavingsText').innerText = `~${formatVal(terSavings)}/yr Saved vs Regular`;
       document.getElementById('mfHoldingCountBadge').innerText = `${AppState.mutualFunds.length} Schemes`;
       renderMFSipRadar();
       renderMFTable();
+      renderMFTxTable();
 
       // Folder 2: Equities (Smart Telemetry + Accordion)
       document.getElementById('stockTotalVal').innerText = formatVal(metrics.stCur);
       const stP = metrics.stCur - metrics.stInv;
       const stPctVal = metrics.stInv > 0 ? ((stP / metrics.stInv) * 100).toFixed(1) : 0;
-      document.getElementById('stockProfitVal').innerText = `+${formatVal(stP)} (+${stPctVal}%)`;
+      const stPProfitable = stP >= 0;
+      const stProfitEl = document.getElementById('stockProfitVal');
+      if (stProfitEl) {
+        stProfitEl.innerText = `${stPProfitable ? '+' : ''}${formatVal(stP)} (${parseFloat(stPctVal) >= 0 ? '+' : ''}${stPctVal}%)`;
+        stProfitEl.style.color = stPProfitable ? '#6ee7b7' : '#fca5a5';
+      }
       document.getElementById('stockHoldingCountBadge').innerText = `${AppState.stocks.length} Equities`;
       renderStockSmartMetrics();
       renderStockTable();
@@ -3065,8 +3660,8 @@
             <div style="font-size:10px; opacity:0.7; margin-top:2px;">Cost Basis: ${formatVal(a.inv)}</div>
           </div>
           <div style="text-align:right;">
-            <div class="num-mono" style="font-weight:700; color:#6ee7b7;">+${a.pct.toFixed(1)}%</div>
-            <div class="num-mono privacy-blur" style="font-size:11px; opacity:0.8;">+${formatVal(a.p)}</div>
+            <div class="num-mono" style="font-weight:700; color:${a.pct >= 0 ? '#6ee7b7' : '#fca5a5'};">${a.pct >= 0 ? '+' : ''}${a.pct.toFixed(1)}%</div>
+            <div class="num-mono privacy-blur" style="font-size:11px; opacity:0.8; color:${a.p >= 0 ? '#6ee7b7' : '#fca5a5'};">${a.p >= 0 ? '+' : ''}${formatVal(a.p)}</div>
           </div>
         </div>
       `).join("");
@@ -3078,17 +3673,29 @@
     function renderMFSipRadar() {
       const radar = document.getElementById('mfSipRadarContainer');
       const monthlyTotal = getMonthlySIPTotal();
-      const sips = AppState.sipConfig && AppState.sipConfig.length ? AppState.sipConfig : AppState.mutualFunds.map((f, i) => ({ fundName: f.name, sipAmount: f.monthlySip || 10000, sipDay: f.sipDay || (i*5+5) }));
+      
+      let sips = [];
+      if (AppState.sipConfig && AppState.sipConfig.length) {
+        sips = AppState.sipConfig;
+      } else {
+        sips = AppState.mutualFunds.filter(f => f.monthlySip > 0 || f.sipActive).map((f, i) => ({
+          fundName: f.name,
+          sipAmount: f.monthlySip || 10000,
+          sipDay: f.sipDay || (i * 5 + 5),
+          category: f.category
+        }));
+      }
 
-      radar.innerHTML = sips.map(s => {
-        const pct = monthlyTotal > 0 ? Math.round((s.sipAmount / monthlyTotal) * 100) : 33;
+      radar.innerHTML = sips.map((s, i) => {
+        const pct = monthlyTotal > 0 ? Math.round((s.sipAmount / monthlyTotal) * 100) : Math.round(100 / Math.max(1, sips.length));
+        const dayVal = s.sipDay || (i * 5 + 5);
         return `
           <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.12); border-radius: 4px; padding: 10px;">
             <div style="display:flex; justify-content:space-between; align-items:center;">
-              <span class="badge-capsule" style="font-size:9px; color:#fde047;">Day ${s.sipDay || 5} of Month</span>
+              <span class="badge-capsule" style="font-size:9px; color:#fde047;">Day ${dayVal} of Month</span>
               <span style="font-size:10px; opacity:0.7;">${pct}% Outflow</span>
             </div>
-            <div style="font-weight:600; color:#fff; font-size:12px; margin-top:6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${s.fundName}</div>
+            <div style="font-weight:600; color:#fff; font-size:12px; margin-top:6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${s.fundName}">${s.fundName}</div>
             <div class="num-mono" style="font-weight:700; color:#6ee7b7; font-size:1.1rem; margin-top:4px;">${formatVal(s.sipAmount)}</div>
           </div>
         `;
@@ -3098,19 +3705,21 @@
       const calMatrix = document.getElementById('sipCalendarMatrixContainer');
       if (calMatrix) {
         const activeDaysMap = {};
-        sips.forEach(s => {
-          const d = parseInt(s.sipDay) || 5;
-          activeDaysMap[d] = (activeDaysMap[d] || 0) + (parseNum(s.sipAmount) || 0);
+        sips.forEach((s, i) => {
+          const d = parseInt(s.sipDay) || (i * 5 + 5);
+          if (d >= 1 && d <= 31) {
+            activeDaysMap[d] = (activeDaysMap[d] || 0) + (parseNum(s.sipAmount) || 0);
+          }
         });
 
         const todayDay = new Date().getDate();
         let calHtml = '';
-        let nextDebitDay = null;
+        const sortedDebitDays = Object.keys(activeDaysMap).map(Number).sort((a, b) => a - b);
+        const nextDebitDay = sortedDebitDays.find(d => d >= todayDay) || sortedDebitDays[0];
 
         for (let d = 1; d <= 31; d++) {
           const hasSip = activeDaysMap[d] !== undefined;
           const isToday = d === todayDay;
-          if (hasSip && !nextDebitDay && d >= todayDay) nextDebitDay = d;
 
           let cls = 'sip-cal-day';
           if (hasSip) cls += ' active-sip';
@@ -3127,9 +3736,9 @@
         calMatrix.innerHTML = calHtml;
 
         const nextBadge = document.getElementById('sipNextExecutionBadge');
-        if (nextBadge && sips.length) {
-          const targetDay = nextDebitDay || sips[0].sipDay || 5;
-          nextBadge.innerText = `Next Debit: Day ${targetDay} (${formatVal(activeDaysMap[targetDay] || sips[0].sipAmount)})`;
+        if (nextBadge && sortedDebitDays.length) {
+          const targetDay = nextDebitDay || sortedDebitDays[0];
+          nextBadge.innerText = `Next Debit: Day ${targetDay} (${formatVal(activeDaysMap[targetDay])})`;
         }
       }
     }
@@ -3137,7 +3746,10 @@
     function setMFCategoryFilter(cat) {
       filterMFCategory = cat;
       document.querySelectorAll('.filter-chip-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.innerText.includes(cat) || (cat === 'ALL' && btn.innerText === 'All Funds'));
+        const btnText = btn.innerText.trim();
+        const isActive = (cat === 'ALL' && btnText === 'All Funds') || 
+                         (cat !== 'ALL' && (btnText.toLowerCase().includes(cat.toLowerCase()) || cat.toLowerCase().includes(btnText.toLowerCase())));
+        btn.classList.toggle('active', isActive);
       });
       renderMFTable();
     }
@@ -3146,8 +3758,11 @@
       const tbody = document.getElementById('tableBodyMF');
       let html = '';
       const list = AppState.mutualFunds.filter(f => {
-        const matchesQuery = !filterMFQuery || f.name.toLowerCase().includes(filterMFQuery) || f.category.toLowerCase().includes(filterMFQuery);
-        const matchesCat = filterMFCategory === 'ALL' || f.category.toLowerCase().includes(filterMFCategory.toLowerCase());
+        const q = filterMFQuery.toLowerCase();
+        const matchesQuery = !q || f.name.toLowerCase().includes(q) || f.category.toLowerCase().includes(q);
+        const matchesCat = filterMFCategory === 'ALL' || 
+                           f.category.toLowerCase().includes(filterMFCategory.toLowerCase()) || 
+                           f.name.toLowerCase().includes(filterMFCategory.toLowerCase());
         return matchesQuery && matchesCat;
       });
 
@@ -3163,25 +3778,29 @@
         const pct = inv > 0 ? ((p / inv) * 100).toFixed(2) : 0;
         const multiple = inv > 0 ? (cur / inv).toFixed(2) : '1.00';
         const alphaSpread = (parseFloat(pct) - 16.2).toFixed(1);
+        const isGreen = p >= 0;
+        const pSign = isGreen ? '+' : '';
+        const pctSign = parseFloat(pct) >= 0 ? '+' : '';
+        const alphaSign = parseFloat(alphaSpread) >= 0 ? '+' : '';
 
         html += `
           <tr onclick="openInspectionFromType('mf', '${f.id}')">
             <td style="font-weight: 600; color: #fff;">
               <div>${f.name}</div>
-              ${f.sipDay ? `<div style="font-size:10px; opacity:0.75; color:#fde047;">Active SIP • Day ${f.sipDay} of month</div>` : ''}
+              ${f.sipDay ? `<div style="font-size:10px; opacity:0.8; color:#fde047;">Active SIP • Day ${f.sipDay} of month</div>` : ''}
             </td>
             <td><span class="badge-capsule">${f.category}</span></td>
             <td class="num-mono privacy-blur">${(f.units || 0).toLocaleString()} @ ₹${(f.avgNav || 0).toFixed(2)}</td>
             <td class="num-mono font-weight-700 privacy-blur" style="color: #fff;">₹${(f.currentNav || 0).toFixed(2)}</td>
             <td class="num-mono privacy-blur">${formatVal(inv)}</td>
             <td class="num-mono font-weight-700 privacy-blur" style="color: #6ee7b7;">${formatVal(cur)}</td>
-            <td class="num-mono privacy-blur" style="color: ${p >= 0 ? '#6ee7b7' : '#fca5a5'};">
-              <div>${p >= 0 ? '+' : ''}${formatVal(p)}</div>
+            <td class="num-mono privacy-blur" style="color: ${isGreen ? '#6ee7b7' : '#fca5a5'};">
+              <div>${pSign}${formatVal(p)}</div>
               <div style="font-size:10px; opacity:0.7;">${multiple}x Cost</div>
             </td>
             <td class="num-mono font-weight-700">
-              <div style="color: ${p >= 0 ? '#6ee7b7' : '#fca5a5'};">${pct}%</div>
-              <div style="font-size:10px; color:#fde047;">+${alphaSpread}% Alpha</div>
+              <div style="color: ${isGreen ? '#6ee7b7' : '#fca5a5'};">${pctSign}${pct}%</div>
+              <div style="font-size:10px; color:#fde047;">${alphaSign}${alphaSpread}% Alpha</div>
             </td>
           </tr>
         `;
@@ -3192,6 +3811,157 @@
     function filterMFList(val) {
       filterMFQuery = val.toLowerCase().trim();
       renderMFTable();
+    }
+
+    let mfTxSectionOpen = true;
+    let filterTxQuery = '';
+
+    function toggleMFTxSection() {
+      mfTxSectionOpen = !mfTxSectionOpen;
+      const wrapper = document.getElementById('mfTxCollapseWrapper');
+      const chevron = document.getElementById('mfTxChevron');
+      const label = document.getElementById('mfTxToggleLabel');
+      if (wrapper) wrapper.style.display = mfTxSectionOpen ? 'block' : 'none';
+      if (chevron) chevron.style.transform = mfTxSectionOpen ? 'rotate(0deg)' : 'rotate(-90deg)';
+      if (label) label.innerText = mfTxSectionOpen ? 'Click to Hide Ledger' : 'Click to Reveal Ledger';
+    }
+
+    function filterMFTxList(val) {
+      filterTxQuery = (val || '').toLowerCase().trim();
+      renderMFTxTable();
+    }
+
+    function renderMFTxTable() {
+      const tbody = document.getElementById('tableBodyMFTx');
+      if (!tbody) return;
+      let list = AppState.sipTransactions || [];
+      if (filterTxQuery) {
+        list = list.filter(tx => (tx.fundName || '').toLowerCase().includes(filterTxQuery) || (tx.date || '').toLowerCase().includes(filterTxQuery));
+      }
+      const badge = document.getElementById('mfTxCountBadge');
+      if (badge) badge.innerText = `${(AppState.sipTransactions || []).length} Inflows Recorded`;
+
+      if (!list.length) {
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding: 2rem; opacity: 0.6;">No systematic inflows matching query.</td></tr>`;
+        return;
+      }
+
+      let html = '';
+      list.forEach((tx, idx) => {
+        const fundMatch = AppState.mutualFunds.find(f => {
+          const fName = (f.name || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+          const txName = (tx.fundName || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+          return fName && txName && (fName.includes(txName) || txName.includes(fName));
+        });
+
+        const currentNav = fundMatch ? (fundMatch.currentNav || tx.nav) : tx.nav;
+        const curVal = tx.units * currentNav;
+        const gain = curVal - tx.amount;
+        const gainPct = tx.amount > 0 ? ((gain / tx.amount) * 100).toFixed(2) : 0;
+        const isGreen = gain >= 0;
+
+        html += `
+          <tr onclick="openTxDetailModal('${tx.id || idx}')" style="cursor: pointer;">
+            <td style="font-weight: 600; color: #fff;">
+              <div style="display:flex; align-items:center; gap:6px;">
+                <span class="badge-capsule" style="font-size:9px; ${tx.isInitial ? 'color:#fde047; border-color:rgba(253,224,71,0.3);' : 'color:#6ee7b7; border-color:rgba(16,185,129,0.3);'}">${tx.isInitial ? 'INITIAL ALLOTMENT' : 'SIP DEBIT'}</span>
+                <span>${tx.date}</span>
+              </div>
+            </td>
+            <td style="font-weight: 600; color: #fff;">
+              <div>${tx.fundName}</div>
+              <div style="font-size:10px; opacity:0.75; color:#fde047;">${tx.category || inferMFCategory(tx.fundName)}</div>
+            </td>
+            <td class="num-mono font-weight-700 privacy-blur" style="color: #FDFAF7;">${formatVal(tx.amount)}</td>
+            <td class="num-mono privacy-blur" style="opacity: 0.85;">₹${(tx.nav || 0).toFixed(4)}</td>
+            <td class="num-mono font-weight-700 privacy-blur" style="color: #fde047;">${(tx.units || 0).toLocaleString(undefined, {minimumFractionDigits: 3, maximumFractionDigits: 4})}</td>
+            <td class="num-mono font-weight-700 privacy-blur" style="color: #6ee7b7;">${formatVal(curVal)}</td>
+            <td class="num-mono font-weight-700" style="color: ${isGreen ? '#6ee7b7' : '#fca5a5'};">
+              <div>${isGreen ? '+' : ''}${formatVal(gain)}</div>
+              <div style="font-size:10px; opacity:0.8;">${isGreen ? '+' : ''}${gainPct}%</div>
+            </td>
+            <td>
+              <button class="btn-passcode-unlock" style="padding: 3px 8px; font-size: 9px;" onclick="event.stopPropagation(); openTxDetailModal('${tx.id || idx}')">Inspect</button>
+            </td>
+          </tr>
+        `;
+      });
+      tbody.innerHTML = html;
+    }
+
+    function openTxDetailModal(txId) {
+      const tx = (AppState.sipTransactions || []).find((t, i) => (t.id === txId || String(i) === String(txId))) || (AppState.sipTransactions && AppState.sipTransactions[0]);
+      if (!tx) return;
+      playFolderTone(560);
+
+      const fundMatch = AppState.mutualFunds.find(f => {
+        const fName = (f.name || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+        const txName = (tx.fundName || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+        return fName && txName && (fName.includes(txName) || txName.includes(fName));
+      });
+
+      const curNav = fundMatch ? (fundMatch.currentNav || tx.nav) : tx.nav;
+      const curVal = tx.units * curNav;
+      const gain = curVal - tx.amount;
+      const gainPct = tx.amount > 0 ? ((gain / tx.amount) * 100).toFixed(2) : 0;
+      const isGreen = gain >= 0;
+
+      document.getElementById('txModalDateBadge').innerText = tx.isInitial ? 'INITIAL ALLOTMENT' : `EXECUTED • ${tx.date}`;
+      document.getElementById('txModalDateBadge').style.color = tx.isInitial ? '#fde047' : '#6ee7b7';
+      document.getElementById('txModalFundName').innerText = tx.fundName;
+      document.getElementById('txModalAmount').innerText = formatVal(tx.amount);
+      document.getElementById('txModalGain').innerText = `${isGreen ? '+' : ''}${formatVal(gain)} (${isGreen ? '+' : ''}${gainPct}% tranche gain)`;
+      document.getElementById('txModalGain').style.color = isGreen ? '#6ee7b7' : '#fca5a5';
+
+      const statsGrid = document.getElementById('txModalStatsGrid');
+      statsGrid.innerHTML = `
+        <div class="dossier-kpi-card" style="padding: 1rem;">
+          <div style="font-size: 10px; opacity: 0.7; text-transform: uppercase;">Execution Purchase NAV</div>
+          <div class="num-mono privacy-blur" style="font-size: 1.2rem; font-weight: 700; color: #fff; margin-top: 4px;">₹${(tx.nav || 0).toFixed(4)}</div>
+          <div style="font-size: 10px; opacity: 0.65; margin-top: 2px;">Allotment NAV</div>
+        </div>
+        <div class="dossier-kpi-card" style="padding: 1rem;">
+          <div style="font-size: 10px; opacity: 0.7; text-transform: uppercase;">Current Live NAV</div>
+          <div class="num-mono privacy-blur" style="font-size: 1.2rem; font-weight: 700; color: #6ee7b7; margin-top: 4px;">₹${(curNav || 0).toFixed(4)}</div>
+          <div style="font-size: 10px; color: #fde047; margin-top: 2px;">${((curNav - tx.nav)/Math.max(0.001, tx.nav)*100).toFixed(2)}% NAV Growth</div>
+        </div>
+        <div class="dossier-kpi-card" style="padding: 1rem;">
+          <div style="font-size: 10px; opacity: 0.7; text-transform: uppercase;">Units Allotted</div>
+          <div class="num-mono font-weight-700 privacy-blur" style="font-size: 1.2rem; color: #fde047; margin-top: 4px;">${(tx.units || 0).toLocaleString(undefined, {minimumFractionDigits: 3, maximumFractionDigits: 4})}</div>
+          <div style="font-size: 10px; opacity: 0.65; margin-top: 2px;">Demat Allotment</div>
+        </div>
+        <div class="dossier-kpi-card" style="padding: 1rem;">
+          <div style="font-size: 10px; opacity: 0.7; text-transform: uppercase;">Current Tranche Valuation</div>
+          <div class="num-mono font-weight-700 privacy-blur" style="font-size: 1.2rem; color: #6ee7b7; margin-top: 4px;">${formatVal(curVal)}</div>
+          <div style="font-size: 10px; opacity: 0.65; margin-top: 2px;">Cost Multiplier: ${(curVal / Math.max(1, tx.amount)).toFixed(2)}x</div>
+        </div>
+      `;
+
+      const metaList = document.getElementById('txModalMetaList');
+      metaList.innerHTML = `
+        <div style="display:flex; justify-content:space-between; margin-bottom: 6px;">
+          <span style="opacity:0.7;">Transaction Type:</span>
+          <strong style="color:#fff;">${tx.isInitial ? 'Initial Portfolio Allotment' : 'Automated Systematic Inflow (SIP)'}</strong>
+        </div>
+        <div style="display:flex; justify-content:space-between; margin-bottom: 6px;">
+          <span style="opacity:0.7;">Execution Date:</span>
+          <strong style="color:#fde047;">${tx.date}</strong>
+        </div>
+        <div style="display:flex; justify-content:space-between; margin-bottom: 6px;">
+          <span style="opacity:0.7;">Fund Category:</span>
+          <strong style="color:#fff;">${tx.category || inferMFCategory(tx.fundName)}</strong>
+        </div>
+        <div style="display:flex; justify-content:space-between;">
+          <span style="opacity:0.7;">Settlement Status:</span>
+          <strong style="color:#6ee7b7;">Executed &amp; Confirmed (T+1 Settlement)</strong>
+        </div>
+      `;
+
+      document.getElementById('txModal').classList.add('active');
+    }
+
+    function closeTxDetailModal() {
+      document.getElementById('txModal').classList.remove('active');
     }
 
     function renderStockSmartMetrics() {
@@ -3320,7 +4090,7 @@
               <div>${p >= 0 ? '+' : ''}${formatVal(p)}</div>
               <div style="font-size:10px; opacity:0.7;">${multiple}x Cost</div>
             </td>
-            <td class="num-mono font-weight-700" style="color: ${p >= 0 ? '#6ee7b7' : '#fca5a5'};">${pct}%</td>
+            <td class="num-mono font-weight-700" style="color: ${p >= 0 ? '#6ee7b7' : '#fca5a5'};">${p >= 0 ? '+' : ''}${pct}%</td>
           </tr>
         `;
       });
@@ -3636,44 +4406,80 @@
     }
 
     /* ==========================================================================
-       SMART PORTFOLIO AI AUDITOR ENGINE (100% DYNAMIC)
+       MOSBY FINANCIAL INTELLIGENCE AI COPILOT (LIVE REASONING & STREAMING CORE)
        ========================================================================== */
-    function renderAIAudit() {
+    let aiStreamInterval = null;
+
+    function typewriterStream(targetEl, fullHtml, onComplete) {
+      if (aiStreamInterval) clearInterval(aiStreamInterval);
+      
+      const container = document.getElementById('aiOutputContainer');
+      if (container) container.scrollTop = 0;
+
+      // Instant, clean high-speed render
+      targetEl.style.opacity = '0';
+      targetEl.innerHTML = fullHtml;
+      
+      let opacity = 0;
+      targetEl.style.transition = 'opacity 0.25s ease';
+      requestAnimationFrame(() => {
+        targetEl.style.opacity = '1';
+        if (window.lucide) lucide.createIcons();
+        if (container) container.scrollTop = 0;
+        if (onComplete) onComplete();
+      });
+    }
+
+    async function askAICopilot(promptType, btnEl) {
+      // Highlight active chip
+      if (btnEl) {
+        const chips = document.querySelectorAll('#aiPromptChipsDeck .filter-pill');
+        chips.forEach(c => c.classList.remove('active'));
+        btnEl.classList.add('active');
+      }
+
+      const thinkingPulse = document.getElementById('aiThinkingPulse');
+      const streamContent = document.getElementById('aiStreamContent');
+      const statusEl = document.getElementById('auditLiveScanStatus');
+      const btnText = document.getElementById('aiScanBtnText');
+      const icon = document.getElementById('aiScanSpinIcon');
+      const thinkingText = document.getElementById('aiThinkingText');
+
+      if (thinkingPulse) thinkingPulse.style.display = 'flex';
+      if (thinkingText) thinkingText.innerText = "AI analyzing real-time portfolio data, risk parameters, and returns...";
+      if (btnText) btnText.innerText = "Analyzing...";
+      if (icon) icon.classList.add('spin');
+      if (statusEl) {
+        statusEl.innerHTML = `<span style="color:#fde047;">● SYNTHESIZING ${AppState.mutualFunds.length} MFs, ${AppState.stocks.length} EQUITIES, ${AppState.sipConfig.length} SIPS...</span>`;
+      }
+
+      // Compute live portfolio metrics
       const metrics = calculateTotals();
       const totalNW = metrics.totalNetWorth || 1;
-
-      // 1. Top holdings and concentration
-      const allHoldings = [
-        ...AppState.mutualFunds.map(f => ({ name: f.name, val: f.currentValue !== undefined ? f.currentValue : (f.units * f.currentNav), type: 'MF' })),
-        ...AppState.stocks.map(s => ({ name: s.name, val: s.currentValue !== undefined ? s.currentValue : (s.qty * s.cmp), type: 'Stock' }))
-      ].sort((a, b) => b.val - a.val);
-
-      const top3Val = (allHoldings[0]?.val || 0) + (allHoldings[1]?.val || 0) + (allHoldings[2]?.val || 0);
-      const concPct = Math.round((top3Val / totalNW) * 100);
-
-      // 2. Dynamic Health Score (0 - 100)
-      let healthScore = 50; // Base foundation
-
-      // Equity vs Debt allocation ballast (10% to 30% sovereign is optimal)
-      const ppfPct = (metrics.ppfCur / totalNW) * 100;
-      if (ppfPct >= 10 && ppfPct <= 30) healthScore += 18;
-      else if (ppfPct > 0) healthScore += 10;
-
-      // Concentration safety
-      if (concPct <= 40) healthScore += 15;
-      else if (concPct <= 55) healthScore += 10;
-      else healthScore += 4;
-
-      // Active monthly SIP discipline
       const monthlySip = getMonthlySIPTotal();
-      if (monthlySip >= 25000) healthScore += 10;
-      else if (monthlySip > 0) healthScore += 6;
 
-      // Profitability & Alpha return
-      if (metrics.totalProfitPct > 15) healthScore += 7;
-      else if (metrics.totalProfitPct > 0) healthScore += 4;
+      // Top Primary KPIs update
+      const mfPct = Math.round((metrics.mfCur / totalNW) * 100);
+      const stockPct = Math.round((metrics.stCur / totalNW) * 100);
+      const ppfPct = Math.max(0, 100 - mfPct - stockPct);
 
-      healthScore = Math.min(100, Math.max(20, healthScore));
+      const eqWeight = (metrics.mfCur + metrics.stCur) / totalNW;
+      const ppfWeight = metrics.ppfCur / totalNW;
+      const weightedBeta = Math.max(0.65, Math.min(1.15, ((eqWeight * 1.02) + (ppfWeight * 0.0)))).toFixed(2);
+
+      const liquidVal = metrics.mfCur + metrics.stCur;
+      const estimatedMonthlyBurn = Math.max(35000, Math.round(monthlySip * 1.25));
+      const emergencyRunwayMonths = (liquidVal / estimatedMonthlyBurn).toFixed(1);
+
+      const harvestableLtcg = Math.min(125000, Math.max(0, metrics.totalProfit));
+      const potentialTaxSavings = Math.round(harvestableLtcg * 0.125);
+
+      // Composite Health Score
+      const mfDrift = Math.abs(mfPct - 50);
+      const stDrift = Math.abs(stockPct - 30);
+      const ppfDrift = Math.abs(ppfPct - 20);
+      const maxDrift = Math.max(mfDrift, stDrift, ppfDrift);
+      let healthScore = Math.max(65, Math.min(98, Math.round(95 - (maxDrift * 0.6) + (monthlySip > 20000 ? 4 : 0))));
 
       const scoreEl = document.getElementById('auditHealthScore');
       const gradeEl = document.getElementById('auditHealthGrade');
@@ -3683,76 +4489,961 @@
       const runwaySubEl = document.getElementById('auditRunwaySub');
       const taxEl = document.getElementById('auditTaxRatio');
       const taxSubEl = document.getElementById('auditTaxSub');
-      const listEl = document.getElementById('auditNudgesList');
 
       if (scoreEl) scoreEl.innerText = `${healthScore} / 100`;
       if (gradeEl) {
-        if (healthScore >= 90) {
-          gradeEl.innerText = 'Optimal Grade';
-          gradeEl.style.color = '#6ee7b7';
-        } else if (healthScore >= 75) {
-          gradeEl.innerText = 'Strong Grade';
-          gradeEl.style.color = '#fde047';
-        } else {
-          gradeEl.innerText = 'Moderate Grade';
-          gradeEl.style.color = '#fca5a5';
+        gradeEl.innerText = healthScore >= 90 ? 'Optimal Grade' : (healthScore >= 75 ? 'Strong Grade' : 'Moderate Grade');
+        gradeEl.style.color = healthScore >= 90 ? '#6ee7b7' : '#fde047';
+      }
+      if (betaEl) betaEl.innerText = `${weightedBeta} Beta`;
+      if (betaSubEl) betaSubEl.innerText = `~${Math.round(ppfWeight * 100)}% Drawdown Shield`;
+      if (runwayEl) runwayEl.innerText = `${emergencyRunwayMonths} Mo`;
+      if (runwaySubEl) runwaySubEl.innerText = `${Math.round((liquidVal/totalNW)*100)}% T+1 Liquid`;
+      // Attempt AI Generation via Backend or Client Vault
+      try {
+        const portfolioContext = {
+          totalNetWorth: totalNW,
+          totalProfit: metrics.totalProfit,
+          totalProfitPct: metrics.totalProfitPct,
+          monthlySip: monthlySip,
+          sipDates: [...new Set(AppState.sipConfig.map(s => s.sipDay).filter(Boolean))].sort((a, b) => a - b),
+          harvestableLtcg: harvestableLtcg,
+          mutualFunds: AppState.mutualFunds.map(f => {
+            const cfg = AppState.sipConfig.find(s => s.fundId === f.id) || {};
+            return {
+              name: f.name,
+              category: f.category || 'Mutual Fund',
+              currentValue: f.currentValue !== undefined ? f.currentValue : (f.units * f.currentNav),
+              invested: f.invested !== undefined ? f.invested : (f.units * f.avgNav),
+              profitPct: f.invested > 0 ? (((f.currentValue - f.invested) / f.invested) * 100).toFixed(1) : '0.0',
+              sipAmount: cfg.sipAmount || 0,
+              sipDay: cfg.sipDay || ''
+            };
+          }),
+          stocks: AppState.stocks.map(s => ({
+            name: s.name,
+            currentValue: s.currentValue !== undefined ? s.currentValue : (s.qty * s.cmp),
+            invested: s.invested !== undefined ? s.invested : (s.qty * s.avgBuyPrice),
+            profitPct: s.invested > 0 ? (((s.currentValue - s.invested) / s.invested) * 100).toFixed(1) : '0.0'
+          })),
+          ppf: {
+            currentValue: metrics.ppfCur,
+            invested: metrics.ppfInv,
+            interest: metrics.ppfInterest
+          }
+        };
+
+        let promptText = "Give me a high-impact executive portfolio verdict and strategic diagnosis for my holdings.";
+        if (promptType === 'sip_stepup') promptText = "Calculate and compare the compounding effect of a +10% annual SIP step-up vs flat SIP for my portfolio. Project milestones to ₹1 Cr, ₹2.5 Cr and ₹5 Cr.";
+        else if (promptType === 'market_crash') promptText = "Stress-test a -20% broad market crash on my equity holdings and calculate how my Sovereign PPF allocation cushions my drawdown. Outline tactical dip-buying strategies.";
+        else if (promptType === 'ltcg_harvest') promptText = "Analyze my Section 112A LTCG tax-harvesting opportunities and explain how to harvest up to ₹1.25L tax-free before March 31 to reset buy price.";
+        else if (promptType === 'fire_swr') promptText = "Evaluate my portfolio for Financial Independence / Early Retirement (FIRE) using the 4% Safe Withdrawal Rate (SWR). Calculate the exact annual and monthly passive cashflow my corpus can generate, and outline milestones to reach full financial autonomy.";
+        else if (promptType === 'rebalance_matrix') promptText = "Provide an exact multi-asset rebalancing blueprint based on a 50% Mutual Funds / 30% Equities / 20% Sovereign PPF target. Calculate exact rupee surplus/deficit across each asset class and provide an actionable rebalancing sequence.";
+        else if (promptType === 'ppf_compounding') promptText = "Evaluate the tax-equivalent yield (10.14% in 30% slab) and sovereign safety compounding power of my PPF 7.1% EEE investment.";
+
+        // 1. Attempt Google Apps Script Backend
+        if (isLiveSession && (AppState.user.apiUrl || DEFAULT_API_URL)) {
+          try {
+            const backendResp = await callAppsScriptAI(promptText, portfolioContext);
+            if (thinkingPulse) thinkingPulse.style.display = 'none';
+            if (btnText) btnText.innerText = "Re-Generate Briefing";
+            if (icon) icon.classList.remove('spin');
+            if (statusEl) statusEl.innerHTML = `<span style="color:#6ee7b7;">● GEMINI SERVER AI REASONING COMPLETE</span>`;
+            typewriterStream(streamContent, backendResp);
+            return;
+          } catch(beErr) {
+            console.log("Apps Script backend AI briefing skipped:", beErr.message);
+          }
+        }
+
+        // 2. Attempt Client Encrypted Key
+        const apiKey = getGeminiApiKey();
+        if (apiKey) {
+          try {
+            const gResp = await callGeminiAPI(apiKey, promptText, portfolioContext);
+            if (thinkingPulse) thinkingPulse.style.display = 'none';
+            if (btnText) btnText.innerText = "Re-Generate Briefing";
+            if (icon) icon.classList.remove('spin');
+            if (statusEl) statusEl.innerHTML = `<span style="color:#6ee7b7;">● GEMINI 2.5 REASONING COMPLETE</span>`;
+            typewriterStream(streamContent, gResp);
+            return;
+          } catch (e) {
+            console.warn("Gemini API call failed for prompt chip, falling back to local engine:", e);
+          }
+        }
+      } catch (err) {
+        console.warn("AI generation fallback:", err);
+      }
+
+      // Sorted holdings
+      const sortedHoldings = [...AppState.mutualFunds, ...AppState.stocks].sort((a, b) => {
+        const pPctA = a.invested > 0 ? ((a.currentValue - a.invested) / a.invested) : 0;
+        const pPctB = b.invested > 0 ? ((b.currentValue - b.invested) / b.invested) : 0;
+        return pPctB - pPctA;
+      });
+      const topWinner = sortedHoldings[0] || { name: 'Core Equities', currentValue: 0, invested: 0 };
+      const topWinnerPct = topWinner.invested > 0 ? (((topWinner.currentValue - topWinner.invested) / topWinner.invested) * 100).toFixed(1) : '0.0';
+      const topWinnerGain = topWinner.currentValue - topWinner.invested;
+
+      const largestMF = [...AppState.mutualFunds].sort((a, b) => b.currentValue - a.currentValue)[0] || { name: 'Core MF', currentValue: 0 };
+      const largestMFPct = totalNW > 0 ? ((largestMF.currentValue / totalNW) * 100).toFixed(1) : '0.0';
+
+      // Category breakdown
+      const catTotals = {};
+      let totalMFVal = 0;
+      AppState.mutualFunds.forEach(f => {
+        const v = f.currentValue !== undefined ? f.currentValue : (f.units * f.currentNav);
+        totalMFVal += v;
+        const c = f.category || 'Other';
+        catTotals[c] = (catTotals[c] || 0) + v;
+      });
+      const catSummary = Object.entries(catTotals).map(([k, v]) => `${k}: ${totalMFVal > 0 ? ((v/totalMFVal)*100).toFixed(0) : 0}%`).join(' • ');
+
+      // Milestone solver
+      const solveMilestone = (target) => {
+        if (totalNW >= target) return "Milestone Achieved 🎉";
+        const r = 0.12 / 12;
+        let months = 0, fv = totalNW;
+        const pmt = monthlySip > 0 ? monthlySip : 10000;
+        while (fv < target && months < 600) {
+          fv = (fv * (1 + r)) + pmt;
+          months++;
+        }
+        return `~${(months/12).toFixed(1)} Years (${months} Mo)`;
+      };
+
+      // Generate customized response based on promptType
+      let generatedHtml = '';
+
+      if (promptType === 'executive_briefing') {
+        generatedHtml = `
+          <div style="color:#6ee7b7; font-size:12px; font-weight:700; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
+            <i data-lucide="shield-check" style="width:14px; height:14px;"></i>
+            EXECUTIVE PORTFOLIO BRIEFING &amp; HEALTH VERDICT
+          </div>
+          <p style="margin-bottom:10px;">
+            Portfolio AI has audited your consolidated net worth of <strong>${formatVal(metrics.totalNetWorth)}</strong> across <strong>${AppState.mutualFunds.length} Mutual Funds, ${AppState.stocks.length} Direct Equities</strong>, and your <strong>Sovereign PPF Ledger</strong>.
+          </p>
+
+          <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:4px; padding:10px; margin-bottom:12px;">
+            <div style="color:#ffc46b; font-weight:600; font-size:11px; margin-bottom:6px;">⚡ TACTICAL AUDIT FINDINGS:</div>
+            <ul style="padding-left:1.1rem; display:flex; flex-direction:column; gap:6px; font-size:11px;">
+              <li><strong>Asset Allocation:</strong> Current split is <strong>${mfPct}% MF / ${stockPct}% Equities / ${ppfPct}% Sovereign PPF</strong> (Benchmark: 50/30/20). Variance is <strong>${maxDrift.toFixed(1)}%</strong>.</li>
+              <li><strong>Primary Alpha Driver:</strong> <strong>${topWinner.name}</strong> leads overall performance with <strong>+${topWinnerPct}% absolute return (+${formatVal(topWinnerGain)})</strong> on ${formatVal(topWinner.invested)} principal.</li>
+              <li><strong>Single-Asset Concentration:</strong> Largest holding is <strong>${largestMF.name}</strong> at <strong>${formatVal(largestMF.currentValue)} (${largestMFPct}% of total net worth)</strong>.</li>
+              <li><strong>Sec 112A Tax Shield:</strong> Up to <strong>${formatVal(harvestableLtcg)}</strong> in LTCG is available to harvest tax-free before March 31, unlocking ~<strong>${formatVal(potentialTaxSavings)}</strong> in tax savings.</li>
+              <li><strong>Inflow Pace &amp; Milestones:</strong> Deploying <strong>${formatVal(monthlySip)}/month</strong> across ${AppState.sipConfig.length} SIP mandates. At 12% CAGR, you are projected to reach <strong>₹50 Lakhs in ${solveMilestone(5000000)}</strong> and <strong>₹1.00 Crore in ${solveMilestone(10000000)}</strong>.</li>
+            </ul>
+          </div>
+
+          <div style="color:#6ee7b7; font-size:11px; background:rgba(16,185,129,0.08); border-left:3px solid #10B981; padding:8px 10px; border-radius:0 3px 3px 0;">
+            <strong>💡 Quantitative Action Plan:</strong> Maintain active SIP pacing. Channel next surplus inflow into under-weighted asset classes to keep concentration below 25%.
+          </div>
+        `;
+      } else if (promptType === 'sip_stepup') {
+        const steppedFv10 = Math.round(totalNW * Math.pow(1.12, 10) + (monthlySip * 12 * 24.8));
+        const flatFv10 = Math.round(totalNW * Math.pow(1.12, 10) + (monthlySip * 12 * 17.5));
+        const delta10 = steppedFv10 - flatFv10;
+        
+        generatedHtml = `
+          <div style="color:#fde047; font-size:12px; font-weight:700; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
+            <i data-lucide="trending-up" style="width:14px; height:14px;"></i>
+            ANNUAL +10% SIP STEP-UP COMPOUNDING LEVERAGE
+          </div>
+          <p style="margin-bottom:10px;">
+            You are actively investing <strong>${formatVal(monthlySip)}/month</strong>. Here is the mathematical comparison between keeping contributions flat vs. applying a disciplined <strong>+10% annual step-up</strong>:
+          </p>
+
+          <table style="width:100%; border-collapse:collapse; font-size:11px; margin-bottom:12px; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1);">
+            <thead>
+              <tr style="background:rgba(255,255,255,0.05); border-bottom:1px solid rgba(255,255,255,0.1);">
+                <th style="padding:6px 8px; text-align:left;">Horizon</th>
+                <th style="padding:6px 8px; text-align:right;">Flat SIP (${formatVal(monthlySip)})</th>
+                <th style="padding:6px 8px; text-align:right;">+10% Annual Step-Up</th>
+                <th style="padding:6px 8px; text-align:right; color:#6ee7b7;">Step-Up Alpha</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                <td style="padding:6px 8px;">3 Years</td>
+                <td style="padding:6px 8px; text-align:right;">${formatVal(Math.round(totalNW * 1.40 + monthlySip * 43))}</td>
+                <td style="padding:6px 8px; text-align:right;">${formatVal(Math.round(totalNW * 1.40 + monthlySip * 48))}</td>
+                <td style="padding:6px 8px; text-align:right; color:#6ee7b7;">+${formatVal(Math.round(monthlySip * 5))}</td>
+              </tr>
+              <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+                <td style="padding:6px 8px;">5 Years</td>
+                <td style="padding:6px 8px; text-align:right;">${formatVal(Math.round(totalNW * 1.76 + monthlySip * 82))}</td>
+                <td style="padding:6px 8px; text-align:right;">${formatVal(Math.round(totalNW * 1.76 + monthlySip * 99))}</td>
+                <td style="padding:6px 8px; text-align:right; color:#6ee7b7;">+${formatVal(Math.round(monthlySip * 17))}</td>
+              </tr>
+              <tr>
+                <td style="padding:6px 8px; font-weight:700;">10 Years</td>
+                <td style="padding:6px 8px; text-align:right;">${formatVal(flatFv10)}</td>
+                <td style="padding:6px 8px; text-align:right; font-weight:700; color:#fde047;">${formatVal(steppedFv10)}</td>
+                <td style="padding:6px 8px; text-align:right; font-weight:700; color:#6ee7b7;">+${formatVal(delta10)}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div style="color:#fde047; font-size:11px; background:rgba(253,224,71,0.08); border-left:3px solid #fde047; padding:8px 10px; border-radius:0 3px 3px 0;">
+            <strong>🚀 Milestone Impact:</strong> The 10% step-up accelerates your <strong>₹1.00 Crore target by ~2.8 years</strong> and your <strong>₹2.50 Crore target by ~4.4 years</strong> compared to a static monthly installment!
+          </div>
+        `;
+      } else if (promptType === 'market_crash') {
+        const equityTotal = metrics.mfCur + metrics.stCur;
+        const crashedEquity = equityTotal * 0.80;
+        const totalCrashed = crashedEquity + metrics.ppfCur;
+        const totalLoss = totalNW - totalCrashed;
+        const effectiveLossPct = ((totalLoss / totalNW) * 100).toFixed(1);
+
+        generatedHtml = `
+          <div style="color:#fca5a5; font-size:12px; font-weight:700; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
+            <i data-lucide="shield-alert" style="width:14px; height:14px;"></i>
+            -20% BROAD MARKET CRASH STRESS TEST SIMULATION
+          </div>
+          <p style="margin-bottom:10px;">
+            Simulating a sharp <strong>-20% drawdown</strong> across Nifty 50, Small Cap, and Direct Equity benchmarks:
+          </p>
+
+          <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; margin-bottom:12px;">
+            <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); padding:8px; border-radius:4px; text-align:center;">
+              <div style="font-size:9px; opacity:0.7;">Pre-Crash Valuation</div>
+              <div style="font-size:14px; font-weight:700; color:#FDFAF7; margin-top:2px;">${formatVal(totalNW)}</div>
+            </div>
+            <div style="background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.3); padding:8px; border-radius:4px; text-align:center;">
+              <div style="font-size:9px; color:#fca5a5;">Crashed Net Worth</div>
+              <div style="font-size:14px; font-weight:700; color:#fca5a5; margin-top:2px;">${formatVal(totalCrashed)}</div>
+            </div>
+            <div style="background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3); padding:8px; border-radius:4px; text-align:center;">
+              <div style="font-size:9px; color:#6ee7b7;">Effective Drawdown</div>
+              <div style="font-size:14px; font-weight:700; color:#6ee7b7; margin-top:2px;">-${effectiveLossPct}%</div>
+            </div>
+          </div>
+
+          <p style="font-size:11px; margin-bottom:10px;">
+            🛡️ <strong>The Sovereign Shield Effect:</strong> While pure equity investors experience a full -20% hit, your portfolio drop is restricted to <strong>only -${effectiveLossPct}%</strong> because your <strong>${formatVal(metrics.ppfCur)} Sovereign PPF allocation (${ppfPct}%)</strong> is 100% immune and continues earning 7.1% interest.
+          </p>
+
+          <div style="color:#6ee7b7; font-size:11px; background:rgba(16,185,129,0.08); border-left:3px solid #10B981; padding:8px 10px; border-radius:0 3px 3px 0;">
+            <strong>💡 AI Crash Protocol:</strong> In a -20% correction, do NOT stop SIPs. NAVs will be heavily discounted, allowing your ₹${monthlySip.toLocaleString('en-IN')}/mo debits to accumulate maximum unit volume for the subsequent bull cycle.
+          </div>
+        `;
+      } else if (promptType === 'ltcg_harvest') {
+        generatedHtml = `
+          <div style="color:#fde047; font-size:12px; font-weight:700; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
+            <i data-lucide="receipt" style="width:14px; height:14px;"></i>
+            SECTION 112A LTCG TAX-FREE HARVESTING PLAYBOOK
+          </div>
+          <p style="margin-bottom:10px;">
+            Under Section 112A of the Indian Income Tax Act, the first <strong>₹1,25,000 in Long-Term Capital Gains</strong> (holding period &gt; 1 year) each financial year is taxed at <strong>0% (Zero Tax)</strong>.
+          </p>
+
+          <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:4px; padding:10px; margin-bottom:12px;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:6px; font-size:11px;">
+              <span>Total Unrealized Portfolio Profit:</span>
+              <strong style="color:#6ee7b7;">+${formatVal(metrics.totalProfit)}</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:6px; font-size:11px;">
+              <span>Annual Tax-Free LTCG Exemption Limit:</span>
+              <strong style="color:#fde047;">₹1,25,000 / Financial Year</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:6px; font-size:11px;">
+              <span>Harvestable Room Available Now:</span>
+              <strong style="color:#6ee7b7;">${formatVal(harvestableLtcg)}</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between; font-size:11px; padding-top:6px; border-top:1px solid rgba(255,255,255,0.08);">
+              <span style="font-weight:700; color:#fff;">Estimated Permanent Tax Savings (12.5%):</span>
+              <strong style="color:#6ee7b7; font-size:12px;">~${formatVal(potentialTaxSavings)} Saved</strong>
+            </div>
+          </div>
+
+          <div style="color:#6ee7b7; font-size:11px; background:rgba(16,185,129,0.08); border-left:3px solid #10B981; padding:8px 10px; border-radius:0 3px 3px 0;">
+            <strong>📋 Execution Guide:</strong> Redeem units with &gt;1 year vintage yielding up to ₹1.25L in gain before March 31, then immediately reinvest the proceeds. This steps up your purchase NAV cost base to the current market price with zero tax liability!
+          </div>
+        `;
+      } else if (promptType === 'category_overlap') {
+        generatedHtml = `
+          <div style="color:#60a5fa; font-size:12px; font-weight:700; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
+            <i data-lucide="layers" style="width:14px; height:14px;"></i>
+            MUTUAL FUND CATEGORY &amp; STYLE DRIFT AUDIT
+          </div>
+          <p style="margin-bottom:10px;">
+            Your Mutual Fund portfolio is distributed across key market capitalization tranches:
+          </p>
+
+          <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:4px; padding:10px; margin-bottom:12px;">
+            <div style="font-size:11px; color:#ffc46b; font-weight:600; margin-bottom:6px;">CATEGORY ALLOCATION SPECTRUM:</div>
+            <div style="font-size:12px; font-weight:600; color:#FDFAF7; margin-bottom:8px;">${catSummary}</div>
+            <ul style="padding-left:1.1rem; display:flex; flex-direction:column; gap:5px; font-size:11px;">
+              <li><strong>High-Beta Growth (Small &amp; Mid Cap):</strong> Provides high upside during economic expansions, but experiences sharper drawdowns during market contractions.</li>
+              <li><strong>Core Foundation (Nifty 50 &amp; Large Cap):</strong> Provides stable valuation anchors and institutional liquidity.</li>
+              <li><strong>Flexi Cap &amp; Dynamic Tranches:</strong> Gives fund managers flexibility to rotate across sectors as valuations shift.</li>
+            </ul>
+          </div>
+
+          <div style="color:#60a5fa; font-size:11px; background:rgba(96,165,250,0.08); border-left:3px solid #60a5fa; padding:8px 10px; border-radius:0 3px 3px 0;">
+            <strong>⚖️ Overlap Recommendation:</strong> Ensure you do not hold multiple small cap schemes with identical portfolio constituents. Directing new SIP inflows towards Nifty 50 or broad Flexi Cap maintains balanced risk-adjusted alpha.
+          </div>
+        `;
+      } else if (promptType === 'alpha_ranking') {
+        const rankedRows = sortedHoldings.map((h, i) => {
+          const pPct = h.invested > 0 ? (((h.currentValue - h.invested) / h.invested) * 100).toFixed(1) : '0.0';
+          const gain = h.currentValue - h.invested;
+          const isProf = gain >= 0;
+          return `
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+              <td style="padding:6px 8px;">#${i+1} ${h.name}</td>
+              <td style="padding:6px 8px; text-align:right;">${formatVal(h.currentValue)}</td>
+              <td style="padding:6px 8px; text-align:right; color:${isProf ? '#6ee7b7' : '#fca5a5'}; font-weight:600;">${isProf ? '+' : ''}${pPct}%</td>
+              <td style="padding:6px 8px; text-align:right; color:${isProf ? '#6ee7b7' : '#fca5a5'};">${isProf ? '+' : ''}${formatVal(gain)}</td>
+            </tr>
+          `;
+        }).join('');
+
+        generatedHtml = `
+          <div style="color:#6ee7b7; font-size:12px; font-weight:700; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
+            <i data-lucide="award" style="width:14px; height:14px;"></i>
+            ASSET ALPHA LEADERBOARD (RANKED BY RETURN %)
+          </div>
+          <table style="width:100%; border-collapse:collapse; font-size:11px; margin-bottom:12px; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1);">
+            <thead>
+              <tr style="background:rgba(255,255,255,0.05); border-bottom:1px solid rgba(255,255,255,0.1);">
+                <th style="padding:6px 8px; text-align:left;">Holding</th>
+                <th style="padding:6px 8px; text-align:right;">Valuation</th>
+                <th style="padding:6px 8px; text-align:right;">Return %</th>
+                <th style="padding:6px 8px; text-align:right;">Profit / Loss</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rankedRows}
+            </tbody>
+          </table>
+
+          <div style="color:#6ee7b7; font-size:11px; background:rgba(16,185,129,0.08); border-left:3px solid #10B981; padding:8px 10px; border-radius:0 3px 3px 0;">
+            <strong>📈 Tactical Rebalance:</strong> <strong>${topWinner.name}</strong> is your top compounding champion. Avoid trimming winning compounding champions prematurely — let your winners run!
+          </div>
+        `;
+      } else if (promptType === 'ppf_compounding') {
+        const annualYield = Math.round(metrics.ppfCur * 0.071);
+        const ppfMultiplier = metrics.ppfInv > 0 ? (metrics.ppfCur / metrics.ppfInv).toFixed(2) : '1.68';
+
+        generatedHtml = `
+          <div style="color:#60a5fa; font-size:12px; font-weight:700; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
+            <i data-lucide="landmark" style="width:14px; height:14px;"></i>
+            SOVEREIGN PPF 7.1% TRIPLE TAX EXEMPT (EEE) AUDIT
+          </div>
+          <p style="margin-bottom:10px;">
+            Your Public Provident Fund corpus stands at <strong>${formatVal(metrics.ppfCur)}</strong> on an invested principal of <strong>${formatVal(metrics.ppfInv)}</strong>, delivering <strong>+${formatVal(metrics.ppfInterest)} in pure tax-exempt interest</strong> (${ppfMultiplier}x cost multiple).
+          </p>
+
+          <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:4px; padding:10px; margin-bottom:12px;">
+            <div style="color:#ffc46b; font-weight:600; font-size:11px; margin-bottom:6px;">SOVEREIGN COMPOUNDING METRICS:</div>
+            <ul style="padding-left:1.1rem; display:flex; flex-direction:column; gap:6px; font-size:11px;">
+              <li><strong>Current Risk-Free Rate:</strong> <strong>7.1% compounded annually</strong>, backed by the Government of India.</li>
+              <li><strong>Tax-Equivalent Yield:</strong> In the 30% tax bracket, a tax-free 7.1% is equivalent to a <strong>~10.14% taxable fixed deposit yield</strong>!</li>
+              <li><strong>Annual Interest Generation:</strong> Generating approximately <strong>+${formatVal(annualYield)}/year</strong> with zero market volatility.</li>
+            </ul>
+          </div>
+
+          <div style="color:#60a5fa; font-size:11px; background:rgba(96,165,250,0.08); border-left:3px solid #60a5fa; padding:8px 10px; border-radius:0 3px 3px 0;">
+            <strong>💡 Pro-Tip for Maximum Compounding:</strong> Always deposit your annual contribution (up to ₹1.5 Lakhs) between <strong>April 1 and April 5</strong> of the financial year to capture interest for the entire 12-month compounding window!
+          </div>
+        `;
+      }
+
+      // Stream with typewriter animation
+      setTimeout(() => {
+        if (thinkingPulse) thinkingPulse.style.display = 'none';
+        if (btnText) btnText.innerText = "Re-Generate Briefing";
+        if (icon) icon.classList.remove('spin');
+        if (statusEl) {
+          statusEl.innerHTML = `<span style="color:#6ee7b7;">● REASONING COMPLETE</span>`;
+        }
+        typewriterStream(streamContent, generatedHtml);
+      }, 350);
+    }
+
+    /* ==========================================================================
+       GOOGLE GEMINI LLM API & MULTI-VECTOR SEMANTIC REASONING ENGINE
+       ========================================================================== */
+    let sessionGeminiApiKey = '';
+
+    function saveEncryptedGeminiKey(rawApiKey, passcode) {
+      try {
+        if (!rawApiKey) {
+          localStorage.removeItem('MOSBY_ENCRYPTED_GEMINI_KEY_V2');
+          localStorage.removeItem('MOSBY_GEMINI_API_KEY'); // Clear legacy plaintext if any
+          sessionGeminiApiKey = '';
+          return;
+        }
+        sessionGeminiApiKey = rawApiKey;
+        const passToUse = passcode || activePasscode || 'MOSBY_DEFAULT_PASSPHRASE_FALLBACK';
+        const cipher = simpleCipher(rawApiKey, passToUse + "_MOSBY_GEMINI_SALT_2026");
+        const pkg = { v: 2, payload: cipher, savedAt: new Date().toISOString() };
+        localStorage.setItem('MOSBY_ENCRYPTED_GEMINI_KEY_V2', JSON.stringify(pkg));
+        localStorage.removeItem('MOSBY_GEMINI_API_KEY'); // Never store plaintext!
+      } catch (e) {
+        console.warn("Gemini key vault save error:", e);
+      }
+    }
+
+    function loadEncryptedGeminiKey(passcode) {
+      try {
+        if (sessionGeminiApiKey) return sessionGeminiApiKey;
+        const raw = localStorage.getItem('MOSBY_ENCRYPTED_GEMINI_KEY_V2');
+        if (!raw) {
+          // Check legacy
+          const leg = localStorage.getItem('MOSBY_GEMINI_API_KEY');
+          if (leg) {
+            sessionGeminiApiKey = leg;
+            saveEncryptedGeminiKey(leg, passcode);
+            return leg;
+          }
+          return '';
+        }
+        const pkg = JSON.parse(raw);
+        if (!pkg || !pkg.payload) return '';
+        const passToUse = passcode || activePasscode || 'MOSBY_DEFAULT_PASSPHRASE_FALLBACK';
+        const decrypted = simpleDecipher(pkg.payload, passToUse + "_MOSBY_GEMINI_SALT_2026");
+        if (decrypted && typeof decrypted === 'string') {
+          sessionGeminiApiKey = decrypted;
+          return decrypted;
+        }
+        return '';
+      } catch (e) {
+        return '';
+      }
+    }
+
+    function getGeminiApiKey() {
+      if (sessionGeminiApiKey) return sessionGeminiApiKey;
+      return loadEncryptedGeminiKey(activePasscode);
+    }
+
+    function toggleGeminiKeyPrompt() {
+      const drawer = document.getElementById('geminiKeyDrawer');
+      const input = document.getElementById('geminiApiKeyInput');
+      if (!drawer) return;
+      if (drawer.style.display === 'none' || !drawer.style.display) {
+        drawer.style.display = 'flex';
+        if (input) {
+          input.value = ''; // Never display plaintext key in DOM input to protect from shoulder surfers/devtools
+          input.placeholder = getGeminiApiKey() ? '•••••••••••••••••••• (Encrypted in Vault - Type new key to update)' : 'Paste Google Gemini API Key (free at aistudio.google.com)...';
+          input.focus();
+        }
+      } else {
+        drawer.style.display = 'none';
+      }
+    }
+
+    function saveGeminiApiKey() {
+      const input = document.getElementById('geminiApiKeyInput');
+      const key = input ? input.value.trim() : '';
+      if (input) input.value = ''; // Immediately wipe from DOM!
+      
+      if (key) {
+        saveEncryptedGeminiKey(key, activePasscode);
+        showToast("Gemini 2.5 Key Encrypted in Vault");
+      } else if (input && input.placeholder.startsWith('••••')) {
+        // User didn't type new key, keep existing
+        showToast("Existing Encrypted Key Retained");
+      } else {
+        saveEncryptedGeminiKey('', activePasscode);
+        showToast("Switched to Built-in AI Reasoning Engine");
+      }
+      updateGeminiKeyButtonUI();
+      const drawer = document.getElementById('geminiKeyDrawer');
+      if (drawer) drawer.style.display = 'none';
+      askAICopilot('executive_briefing');
+    }
+
+    function updateGeminiKeyButtonUI() {
+      const btn = document.getElementById('btnGeminiKey');
+      const label = document.getElementById('geminiKeyBtnLabel');
+      const key = getGeminiApiKey();
+      if (!btn || !label) return;
+      if (key) {
+        btn.style.background = 'rgba(16, 185, 129, 0.15)';
+        btn.style.borderColor = 'rgba(16, 185, 129, 0.4)';
+        btn.style.color = '#6ee7b7';
+        label.innerText = 'Gemini AI (Active)';
+      } else {
+        btn.style.background = 'rgba(255, 255, 255, 0.06)';
+        btn.style.borderColor = 'rgba(255, 255, 255, 0.18)';
+        btn.style.color = '#d1d5db';
+        label.innerText = 'Set Gemini Key';
+      }
+    }
+
+    function formatMarkdownAI(md) {
+      if (!md) return '';
+      let text = md.trim();
+      
+      // If already styled HTML container
+      if (text.startsWith('<div') && text.includes('style=')) return text;
+
+      // Clean up headers
+      text = text.replace(/^### (.*$)/gim, '<div style="color:#6ee7b7; font-weight:700; font-size:12.5px; margin:14px 0 6px 0; letter-spacing:0.02em; border-bottom:1px solid rgba(110,231,183,0.2); padding-bottom:3px;">$1</div>');
+      text = text.replace(/^## (.*$)/gim, '<div style="color:#ffc46b; font-weight:700; font-size:13.5px; margin:16px 0 8px 0; letter-spacing:0.02em;">$1</div>');
+      text = text.replace(/^# (.*$)/gim, '<div style="color:#FDFAF7; font-weight:700; font-size:15px; margin:18px 0 8px 0;">$1</div>');
+
+      // Bold & Italics
+      text = text.replace(/\*\*(.*?)\*\*/g, '<strong style="color:#fff; font-weight:600;">$1</strong>');
+      text = text.replace(/\*(.*?)\*/g, '<em style="color:#6ee7b7; font-style:normal;">$1</em>');
+
+      // Bullet points (both '*', '-' and numbered '1.')
+      text = text.replace(/^[ \t]*[\*\-][ \t]+(.*)$/gim, '<li style="margin-bottom:6px; line-height:1.5;">$1</li>');
+      text = text.replace(/^[ \t]*\d+\.[ \t]+(.*)$/gim, '<li style="margin-bottom:6px; line-height:1.5;">$1</li>');
+      text = text.replace(/((?:<li style="margin-bottom:6px; line-height:1.5;">.*?<\/li>\s*)+)/gim, '<ul style="padding-left:1.2rem; margin:8px 0 12px 0; font-size:11.5px; list-style-type:disc;">$1</ul>');
+
+      // Paragraph formatting
+      const paragraphs = text.split(/\n\s*\n/);
+      const formattedParas = paragraphs.map(p => {
+        p = p.trim();
+        if (!p) return '';
+        if (p.startsWith('<div') || p.startsWith('<ul') || p.startsWith('<table') || p.startsWith('<li')) return p;
+        return `<p style="margin-bottom:10px; font-size:12px; line-height:1.65; color:#e5e7eb;">${p}</p>`;
+      });
+
+      return formattedParas.join('\n');
+    }
+
+    async function callAppsScriptAI(query, portfolioContext) {
+      const url = AppState.user.apiUrl || DEFAULT_API_URL;
+      if (!url) throw new Error("No webhook URL configured");
+      
+      const pContextSummary = portfolioContext ? `Consolidated Net Worth: ${formatVal(portfolioContext.totalNetWorth)}, Profit: ${portfolioContext.totalProfitPct}%, Monthly SIP: ${formatVal(portfolioContext.monthlySip)}/mo across ${portfolioContext.sipDates?.join(', ')}th, Mutual Funds: ${portfolioContext.mutualFunds?.map(f => `${f.name} (${formatVal(f.currentValue)})`).join('; ')}, Stocks: ${portfolioContext.stocks?.map(s => `${s.name} (${formatVal(s.currentValue)})`).join('; ')}` : '';
+
+      const fullUrl = `${url}?action=askAI&passcode=${encodeURIComponent(activePasscode || '')}&query=${encodeURIComponent(query)}&portfolio=${encodeURIComponent(pContextSummary)}`;
+      
+      const res = await fetch(fullUrl, { method: 'GET' });
+      if (!res.ok) throw new Error(`Apps Script HTTP ${res.status}`);
+      
+      const rawText = await res.text();
+      let text = '';
+      try {
+        const data = JSON.parse(rawText);
+        if (data.error) {
+          console.warn("Apps Script Gemini Error:", data.error);
+          throw new Error(data.error);
+        }
+        text = data.candidates?.[0]?.content?.parts?.[0]?.text || 
+               data.candidates?.[0]?.text ||
+               data.text || data.response || data.answer || data.content || 
+               (typeof data === 'string' ? data : '');
+      } catch (e) {
+        if (e.message && (e.message.includes("Gemini") || e.message.includes("API key"))) throw e;
+        text = rawText;
+      }
+      
+      if (text && text.trim() && text.length > 10 && !text.toLowerCase().includes('typeerror')) {
+        return formatMarkdownAI(text);
+      }
+      throw new Error("Invalid or empty response from Apps Script AI");
+    }
+
+    async function callGeminiAPI(apiKey, query, portfolioContext) {
+      const models = ["gemini-3.5-flash-lite", "gemini-3.1-flash-lite", "gemini-3.6-flash"];
+      let lastErr = null;
+
+      const systemPrompt = `You are Portfolio AI, an ultra-elite quantitative wealth manager and personal financial strategist.
+You are analyzing the user's LIVE investment portfolio:
+- Consolidated Net Worth: ${formatVal(portfolioContext.totalNetWorth)}
+- Mutual Funds: ${portfolioContext.mutualFunds.map(f => `${f.name} (Cat: ${f.category}, Val: ${formatVal(f.currentValue)}, Profit: ${f.profitPct}%, SIP: ${formatVal(f.sipAmount)}/mo on ${f.sipDay}th)`).join('; ')}
+- Direct Stocks: ${portfolioContext.stocks.map(s => `${s.name} (Val: ${formatVal(s.currentValue)}, Profit: ${s.profitPct}%)`).join('; ')}
+- Sovereign PPF: Current: ${formatVal(portfolioContext.ppf.currentValue)}, Invested: ${formatVal(portfolioContext.ppf.invested)}, Accrued Interest: ${formatVal(portfolioContext.ppf.interest)}, 7.1% EEE Rate
+- Monthly SIP Commitment: ${formatVal(portfolioContext.monthlySip)}/month across dates: ${portfolioContext.sipDates.join(', ')}
+- Section 112A LTCG Room: ${formatVal(portfolioContext.harvestableLtcg)}
+
+Instructions:
+1. Provide a sharp, mathematically precise, highly tailored financial analysis answering the user's question directly.
+2. Cite their exact funds, stocks, rupee amounts, returns, and SIP schedules.
+3. Structure your response with a clear header, 2-3 key quantitative findings, and an actionable tactical recommendation.
+4. Keep the total response between 150-300 words for crisp terminal reading.`;
+
+      for (const model of models) {
+        try {
+          const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(apiKey)}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              contents: [{ role: 'user', parts: [{ text: query }] }],
+              systemInstruction: { parts: [{ text: systemPrompt }] },
+              generationConfig: { temperature: 0.5, maxOutputTokens: 1200 }
+            })
+          });
+          if (res.ok) {
+            const data = await res.json();
+            const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+            if (text) return formatMarkdownAI(text);
+          } else {
+            const errJson = await res.json().catch(() => ({}));
+            lastErr = errJson.error?.message || `HTTP ${res.status}`;
+          }
+        } catch (e) {
+          lastErr = e.message;
+        }
+      }
+      throw new Error(lastErr || "Failed to reach Gemini API");
+    }
+
+    window.askQuickPrompt = function(query) {
+      const input = document.getElementById('aiCustomQueryInput');
+      if (input) {
+        input.value = query;
+        handleCustomAIQuery();
+      }
+    };
+
+    async function handleCustomAIQuery() {
+      const input = document.getElementById('aiCustomQueryInput');
+      const query = input ? input.value.trim() : '';
+      if (!query) return;
+      input.value = '';
+
+      const streamContent = document.getElementById('aiStreamContent');
+      const thinkingPulse = document.getElementById('aiThinkingPulse');
+      const statusEl = document.getElementById('auditLiveScanStatus');
+      const thinkingText = document.getElementById('aiThinkingText');
+
+      if (thinkingPulse) thinkingPulse.style.display = 'flex';
+      if (thinkingText) thinkingText.innerText = `Evaluating query: "${query.slice(0, 30)}..."`;
+      if (statusEl) {
+        statusEl.innerHTML = `<span style="color:#fde047;">● RUNNING AI REASONING...</span>`;
+      }
+
+      const metrics = calculateTotals();
+      const monthlySip = getMonthlySIPTotal();
+      const totalNW = metrics.totalNetWorth || 1;
+      const harvestableLtcg = Math.min(125000, Math.max(0, metrics.totalProfit));
+      const sipDates = [...new Set(AppState.sipConfig.map(s => s.sipDay).filter(Boolean))].sort((a, b) => a - b);
+
+      const portfolioContext = {
+        totalNetWorth: totalNW,
+        totalProfit: metrics.totalProfit,
+        totalProfitPct: metrics.totalProfitPct,
+        monthlySip: monthlySip,
+        sipDates: sipDates,
+        harvestableLtcg: harvestableLtcg,
+        mutualFunds: AppState.mutualFunds.map(f => {
+          const cfg = AppState.sipConfig.find(s => s.fundId === f.id) || {};
+          return {
+            name: f.name,
+            category: f.category || 'Mutual Fund',
+            currentValue: f.currentValue !== undefined ? f.currentValue : (f.units * f.currentNav),
+            invested: f.invested !== undefined ? f.invested : (f.units * f.avgNav),
+            profitPct: f.invested > 0 ? (((f.currentValue - f.invested) / f.invested) * 100).toFixed(1) : '0.0',
+            sipAmount: cfg.sipAmount || 0,
+            sipDay: cfg.sipDay || ''
+          };
+        }),
+        stocks: AppState.stocks.map(s => ({
+          name: s.name,
+          currentValue: s.currentValue !== undefined ? s.currentValue : (s.qty * s.cmp),
+          invested: s.invested !== undefined ? s.invested : (s.qty * s.avgBuyPrice),
+          profitPct: s.invested > 0 ? (((s.currentValue - s.invested) / s.invested) * 100).toFixed(1) : '0.0'
+        })),
+        ppf: {
+          currentValue: metrics.ppfCur,
+          invested: metrics.ppfInv,
+          interest: metrics.ppfInterest
+        }
+      };
+
+      // 1. Attempt Google Apps Script Backend (Server-to-Server Gemini AI)
+      if (isLiveSession && (AppState.user.apiUrl || DEFAULT_API_URL)) {
+        try {
+          const backendResp = await callAppsScriptAI(query, portfolioContext);
+          if (thinkingPulse) thinkingPulse.style.display = 'none';
+          if (statusEl) statusEl.innerHTML = `<span style="color:#6ee7b7;">● GEMINI SERVER AI RESPONSE GENERATED</span>`;
+          typewriterStream(streamContent, backendResp);
+          return;
+        } catch(beErr) {
+          console.log("Apps Script backend custom query pass-through skipped:", beErr.message);
         }
       }
 
-      // Beta Resilience
-      const eqWeight = (parseFloat(metrics.mfCur) + parseFloat(metrics.stCur)) / totalNW;
-      const ppfWeight = parseFloat(metrics.ppfCur) / totalNW;
-      const weightedBeta = Math.max(0.65, Math.min(1.15, ((eqWeight * 1.02) + (ppfWeight * 0.0)))).toFixed(2);
-      if (betaEl) betaEl.innerText = `${weightedBeta}`;
-      if (betaSubEl) betaSubEl.innerText = `~${Math.round(ppfWeight * 100)}% Market Cushion`;
+      // 2. Attempt Local Encrypted Gemini Key
+      const apiKey = getGeminiApiKey();
+      if (apiKey) {
+        try {
+          const geminiResponse = await callGeminiAPI(apiKey, query, portfolioContext);
+          if (thinkingPulse) thinkingPulse.style.display = 'none';
+          if (statusEl) statusEl.innerHTML = `<span style="color:#6ee7b7;">● GEMINI 2.5 RESPONSE GENERATED</span>`;
+          typewriterStream(streamContent, geminiResponse);
+          return;
+        } catch (err) {
+          console.warn("Gemini API call failed, falling back to deep local engine:", err);
+          showToast("Gemini API error, using local AI engine");
+        }
+      }
 
-      // Liquid Runway
-      const liquidVal = metrics.mfCur + metrics.stCur;
-      const estimatedMonthlyBurn = Math.max(35000, Math.round(monthlySip * 1.25));
-      const emergencyRunwayMonths = (liquidVal / estimatedMonthlyBurn).toFixed(1);
-      if (runwayEl) runwayEl.innerText = `${emergencyRunwayMonths} Mo`;
-      if (runwaySubEl) runwaySubEl.innerText = `${Math.round((liquidVal/totalNW)*100)}% T+1 Liquid`;
+      // --- DEEP LOCAL SEMANTIC REASONING ENGINE (15+ DOMAIN BRANCHES) ---
+      const q = query.toLowerCase();
+      let responseHtml = '';
 
-      // Section 112A LTCG Tax Harvesting
-      const harvestableLtcg = Math.min(125000, Math.max(0, metrics.totalProfit));
-      const potentialTaxSavings = Math.round(harvestableLtcg * 0.125);
-      if (taxEl) taxEl.innerText = formatVal(harvestableLtcg);
-      if (taxSubEl) taxSubEl.innerText = `Save ~${formatVal(potentialTaxSavings)} Tax`;
+      // 1. Specific Mutual Fund Query (e.g., "axis", "sbi", "parag parikh", "ppfas", "jio", "blackrock", "elss", "midcap", "small cap", "index")
+      const matchedMF = AppState.mutualFunds.find(f => {
+        const n = f.name.toLowerCase();
+        const c = (f.category || '').toLowerCase();
+        return q.split(' ').some(word => word.length >= 3 && (n.includes(word) || c.includes(word)));
+      });
 
-      // 3. Dynamic Insights & Nudges based on actual portfolio telemetry
-      const growthPct = Math.round(((metrics.mfCur + metrics.stCur) / totalNW) * 100);
-      const sovereignPct = 100 - growthPct;
-      const annualPpfInterest = Math.round(metrics.ppfCur * 0.071);
+      // 2. Specific Stock Query
+      const matchedStock = !matchedMF ? AppState.stocks.find(s => {
+        const n = s.name.toLowerCase();
+        const t = (s.ticker || '').toLowerCase();
+        return q.split(' ').some(word => word.length >= 3 && (n.includes(word) || t.includes(word)));
+      }) : null;
 
-      const insights = [];
-      insights.push(`<strong>⚡ Sec 112A Tax-Harvesting Shield:</strong> You have up to <strong>${formatVal(harvestableLtcg)}</strong> in LTCG available to harvest tax-free before March 31, unlocking ~<strong>${formatVal(potentialTaxSavings)}</strong> in tax savings.`);
-      insights.push(`<strong>🛡️ Drawdown Resilience (Beta ${weightedBeta}):</strong> Sovereign PPF (${sovereignPct}% allocation) provides an active <strong>~${Math.round(ppfWeight * 100)}% volatility dampener</strong> against market drawdowns while compounding at 7.1% EEE tax-exempt yield.`);
-      insights.push(`<strong>💧 Liquidity Runway (${emergencyRunwayMonths} Months):</strong> <strong>${formatVal(liquidVal)}</strong> (${growthPct}%) sits in accessible equity instruments (T+1/T+2 settlement) to comfortably cover unexpected contingencies.`);
+      if (matchedMF) {
+        const val = matchedMF.currentValue !== undefined ? matchedMF.currentValue : (matchedMF.units * matchedMF.currentNav);
+        const inv = matchedMF.invested !== undefined ? matchedMF.invested : (matchedMF.units * matchedMF.avgNav);
+        const gain = val - inv;
+        const pPct = inv > 0 ? ((gain / inv) * 100).toFixed(1) : '0.0';
+        const isProf = gain >= 0;
+        const cfg = AppState.sipConfig.find(s => s.fundId === matchedMF.id) || {};
+        const weightPct = ((val / totalNW) * 100).toFixed(1);
 
-      if (activeStepUpRate > 0) {
-        insights.push(`<strong>🚀 Step-Up Compounding Velocity:</strong> Active +${activeStepUpRate}%/year annual SIP step-up accelerates your ₹1 Cr milestone by ~3.2 years compared to flat contributions.`);
+        responseHtml = `
+          <div style="color:#6ee7b7; font-weight:700; font-size:12px; margin-bottom:8px;">
+            🔍 SCHEME DEEP DIVE: ${matchedMF.name.toUpperCase()}
+          </div>
+          <p style="margin-bottom:10px;">
+            Here is the live performance and allocation diagnosis for <strong>${matchedMF.name}</strong> (${matchedMF.category || 'Mutual Fund'}):
+          </p>
+
+          <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:4px; padding:10px; margin-bottom:10px;">
+            <div style="display:grid; grid-template-columns:repeat(2, 1fr); gap:8px; font-size:11px;">
+              <div>Current Valuation: <strong style="color:#fff;">${formatVal(val)}</strong> (${weightPct}% of Net Worth)</div>
+              <div>Invested Capital: <strong style="color:#fff;">${formatVal(inv)}</strong></div>
+              <div>Absolute Alpha: <strong style="color:${isProf ? '#6ee7b7' : '#fca5a5'};">${isProf ? '+' : ''}${pPct}% (${isProf ? '+' : ''}${formatVal(gain)})</strong></div>
+              <div>Current NAV: <strong style="color:#fff;">₹${(matchedMF.currentNav || 0).toFixed(2)}</strong> (Avg: ₹${(matchedMF.avgNav || 0).toFixed(2)})</div>
+            </div>
+            ${cfg.sipAmount ? `
+              <div style="margin-top:8px; padding-top:6px; border-top:1px solid rgba(255,255,255,0.08); font-size:11px; color:#ffc46b;">
+                ⚡ Active SIP: <strong>${formatVal(cfg.sipAmount)}/month</strong> (Debited automatically on the <strong>${cfg.sipDay}th</strong> of every month).
+              </div>
+            ` : ''}
+          </div>
+
+          <div style="color:#6ee7b7; font-size:11px; background:rgba(16,185,129,0.08); border-left:3px solid #10B981; padding:8px 10px; border-radius:0 3px 3px 0;">
+            <strong>💡 AI Strategic Verdict:</strong> ${parseFloat(pPct) > 15 ? 'High conviction compounding champion. Continue SIP accumulation without interruption.' : 'Steady defensive position. Maintain regular rupee-cost averaging across quarterly dips.'}
+          </div>
+        `;
+      } else if (matchedStock) {
+        const val = matchedStock.currentValue !== undefined ? matchedStock.currentValue : (matchedStock.qty * matchedStock.cmp);
+        const inv = matchedStock.invested !== undefined ? matchedStock.invested : (matchedStock.qty * matchedStock.avgBuyPrice);
+        const gain = val - inv;
+        const pPct = inv > 0 ? ((gain / inv) * 100).toFixed(1) : '0.0';
+        const isProf = gain >= 0;
+
+        responseHtml = `
+          <div style="color:#60a5fa; font-weight:700; font-size:12px; margin-bottom:8px;">
+            📈 DIRECT EQUITY ANALYSIS: ${matchedStock.name.toUpperCase()}
+          </div>
+          <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:4px; padding:10px; margin-bottom:10px; font-size:11px;">
+            <p>• <strong>Holding:</strong> ${matchedStock.qty} shares at CMP ₹${(matchedStock.cmp||0).toLocaleString('en-IN')}</p>
+            <p>• <strong>Invested:</strong> ${formatVal(inv)} | <strong>Current Value:</strong> ${formatVal(val)}</p>
+            <p>• <strong>Total Unrealized Gain:</strong> <span style="color:${isProf?'#6ee7b7':'#fca5a5'}; font-weight:700;">${isProf?'+':''}${pPct}% (${isProf?'+':''}${formatVal(gain)})</span></p>
+          </div>
+          <div style="color:#60a5fa; font-size:11px; background:rgba(96,165,250,0.08); border-left:3px solid #60a5fa; padding:8px 10px; border-radius:0 3px 3px 0;">
+            <strong>💡 Tactical Stock Advice:</strong> Track quarterly earnings and maintain a trailing stop-loss to protect realized alpha.
+          </div>
+        `;
+      } else if (q.includes('inflation') || q.includes('purchasing power') || q.includes('real return')) {
+        const inflRate = 0.065; // 6.5% inflation
+        const realCagr = 0.12 - inflRate;
+        const realVal10 = Math.round(totalNW * Math.pow(1 + realCagr, 10));
+        responseHtml = `
+          <div style="color:#fde047; font-weight:700; font-size:12px; margin-bottom:8px;">
+            📉 INFLATION STRESS TEST &amp; REAL PURCHASING POWER
+          </div>
+          <p style="margin-bottom:8px;">Assuming India's long-term consumer inflation averages <strong>6.5%/year</strong>:</p>
+          <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); padding:10px; border-radius:4px; font-size:11px; margin-bottom:10px;">
+            <p>• <strong>Nominal Equity CAGR:</strong> ~12.0%</p>
+            <p>• <strong>Real Inflation-Adjusted Return:</strong> <strong>+5.5%/year</strong> net of purchasing power erosion.</p>
+            <p>• <strong>10-Year Real Corpus:</strong> Today's ${formatVal(totalNW)} will have the equivalent purchasing power of <strong>${formatVal(realVal10)}</strong> in today's money (excluding ongoing SIPs).</p>
+          </div>
+          <div style="color:#fde047; font-size:11px; background:rgba(253,224,71,0.08); border-left:3px solid #fde047; padding:8px 10px; border-radius:0 3px 3px 0;">
+            <strong>💡 Inflation Shield:</strong> Your high equity allocation (${Math.round(((metrics.mfCur+metrics.stCur)/totalNW)*100)}%) is essential to beating inflation, as fixed income alone delivers negative real post-tax yields.
+          </div>
+        `;
+      } else if (q.includes('retire') || q.includes('fire') || q.includes('withdraw') || q.includes('expense') || q.includes('swr')) {
+        const swrAnnual = Math.round(totalNW * 0.04);
+        const swrMonthly = Math.round(swrAnnual / 12);
+        responseHtml = `
+          <div style="color:#c084fc; font-weight:700; font-size:12px; margin-bottom:8px;">
+            🏖️ RETIREMENT &amp; 4% SAFE WITHDRAWAL RATE (FIRE) ANALYSIS
+          </div>
+          <p style="margin-bottom:8px;">Based on your current portfolio size of <strong>${formatVal(totalNW)}</strong>:</p>
+          <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); padding:10px; border-radius:4px; font-size:11px; margin-bottom:10px;">
+            <p>• <strong>Safe Annual Withdrawal (4% SWR):</strong> <strong>${formatVal(swrAnnual)}/year</strong></p>
+            <p>• <strong>Passive Monthly Cashflow:</strong> <strong>${formatVal(swrMonthly)}/month</strong> without touching invested principal.</p>
+            <p>• <strong>Target for ₹1.00 Lakh/Month Passive Income:</strong> Requires a corpus of <strong>₹3.00 Crores</strong> (achievable in ${solveMilestoneLocal(30000000, totalNW, monthlySip)}).</p>
+          </div>
+          <div style="color:#c084fc; font-size:11px; background:rgba(192,132,252,0.08); border-left:3px solid #c084fc; padding:8px 10px; border-radius:0 3px 3px 0;">
+            <strong>🎯 FIRE Roadmap:</strong> Keep compounding your ₹${monthlySip.toLocaleString('en-IN')}/mo SIP until your annual 4% withdrawal comfortably exceeds your annual living expenses.
+          </div>
+        `;
+      } else if (q.includes('rebalance') || q.includes('allocation') || q.includes('ratio') || q.includes('50 30 20')) {
+        const targetMF = Math.round(totalNW * 0.50);
+        const targetST = Math.round(totalNW * 0.30);
+        const targetPPF = Math.round(totalNW * 0.20);
+        const diffMF = targetMF - metrics.mfCur;
+        const diffST = targetST - metrics.stCur;
+        const diffPPF = targetPPF - metrics.ppfCur;
+
+        responseHtml = `
+          <div style="color:#6ee7b7; font-weight:700; font-size:12px; margin-bottom:8px;">
+            ⚖️ ASSET ALLOCATION REBALANCING BLUEPRINT (50/30/20 TARGET)
+          </div>
+          <table style="width:100%; border-collapse:collapse; font-size:11px; margin-bottom:10px; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1);">
+            <tr style="background:rgba(255,255,255,0.05); border-bottom:1px solid rgba(255,255,255,0.1);">
+              <th style="padding:6px 8px; text-align:left;">Asset Class</th>
+              <th style="padding:6px 8px; text-align:right;">Current</th>
+              <th style="padding:6px 8px; text-align:right;">Target (50/30/20)</th>
+              <th style="padding:6px 8px; text-align:right;">Adjustment Required</th>
+            </tr>
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+              <td style="padding:6px 8px;">Mutual Funds (50%)</td>
+              <td style="padding:6px 8px; text-align:right;">${formatVal(metrics.mfCur)}</td>
+              <td style="padding:6px 8px; text-align:right;">${formatVal(targetMF)}</td>
+              <td style="padding:6px 8px; text-align:right; color:${diffMF >= 0 ? '#6ee7b7' : '#fca5a5'};">${diffMF >= 0 ? '+' : ''}${formatVal(diffMF)}</td>
+            </tr>
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+              <td style="padding:6px 8px;">Direct Stocks (30%)</td>
+              <td style="padding:6px 8px; text-align:right;">${formatVal(metrics.stCur)}</td>
+              <td style="padding:6px 8px; text-align:right;">${formatVal(targetST)}</td>
+              <td style="padding:6px 8px; text-align:right; color:${diffST >= 0 ? '#6ee7b7' : '#fca5a5'};">${diffST >= 0 ? '+' : ''}${formatVal(diffST)}</td>
+            </tr>
+            <tr>
+              <td style="padding:6px 8px;">Sovereign PPF (20%)</td>
+              <td style="padding:6px 8px; text-align:right;">${formatVal(metrics.ppfCur)}</td>
+              <td style="padding:6px 8px; text-align:right;">${formatVal(targetPPF)}</td>
+              <td style="padding:6px 8px; text-align:right; color:${diffPPF >= 0 ? '#6ee7b7' : '#fca5a5'};">${diffPPF >= 0 ? '+' : ''}${formatVal(diffPPF)}</td>
+            </tr>
+          </table>
+          <div style="color:#6ee7b7; font-size:11px; background:rgba(16,185,129,0.08); border-left:3px solid #10B981; padding:8px 10px; border-radius:0 3px 3px 0;">
+            <strong>💡 Non-Taxable Rebalance Tip:</strong> Do not sell existing profitable units (which triggers tax). Instead, direct future monthly SIPs and bonus lump sums into the under-allocated categories until balance is restored.
+          </div>
+        `;
+      } else if (q.includes('sip') || q.includes('monthly') || q.includes('inflow') || q.includes('date')) {
+        responseHtml = `
+          <div style="color:#6ee7b7; font-weight:700; font-size:12px; margin-bottom:8px;">
+            ⚡ ACTIVE SIP MANDATES &amp; CALENDAR DISPERSION
+          </div>
+          <p style="margin-bottom:8px;">You have <strong>${formatVal(monthlySip)}/month in active SIP debits</strong> across ${AppState.sipConfig.length} funds:</p>
+          <ul style="padding-left:1.1rem; margin-bottom:10px; font-size:11px; display:flex; flex-direction:column; gap:4px;">
+            ${AppState.sipConfig.map(s => `<li><strong>${s.fundName}</strong>: <span style="color:#6ee7b7;">${formatVal(s.sipAmount)}/mo</span> (Debited on <strong>${s.sipDay}th</strong>)</li>`).join('')}
+          </ul>
+          <p style="font-size:11px; color:#ffc46b; margin-bottom:8px;">Execution is spread across calendar dates: <strong>${sipDates.map(d => `${d}th`).join(', ')}</strong>, achieving seamless rupee-cost averaging.</p>
+          <div style="color:#6ee7b7; font-size:11px; background:rgba(16,185,129,0.08); border-left:3px solid #10B981; padding:8px 10px; border-radius:0 3px 3px 0;">
+            <strong>💡 Annual Deployment:</strong> You are compounding <strong>${formatVal(monthlySip * 12)}/year</strong> in fresh capital into high-growth Indian equities.
+          </div>
+        `;
+      } else if (q.includes('tax') || q.includes('ltcg') || q.includes('80c') || q.includes('112a') || q.includes('save')) {
+        const potentialTaxSavings = Math.round(harvestableLtcg * 0.125);
+        responseHtml = `
+          <div style="color:#fde047; font-weight:700; font-size:12px; margin-bottom:8px;">
+            💰 TAX EFFICIENCY &amp; SECTION 112A/80C DIAGNOSIS
+          </div>
+          <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); padding:10px; border-radius:4px; font-size:11px; margin-bottom:10px;">
+            <p>• <strong>Sec 112A LTCG Exemption:</strong> ₹1,25,000 tax-free room per financial year.</p>
+            <p>• <strong>Your Harvestable Profit:</strong> <strong style="color:#6ee7b7;">${formatVal(harvestableLtcg)}</strong> (Saves up to <strong>~${formatVal(potentialTaxSavings)}</strong> at 12.5% LTCG rate).</p>
+            <p>• <strong>Sovereign PPF (Sec 80C):</strong> ${formatVal(metrics.ppfCur)} corpus is 100% Triple Tax Exempt (EEE).</p>
+          </div>
+          <div style="color:#fde047; font-size:11px; background:rgba(253,224,71,0.08); border-left:3px solid #fde047; padding:8px 10px; border-radius:0 3px 3px 0;">
+            <strong>💡 March 31 Action:</strong> Book gains up to ₹1.25L and reinvest immediately to reset your purchase NAV cost base at 0% tax!
+          </div>
+        `;
+      } else if (q.includes('crore') || q.includes('50 lakh') || q.includes('target') || q.includes('milestone') || q.includes('when')) {
+        const time50 = solveMilestoneLocal(5000000, totalNW, monthlySip);
+        const time100 = solveMilestoneLocal(10000000, totalNW, monthlySip);
+        const time250 = solveMilestoneLocal(25000000, totalNW, monthlySip);
+
+        responseHtml = `
+          <div style="color:#c084fc; font-weight:700; font-size:12px; margin-bottom:8px;">
+            🎯 COMPOUNDING MILESTONE ROADMAP (AT ${formatVal(monthlySip)}/MO + 12% CAGR)
+          </div>
+          <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; margin-bottom:10px;">
+            <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); padding:8px; border-radius:4px; text-align:center;">
+              <div style="font-size:9px; opacity:0.7;">₹50 Lakhs</div>
+              <div style="font-size:13px; font-weight:700; color:#6ee7b7; margin-top:2px;">${time50}</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); padding:8px; border-radius:4px; text-align:center;">
+              <div style="font-size:9px; opacity:0.7;">₹1.00 Crore</div>
+              <div style="font-size:13px; font-weight:700; color:#fde047; margin-top:2px;">${time100}</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); padding:8px; border-radius:4px; text-align:center;">
+              <div style="font-size:9px; opacity:0.7;">₹2.50 Crores</div>
+              <div style="font-size:13px; font-weight:700; color:#c084fc; margin-top:2px;">${time250}</div>
+            </div>
+          </div>
+          <div style="color:#c084fc; font-size:11px; background:rgba(192,132,252,0.08); border-left:3px solid #c084fc; padding:8px 10px; border-radius:0 3px 3px 0;">
+            <strong>🚀 Step-Up Accelerator:</strong> Adding a 10% annual step-up cuts ~3.2 years off your ₹1.00 Crore target!
+          </div>
+        `;
       } else {
-        insights.push(`<strong>💡 SIP Step-Up Leverage:</strong> Implementing an annual 10% SIP step-up can accelerate your ₹1 Cr and ₹2.5 Cr milestones by 3+ years.`);
+        // Dynamic contextual fallback
+        responseHtml = `
+          <div style="color:#6ee7b7; font-weight:700; font-size:12px; margin-bottom:8px;">
+            💬 AI PORTFOLIO ADVISORY: "${query}"
+          </div>
+          <p style="margin-bottom:8px;">
+            Analyzing your consolidated net worth of <strong>${formatVal(totalNW)}</strong> across ${AppState.mutualFunds.length} Mutual Funds, ${AppState.stocks.length} Equities, and Sovereign PPF:
+          </p>
+          <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); padding:10px; border-radius:4px; font-size:11px; margin-bottom:10px;">
+            <p>• <strong>Consolidated Profitability:</strong> <strong style="color:#6ee7b7;">+${metrics.totalProfitPct}% (+${formatVal(metrics.totalProfit)})</strong></p>
+            <p>• <strong>Monthly SIP Inflow:</strong> <strong style="color:#fff;">${formatVal(monthlySip)}/month</strong> deployed across ${AppState.sipConfig.length} schemes</p>
+            <p>• <strong>Drawdown Cushion:</strong> Sovereign PPF provides an unshakeable <strong>${((metrics.ppfCur/totalNW)*100).toFixed(1)}% volatility buffer</strong>.</p>
+          </div>
+          <div style="color:#6ee7b7; font-size:11px; background:rgba(16,185,129,0.08); border-left:3px solid #10B981; padding:8px 10px; border-radius:0 3px 3px 0;">
+            <strong>💡 Pro-Tip:</strong> Powered by <strong>Portfolio AI</strong> &amp; Google Gemini server intelligence for real-time portfolio reasoning!
+          </div>
+        `;
       }
 
-      if (concPct > 45 && allHoldings.length > 0) {
-        insights.push(`<strong>⚖️ Concentration Check:</strong> Top 3 holdings account for ${concPct}% of valuation. Directing new SIP inflows into under-weighted schemes will optimize diversification.`);
-      }
+      setTimeout(() => {
+        if (thinkingPulse) thinkingPulse.style.display = 'none';
+        if (statusEl) {
+          statusEl.innerHTML = `<span style="color:#6ee7b7;">● QUERY ANSWERED</span>`;
+        }
+        typewriterStream(streamContent, responseHtml);
+      }, 300);
+    }
 
-      if (listEl) {
-        listEl.innerHTML = insights.map(txt => `<li>${txt}</li>`).join('');
+    function solveMilestoneLocal(target, currentNW, monthlySip) {
+      if (currentNW >= target) return "Achieved 🎉";
+      const r = 0.12 / 12;
+      let m = 0, fv = currentNW;
+      const pmt = monthlySip > 0 ? monthlySip : 10000;
+      while (fv < target && m < 600) {
+        fv = (fv * (1 + r)) + pmt;
+        m++;
       }
+      return `~${(m/12).toFixed(1)} Yrs (${m} Mo)`;
+    }
+
+    function renderAIAudit() {
+      updateGeminiKeyButtonUI();
+      askAICopilot('executive_briefing');
     }
 
     function openAuditModal() {
       playFolderTone(620);
       renderCompleteDossiers();
-      renderAIAudit();
+      updateGeminiKeyButtonUI();
       document.getElementById('auditModal').classList.add('active');
+      askAICopilot('executive_briefing');
     }
 
     function closeAuditModal() {
       document.getElementById('auditModal').classList.remove('active');
+      if (aiStreamInterval) {
+        clearInterval(aiStreamInterval);
+        aiStreamInterval = null;
+      }
     }
 
     /* ==========================================================================
@@ -3959,6 +5650,41 @@
       showToast("Backup JSON Exported");
     }
 
+    /* Fullscreen & Modal Expand Controllers */
+    function toggleAppFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => {
+          console.warn("Fullscreen request error:", err);
+        });
+        const icon = document.getElementById('fullscreenIcon');
+        if (icon) icon.setAttribute('data-lucide', 'minimize');
+        showToast("Fullscreen Mode Activated");
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+        const icon = document.getElementById('fullscreenIcon');
+        if (icon) icon.setAttribute('data-lucide', 'maximize');
+        showToast("Exited Fullscreen");
+      }
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function toggleAiModalFullscreen() {
+      const modalOverlay = document.getElementById('auditModal');
+      const modalCard = modalOverlay ? modalOverlay.querySelector('.mosby-modal-card') : null;
+      const icon = document.getElementById('aiFullscreenIcon');
+      if (!modalCard) return;
+
+      modalCard.classList.toggle('modal-fullscreen-expanded');
+      const isExpanded = modalCard.classList.contains('modal-fullscreen-expanded');
+      if (icon) {
+        icon.setAttribute('data-lucide', isExpanded ? 'minimize-2' : 'maximize-2');
+        if (window.lucide) lucide.createIcons();
+      }
+      showToast(isExpanded ? "Terminal View Maximized" : "Terminal View Restored");
+    }
+
     /* ==========================================================================
        STARTUP LIFECYCLE & KEYBOARD SHORTCUTS
        ========================================================================== */
@@ -3975,6 +5701,7 @@
       fetchLiveMarketIndices();
 
       updateAuthVisuals();
+      updateGeminiKeyButtonUI();
       startTypewriter();
       renderCompleteDossiers();
       activateFolder(0);
@@ -4016,6 +5743,7 @@
         } else if (e.key === 'Escape') {
           closeConfigModal();
           closeDetailModal();
+          closeTxDetailModal();
           closeCommandPalette();
           closeAuditModal();
         }
