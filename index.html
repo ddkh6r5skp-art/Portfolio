@@ -3761,44 +3761,42 @@ const DEMO_STATE = {
     lastSync: null
   },
   mutualFunds: [
-    { id: 'mf-1', name: 'Apex Sovereign Flexi Cap Fund', category: 'Flexi Cap', units: 324.15, avgNav: 88.50, currentNav: 108.40, invested: 286753.00, currentValue: 351232.26, dailyChange: 1420.50, monthlyChange: 9850.20, yearChange: 64479.26, monthlySip: 10000, sipDay: 5, sipActive: true },
-    { id: 'mf-2', name: 'Chronos Quantum 150 Midcap Index', category: 'Midcap 150 Index', units: 2185.40, avgNav: 11.20, currentNav: 14.85, invested: 244724.48, currentValue: 324478.44, dailyChange: 980.40, monthlyChange: 7640.10, yearChange: 79753.96, monthlySip: 8500, sipDay: 11, sipActive: true },
-    { id: 'mf-3', name: 'Vanguard Titan Small Cap Growth', category: 'Small Cap', units: 184.22, avgNav: 115.40, currentNav: 148.60, invested: 212361.39, currentValue: 273456.69, dailyChange: -540.20, monthlyChange: 6890.40, yearChange: 61095.30, monthlySip: 7500, sipDay: 13, sipActive: true },
-    { id: 'mf-4', name: 'Helios Global Bluechip Index', category: 'Nifty 50 Index', units: 152.80, avgNav: 210.30, currentNav: 238.40, invested: 319824.24, currentValue: 362558.72, dailyChange: 650.10, monthlyChange: 4500.00, yearChange: 42734.48, monthlySip: 12000, sipDay: 18, sipActive: true },
-    { id: 'mf-5', name: 'Aegis Sovereign Tax Shield (ELSS)', category: 'ELSS Tax Saver', units: 412.50, avgNav: 36.40, currentNav: 44.80, invested: 149986.20, currentValue: 184598.40, dailyChange: 210.00, monthlyChange: 2840.00, yearChange: 34612.20, monthlySip: 5000, sipDay: 25, sipActive: true }
+    { id: 'mf-1', name: 'Apex Sovereign Flexi Cap Fund', category: 'Flexi Cap', units: 1250.40, avgNav: 84.50, currentNav: 104.20, invested: 105658.80, currentValue: 130291.68, dailyChange: 520.40, monthlyChange: 3850.20, yearChange: 24632.88, monthlySip: 3500, sipDay: 5, sipActive: true },
+    { id: 'mf-2', name: 'Chronos Quantum 150 Midcap Index', category: 'Midcap 150 Index', units: 6200.50, avgNav: 11.20, currentNav: 14.85, invested: 69445.60, currentValue: 92077.42, dailyChange: 380.20, monthlyChange: 2450.10, yearChange: 22631.82, monthlySip: 2500, sipDay: 11, sipActive: true },
+    { id: 'mf-3', name: 'Vanguard Titan Small Cap Growth', category: 'Small Cap', units: 480.20, avgNav: 115.40, currentNav: 148.60, invested: 55415.08, currentValue: 71357.72, dailyChange: -180.20, monthlyChange: 1850.40, yearChange: 15942.64, monthlySip: 2000, sipDay: 13, sipActive: true },
+    { id: 'mf-4', name: 'Helios Global Bluechip Index', category: 'Nifty 50 Index', units: 280.50, avgNav: 210.30, currentNav: 238.40, invested: 58989.15, currentValue: 66871.20, dailyChange: 190.10, monthlyChange: 1200.00, yearChange: 7882.05, monthlySip: 3000, sipDay: 18, sipActive: true },
+    { id: 'mf-5', name: 'Aegis Sovereign Tax Shield (ELSS)', category: 'ELSS Tax Saver', units: 580.40, avgNav: 36.40, currentNav: 44.80, invested: 21126.56, currentValue: 26001.92, dailyChange: 60.00, monthlyChange: 720.00, yearChange: 4875.36, monthlySip: 1000, sipDay: 25, sipActive: true }
   ],
   stocks: [
-    { id: 'st-1', name: 'Mosby Defense Systems', ticker: 'MOSBY.DEF', sector: 'Defense & Robotics', qty: 35, avgBuyPrice: 380.00, cmp: 524.50, invested: 133000.00, currentValue: 183575.00, dailyChange: 2450.00, monthlyChange: 9800.00, yearChange: 50575.00, low52: 320, high52: 560 },
-    { id: 'st-2', name: 'Quantum Neural Labs', ticker: 'QUANTUM.AI', sector: 'Artificial Intelligence', qty: 220, avgBuyPrice: 850.00, cmp: 1180.00, invested: 187000.00, currentValue: 259600.00, dailyChange: 3100.00, monthlyChange: 15400.00, yearChange: 72600.00, low52: 780, high52: 1250 },
-    { id: 'st-3', name: 'Neo Clean Energy Utility', ticker: 'NEO.ENERGY', sector: 'Renewable Power', qty: 65, avgBuyPrice: 145.00, cmp: 228.40, invested: 94250.00, currentValue: 148460.00, dailyChange: 1120.00, monthlyChange: 7800.00, yearChange: 54210.00, low52: 130, high52: 260 },
-    { id: 'st-4', name: 'Indus Semiconductor Foundry', ticker: 'IND.SEMI', sector: 'Semiconductors', qty: 420, avgBuyPrice: 210.00, cmp: 335.00, invested: 88200.00, currentValue: 140700.00, dailyChange: 1680.00, monthlyChange: 11200.00, yearChange: 52500.00, low52: 190, high52: 360 },
-    { id: 'st-5', name: 'Cyber Defense Infrastructure', ticker: 'CYBER.SEC', sector: 'Cybersecurity', qty: 180, avgBuyPrice: 620.00, cmp: 765.00, invested: 111600.00, currentValue: 137700.00, dailyChange: -640.00, monthlyChange: 4200.00, yearChange: 26100.00, low52: 540, high52: 820 },
-    { id: 'st-6', name: 'Aerospace Dynamics Corp', ticker: 'AERO.DYN', sector: 'Aerospace', qty: 160, avgBuyPrice: 740.00, cmp: 945.00, invested: 118400.00, currentValue: 151200.00, dailyChange: 1280.00, monthlyChange: 6700.00, yearChange: 32800.00, low52: 680, high52: 1020 }
+    { id: 'st-1', name: 'Mosby Defense Systems', ticker: 'MOSBY.DEF', sector: 'Defense & Robotics', qty: 110, avgBuyPrice: 380.00, cmp: 524.50, invested: 41800.00, currentValue: 57695.00, dailyChange: 770.00, monthlyChange: 3200.00, yearChange: 15895.00, low52: 320, high52: 560 },
+    { id: 'st-2', name: 'Quantum Neural Labs', ticker: 'QUANTUM.AI', sector: 'Artificial Intelligence', qty: 65, avgBuyPrice: 850.00, cmp: 1180.00, invested: 55250.00, currentValue: 76700.00, dailyChange: 910.00, monthlyChange: 4500.00, yearChange: 21450.00, low52: 780, high52: 1250 },
+    { id: 'st-3', name: 'Neo Clean Energy Utility', ticker: 'NEO.ENERGY', sector: 'Renewable Power', qty: 220, avgBuyPrice: 145.00, cmp: 228.40, invested: 31900.00, currentValue: 50248.00, dailyChange: 380.00, monthlyChange: 2600.00, yearChange: 18348.00, low52: 130, high52: 260 },
+    { id: 'st-4', name: 'Indus Semiconductor Foundry', ticker: 'IND.SEMI', sector: 'Semiconductors', qty: 120, avgBuyPrice: 210.00, cmp: 335.00, invested: 25200.00, currentValue: 40200.00, dailyChange: 480.00, monthlyChange: 3100.00, yearChange: 15000.00, low52: 190, high52: 360 },
+    { id: 'st-5', name: 'Cyber Defense Infrastructure', ticker: 'CYBER.SEC', sector: 'Cybersecurity', qty: 40, avgBuyPrice: 620.00, cmp: 765.00, invested: 24800.00, currentValue: 30600.00, dailyChange: -160.00, monthlyChange: 1100.00, yearChange: 5800.00, low52: 540, high52: 820 }
   ],
   ppf: {
-    totalDeposited: 350000,
-    currentBalance: 492480,
+    totalDeposited: 115000,
+    currentBalance: 142850,
     ledger: [
-      { fy: 'FY 2021-22', opening: 0, deposit: 100000, rate: '7.1%', interest: 7100, closing: 107100 },
-      { fy: 'FY 2022-23', opening: 107100, deposit: 100000, rate: '7.1%', interest: 14704, closing: 221804 },
-      { fy: 'FY 2023-24', opening: 221804, deposit: 75000, rate: '7.1%', interest: 21075, closing: 317879 },
-      { fy: 'FY 2024-25', opening: 317879, deposit: 75000, rate: '7.1%', interest: 27899, closing: 420778 },
-      { fy: 'FY 2025-26', opening: 420778, deposit: 50000, rate: '7.1%', interest: 33455, closing: 504233 }
+      { fy: 'FY 2022-23', opening: 0, deposit: 35000, rate: '7.1%', interest: 2485, closing: 37485 },
+      { fy: 'FY 2023-24', opening: 37485, deposit: 40000, rate: '7.1%', interest: 5501, closing: 82986 },
+      { fy: 'FY 2024-25', opening: 82986, deposit: 40000, rate: '7.1%', interest: 8732, closing: 131718 },
+      { fy: 'FY 2025-26', opening: 131718, deposit: 0, rate: '7.1%', interest: 9352, closing: 141070 }
     ]
   },
   sipConfig: [
-    { ticker: 'APEX:FLX', sipAmount: 10000, sipDay: 5, fundName: 'Apex Sovereign Flexi Cap Fund' },
-    { ticker: 'CHRN:Q15', sipAmount: 8500, sipDay: 11, fundName: 'Chronos Quantum 150 Midcap Index' },
-    { ticker: 'VNGR:TTN', sipAmount: 7500, sipDay: 13, fundName: 'Vanguard Titan Small Cap Growth' },
-    { ticker: 'HLOS:BLU', sipAmount: 12000, sipDay: 18, fundName: 'Helios Global Bluechip Index' },
-    { ticker: 'AEGS:TAX', sipAmount: 5000, sipDay: 25, fundName: 'Aegis Sovereign Tax Shield (ELSS)' }
+    { ticker: 'APEX:FLX', sipAmount: 3500, sipDay: 5, fundName: 'Apex Sovereign Flexi Cap Fund' },
+    { ticker: 'CHRN:Q15', sipAmount: 2500, sipDay: 11, fundName: 'Chronos Quantum 150 Midcap Index' },
+    { ticker: 'VNGR:TTN', sipAmount: 2000, sipDay: 13, fundName: 'Vanguard Titan Small Cap Growth' },
+    { ticker: 'HLOS:BLU', sipAmount: 3000, sipDay: 18, fundName: 'Helios Global Bluechip Index' },
+    { ticker: 'AEGS:TAX', sipAmount: 1000, sipDay: 25, fundName: 'Aegis Sovereign Tax Shield (ELSS)' }
   ],
   sipTransactions: [
-    { date: '18 Aug 2026', fundName: 'Helios Global Bluechip Index', amount: 12000, nav: 236.10, units: 50.826, currentValue: 12116.92, gain: 116.92, gainPct: 0.97 },
-    { date: '13 Aug 2026', fundName: 'Vanguard Titan Small Cap Growth', amount: 7500, nav: 145.20, units: 51.653, currentValue: 7675.64, gain: 175.64, gainPct: 2.34 },
-    { date: '11 Aug 2026', fundName: 'Chronos Quantum 150 Midcap Index', amount: 8500, nav: 14.50, units: 586.207, currentValue: 8705.17, gain: 205.17, gainPct: 2.41 },
-    { date: '05 Aug 2026', fundName: 'Apex Sovereign Flexi Cap Fund', amount: 10000, nav: 105.80, units: 94.518, currentValue: 10245.75, gain: 245.75, gainPct: 2.46 },
-    { date: '25 Jul 2026', fundName: 'Aegis Sovereign Tax Shield (ELSS)', amount: 5000, nav: 43.90, units: 113.895, currentValue: 5102.50, gain: 102.50, gainPct: 2.05 }
+    { date: '18 Aug 2026', fundName: 'Helios Global Bluechip Index', amount: 3000, nav: 236.10, units: 12.706, currentValue: 3029.23, gain: 29.23, gainPct: 0.97 },
+    { date: '13 Aug 2026', fundName: 'Vanguard Titan Small Cap Growth', amount: 2000, nav: 145.20, units: 13.774, currentValue: 2046.84, gain: 46.84, gainPct: 2.34 },
+    { date: '11 Aug 2026', fundName: 'Chronos Quantum 150 Midcap Index', amount: 2500, nav: 14.50, units: 172.413, currentValue: 2560.34, gain: 60.34, gainPct: 2.41 },
+    { date: '05 Aug 2026', fundName: 'Apex Sovereign Flexi Cap Fund', amount: 3500, nav: 105.80, units: 33.081, currentValue: 3586.01, gain: 86.01, gainPct: 2.46 },
+    { date: '25 Jul 2026', fundName: 'Aegis Sovereign Tax Shield (ELSS)', amount: 1000, nav: 43.90, units: 22.779, currentValue: 1020.50, gain: 20.50, gainPct: 2.05 }
   ]
 };
 
@@ -4078,9 +4076,33 @@ function normalizeMFData(data) {
     const category = inferMFCategory(name, rawCategory);
 
     // Time horizon change fields
-    const dailyChange = parseNum(getField(r, 'Daily Change', 'dailyChange', 'dayChange', 'day_change', 'DailyChange', '1D Change', 'Today Change'));
-    const monthlyChange = parseNum(getField(r, 'Monthly Change', 'monthlyChange', 'monthChange', 'Last Month', 'Last_Month', 'LastMonth', '1M Change'));
-    const yearChange = parseNum(getField(r, 'Year Change', 'yearChange', 'Last Year', 'Last_Year', 'LastYear', 'yearlyChange', '1Y Change'));
+    let dailyChange = parseNum(getField(r, 
+      'Daily Change', 'Daily_Change', 'dailyChange', 'dayChange', 'Day Change', 'Day_Change', 
+      '1D Change', '1D_Change', '1D', 'Today Change', 'Today_Change', 'Today', 'Daily', 'Day', 
+      'Daily Gain', 'Day Gain', 'Day P&L', 'Daily P&L', 'Day P/L', 'Daily P/L', 'DayProfit', 'DailyProfit',
+      '1 Day Change', 'Change Today', 'Daily Movement', 'Day Return', 'Daily Change (Rs)', 'Daily Change (INR)'
+    ));
+
+    let monthlyChange = parseNum(getField(r, 
+      'Monthly Change', 'Monthly_Change', 'monthlyChange', 'monthChange', 'Month Change', 'Month_Change',
+      'Last Month', 'Last_Month', 'LastMonth', '1M Change', '1M_Change', '1M', 'Monthly', 'Month', 
+      'Monthly Gain', 'Month Gain', 'Monthly P&L', 'Month P&L', 'Monthly P/L', '30 Days Change', '30D Change',
+      'Last 30 Days', '1 Month Change', 'Month Return', 'Monthly Change (Rs)', 'Monthly Change (INR)'
+    ));
+
+    let yearChange = parseNum(getField(r, 
+      'Year Change', 'Year_Change', 'yearChange', 'Yearly Change', 'Yearly_Change', 'yearlyChange',
+      'Last Year', 'Last_Year', 'LastYear', '1Y Change', '1Y_Change', '1Y', 'Yearly', 'Year', 
+      '1 Year Change', 'Year Gain', 'Yearly Gain', 'Year P&L', 'Yearly P&L', '365 Days Change', 
+      '52W Change', '52 Week Change', 'Annual Change', 'Annual Trajectory', 'Year Return', 'Year Change (Rs)', 'Year Change (INR)'
+    ));
+
+    if (dailyChange === 0) {
+      const dayPct = parseNum(getField(r, 'Day Change %', 'Daily %', 'Change %', '1D %', 'Day %', 'Day Change (%)', 'Change (%)'));
+      if (dayPct !== 0 && currentValue > 0) {
+        dailyChange = Math.round(currentValue * (dayPct / 100));
+      }
+    }
 
     const rawDay = getField(r, 'SIP Day of Month', 'sipDayOfMonth', 'sipDay', 'day', 'SIP Date', 'Debit Date', 'Date');
     let parsedDay = parseNum(rawDay);
@@ -4139,9 +4161,33 @@ function normalizeStockData(data) {
     const currentValue = rawCur > 0 ? rawCur : (qty > 0 && livePrice > 0 ? (qty * livePrice) : invested);
 
     // Time horizon change fields
-    const dailyChange = parseNum(getField(r, 'Daily Change', 'dailyChange', 'dayChange', 'Day Change', '1D Change', 'Today Change'));
-    const monthlyChange = parseNum(getField(r, 'Last Month', 'Last_Month', 'LastMonth', 'monthlyChange', 'Monthly Change', 'monthChange', '1M Change'));
-    const yearChange = parseNum(getField(r, 'Last Year', 'Last_Year', 'LastYear', 'yearChange', 'Year Change', 'yearlyChange', '1Y Change'));
+    let dailyChange = parseNum(getField(r, 
+      'Daily Change', 'Daily_Change', 'dailyChange', 'dayChange', 'Day Change', 'Day_Change', 
+      '1D Change', '1D_Change', '1D', 'Today Change', 'Today_Change', 'Today', 'Daily', 'Day', 
+      'Daily Gain', 'Day Gain', 'Day P&L', 'Daily P&L', 'Day P/L', 'Daily P/L', 'DayProfit', 'DailyProfit',
+      '1 Day Change', 'Change Today', 'Daily Movement', 'Day Return', 'Daily Change (Rs)', 'Daily Change (INR)'
+    ));
+
+    let monthlyChange = parseNum(getField(r, 
+      'Last Month', 'Last_Month', 'LastMonth', 'monthlyChange', 'Monthly Change', 'Monthly_Change', 
+      'monthChange', 'Month Change', 'Month_Change', '1M Change', '1M_Change', '1M', 'Monthly', 'Month', 
+      'Monthly Gain', 'Month Gain', 'Monthly P&L', 'Month P&L', 'Monthly P/L', '30 Days Change', '30D Change',
+      'Last 30 Days', '1 Month Change', 'Month Return', 'Monthly Change (Rs)', 'Monthly Change (INR)'
+    ));
+
+    let yearChange = parseNum(getField(r, 
+      'Last Year', 'Last_Year', 'LastYear', 'yearChange', 'Year Change', 'Year_Change', 
+      'yearlyChange', 'Yearly Change', 'Yearly_Change', '1Y Change', '1Y_Change', '1Y', 'Yearly', 'Year', 
+      '1 Year Change', 'Year Gain', 'Yearly Gain', 'Year P&L', 'Yearly P&L', '365 Days Change', 
+      '52W Change', '52 Week Change', 'Annual Change', 'Annual Trajectory', 'Year Return', 'Year Change (Rs)', 'Year Change (INR)'
+    ));
+
+    if (dailyChange === 0) {
+      const dayPct = parseNum(getField(r, 'Day Change %', 'Daily %', 'Change %', '1D %', 'Day %', 'Day Change (%)', 'Change (%)'));
+      if (dayPct !== 0 && currentValue > 0) {
+        dailyChange = Math.round(currentValue * (dayPct / 100));
+      }
+    }
 
     return {
       id: 'st-' + i,
@@ -4155,6 +4201,21 @@ function normalizeStockData(data) {
       raw: r
     };
   });
+}
+
+function normalizeDashboardSummary(data) {
+  const rows = getRootArray(data, 'Dashboard', 'dashboard', 'Summary', 'summary', 'Overview', 'overview', 'Master', 'master');
+  let res = { totalDayChange: null, totalMonthChange: null, totalYearChange: null };
+  if (Array.isArray(rows) && rows.length) {
+    rows.forEach(r => {
+      const k = String(getField(r, 'Metric', 'Name', 'Item', 'Key', 'Title', 'Field', 'Parameter') || Object.values(r)[0] || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+      const v = parseNum(getField(r, 'Value', 'Amount', 'Val', 'Total') || Object.values(r)[1]);
+      if (k.includes('day') || k.includes('daily') || k.includes('1d')) res.totalDayChange = v;
+      if (k.includes('month') || k.includes('1m') || k.includes('lastmonth')) res.totalMonthChange = v;
+      if (k.includes('year') || k.includes('1y') || k.includes('lastyear') || k.includes('annual')) res.totalYearChange = v;
+    });
+  }
+  return res;
 }
 
 function normalizePPFData(data) {
@@ -4384,9 +4445,16 @@ function calculateTotals() {
   const totalProfitPct = totalInv > 0 ? ((totalProfit / totalInv) * 100).toFixed(2) : '0.00';
 
   // Consolidated Net Worth Horizon Changes
-  const totalDayChange = mfDayChange + stDayChange + ppfDailyInterest;
-  const totalMonthChange = mfMonthChange + stMonthChange + ppfMonthlyInterest;
-  const totalYearChange = mfYearChange + stYearChange + ppfYearlyInterest;
+  const dashSummary = normalizeDashboardSummary(AppState.rawPayload || {});
+  const totalDayChange = (dashSummary.totalDayChange !== null && dashSummary.totalDayChange !== 0) 
+    ? dashSummary.totalDayChange 
+    : (mfDayChange + stDayChange + ppfDailyInterest);
+  const totalMonthChange = (dashSummary.totalMonthChange !== null && dashSummary.totalMonthChange !== 0) 
+    ? dashSummary.totalMonthChange 
+    : (mfMonthChange + stMonthChange + ppfMonthlyInterest);
+  const totalYearChange = (dashSummary.totalYearChange !== null && dashSummary.totalYearChange !== 0) 
+    ? dashSummary.totalYearChange 
+    : (mfYearChange + stYearChange + ppfYearlyInterest);
 
   const totalDayChangePct = totalNetWorth > 0 ? ((totalDayChange / (totalNetWorth - totalDayChange)) * 100).toFixed(2) : '0.00';
   const totalMonthChangePct = totalNetWorth > 0 ? ((totalMonthChange / (totalNetWorth - totalMonthChange)) * 100).toFixed(2) : '0.00';
@@ -5701,6 +5769,8 @@ async function connectLiveSheet(explicitPass = '') {
     isLiveSession = true;
     activePasscode = pass;
     AppState.user.lastSync = new Date().toISOString();
+    AppState.rawPayload = data;
+    console.log("=== RAW GOOGLE SHEET TELEMETRY PAYLOAD ===", data);
 
     AppState.mutualFunds = normalizeMFData(data);
     AppState.stocks = normalizeStockData(data);
