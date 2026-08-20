@@ -18,7 +18,7 @@
   <!-- Apple PWA Standalone App & Mobile Web App Meta Tags -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Wealth Dossier">
+  <meta name="apple-mobile-web-app-title" content="Dossier">
   <link rel="manifest" href="manifest.json">
   <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='128' fill='%23181E29'/><circle cx='256' cy='256' r='180' fill='none' stroke='%236ee7b7' stroke-width='24'/><path d='M256 120v272M180 200l76-80 76 80' fill='none' stroke='%236ee7b7' stroke-width='24' stroke-linecap='round' stroke-linejoin='round'/></svg>">
 
@@ -3761,44 +3761,45 @@ const DEMO_STATE = {
     lastSync: null
   },
   mutualFunds: [
-    { id: 'mf-1', name: 'Axis Small Cap Fund', category: 'Small Cap', units: 1660.481, avgNav: 119.06, currentNav: 137.12, invested: 197700.91, currentValue: 227685.22, dailyChange: 846.85, monthlyChange: 8152.96, yearChange: 57751.55, monthlySip: 7500, sipDay: 10, sipActive: true },
-    { id: 'mf-2', name: 'SBI Nifty 50 Index Fund', category: 'Nifty 50 Index', units: 1410.173, avgNav: 225.64, currentNav: 227.26, invested: 318198.02, currentValue: 320472.83, dailyChange: -1038.87, monthlyChange: -1132.79, yearChange: 32936.14, monthlySip: 10000, sipDay: 13, sipActive: true },
-    { id: 'mf-3', name: 'Parag Parikh Flexi Cap Fund', category: 'Flexi Cap', units: 2781.095, avgNav: 91.69, currentNav: 91.05, invested: 255000.00, currentValue: 253229.82, dailyChange: -1750.42, monthlyChange: -988.12, yearChange: 14746.20, monthlySip: 8000, sipDay: 12, sipActive: true },
-    { id: 'mf-4', name: 'Black Rock Midcap 150 Index Fund', category: 'Midcap 150 Index', units: 20891.217, avgNav: 10.29, currentNav: 11.06, invested: 214999.25, currentValue: 231012.99, dailyChange: 342.62, monthlyChange: 4999.27, yearChange: 0, monthlySip: 6500, sipDay: 25, sipActive: true },
-    { id: 'mf-5', name: 'Parag Parikh ELSS Fund', category: 'ELSS Tax Saver', units: 3149.335, avgNav: 31.75, currentNav: 32.02, invested: 100000.00, currentValue: 100853.36, dailyChange: -641.83, monthlyChange: -773.48, yearChange: 1873.22, monthlySip: 0, sipDay: null, sipActive: false }
+    { id: 'mf-1', name: 'Apex Sovereign Flexi Cap Fund', category: 'Flexi Cap', units: 3240.15, avgNav: 88.50, currentNav: 108.40, invested: 286753.00, currentValue: 351232.26, dailyChange: 1420.50, monthlyChange: 9850.20, yearChange: 64479.26, monthlySip: 10000, sipDay: 5, sipActive: true },
+    { id: 'mf-2', name: 'Chronos Quantum 150 Midcap Index', category: 'Midcap 150 Index', units: 21850.40, avgNav: 11.20, currentNav: 14.85, invested: 244724.48, currentValue: 324478.44, dailyChange: 980.40, monthlyChange: 7640.10, yearChange: 79753.96, monthlySip: 8500, sipDay: 11, sipActive: true },
+    { id: 'mf-3', name: 'Vanguard Titan Small Cap Growth', category: 'Small Cap', units: 1840.22, avgNav: 115.40, currentNav: 148.60, invested: 212361.39, currentValue: 273456.69, dailyChange: -540.20, monthlyChange: 6890.40, yearChange: 61095.30, monthlySip: 7500, sipDay: 13, sipActive: true },
+    { id: 'mf-4', name: 'Helios Global Bluechip Index', category: 'Nifty 50 Index', units: 1520.80, avgNav: 210.30, currentNav: 238.40, invested: 319824.24, currentValue: 362558.72, dailyChange: 650.10, monthlyChange: 4500.00, yearChange: 42734.48, monthlySip: 12000, sipDay: 18, sipActive: true },
+    { id: 'mf-5', name: 'Aegis Sovereign Tax Shield (ELSS)', category: 'ELSS Tax Saver', units: 4120.50, avgNav: 36.40, currentNav: 44.80, invested: 149986.20, currentValue: 184598.40, dailyChange: 210.00, monthlyChange: 2840.00, yearChange: 34612.20, monthlySip: 5000, sipDay: 25, sipActive: true }
   ],
   stocks: [
-    { id: 'st-1', name: 'ACMESOLAR', ticker: 'ACMESOLAR', sector: 'Green Energy', qty: 425, avgBuyPrice: 277.81, cmp: 372.25, invested: 118069.25, currentValue: 158206.25, dailyChange: 3123.75, monthlyChange: -2252.50, yearChange: 38228.75, low52: 240, high52: 395 },
-    { id: 'st-2', name: 'BEL', ticker: 'BEL', sector: 'Defense & Aerospace', qty: 306, avgBuyPrice: 398.04, cmp: 412.10, invested: 121800.24, currentValue: 126102.60, dailyChange: -107.10, monthlyChange: 1208.70, yearChange: 9057.60, low52: 280, high52: 440 },
-    { id: 'st-3', name: 'CDSL', ticker: 'CDSL', sector: 'Financial Infrastructure', qty: 149, avgBuyPrice: 1416.29, cmp: 1345.00, invested: 211027.21, currentValue: 200405.00, dailyChange: -1758.20, monthlyChange: -5989.80, yearChange: -34284.90, low52: 1150, high52: 1720 },
-    { id: 'st-4', name: 'GOLDBEES-E', ticker: 'GOLDBEES', sector: 'Precious Metals (Gold)', qty: 420, avgBuyPrice: 117.18, cmp: 126.45, invested: 49215.60, currentValue: 53109.00, dailyChange: 12.60, monthlyChange: 4036.20, yearChange: 18354.00, low52: 95, high52: 135 },
-    { id: 'st-5', name: 'HDFCBANK', ticker: 'HDFCBANK', sector: 'Private Banking', qty: 129, avgBuyPrice: 842.62, cmp: 723.25, invested: 108697.98, currentValue: 93299.25, dailyChange: -741.75, monthlyChange: -7011.15, yearChange: -35932.95, low52: 680, high52: 920 },
-    { id: 'st-6', name: 'IRCTC', ticker: 'IRCTC', sector: 'Railways & Tourism', qty: 65, avgBuyPrice: 775.09, cmp: 492.50, invested: 50380.85, currentValue: 32012.50, dailyChange: -484.25, monthlyChange: -796.25, yearChange: -14911.00, low52: 450, high52: 890 },
-    { id: 'st-7', name: 'IREDA', ticker: 'IREDA', sector: 'Green Energy Financing', qty: 412, avgBuyPrice: 158.44, cmp: 115.53, invested: 65277.28, currentValue: 47598.36, dailyChange: -543.84, monthlyChange: -2595.60, yearChange: -13126.32, low52: 105, high52: 240 },
-    { id: 'st-8', name: 'JIOFIN', ticker: 'JIOFIN', sector: 'Fintech & Lending', qty: 396, avgBuyPrice: 301.12, cmp: 246.35, invested: 119243.52, currentValue: 97554.60, dailyChange: -1346.40, monthlyChange: 2942.28, yearChange: -32868.00, low52: 215, high52: 380 },
-    { id: 'st-9', name: 'LGEINDIA', ticker: 'LGEINDIA', sector: 'Consumer Durables', qty: 37, avgBuyPrice: 1601.02, cmp: 1645.00, invested: 59237.74, currentValue: 60865.00, dailyChange: -836.20, monthlyChange: 2538.20, yearChange: 0, low52: 1400, high52: 1850 },
-    { id: 'st-10', name: 'NHPC', ticker: 'NHPC', sector: 'Hydro Power Utility', qty: 885, avgBuyPrice: 102.59, cmp: 76.56, invested: 90792.15, currentValue: 67755.60, dailyChange: -35.40, monthlyChange: -3929.40, yearChange: -5504.70, low52: 65, high52: 118 },
-    { id: 'st-11', name: 'PREMIERENE', ticker: 'PREMIERENE', sector: 'Solar PV Modules', qty: 104, avgBuyPrice: 1002.89, cmp: 1015.00, invested: 104300.56, currentValue: 105560.00, dailyChange: -52.00, monthlyChange: -7425.60, yearChange: 1705.60, low52: 850, high52: 1250 },
-    { id: 'st-12', name: 'SUZLON', ticker: 'SUZLON', sector: 'Wind Energy Turbines', qty: 2435, avgBuyPrice: 64.23, cmp: 47.62, invested: 156400.05, currentValue: 115954.70, dailyChange: -3360.30, monthlyChange: -13319.45, yearChange: -25445.75, low52: 38, high52: 86 },
-    { id: 'st-13', name: 'TMCV', ticker: 'TMCV', sector: 'Commercial Vehicles', qty: 124, avgBuyPrice: 246.24, cmp: 468.80, invested: 30533.76, currentValue: 58131.20, dailyChange: -198.40, monthlyChange: 7371.80, yearChange: 0, low52: 210, high52: 510 },
-    { id: 'st-14', name: 'TMPV', ticker: 'TMPV', sector: 'Passenger Vehicles & EV', qty: 199, avgBuyPrice: 549.60, cmp: 322.80, invested: 109370.40, currentValue: 64237.20, dailyChange: -1472.60, monthlyChange: -2716.35, yearChange: -17199.57, low52: 290, high52: 620 }
+    { id: 'st-1', name: 'Mosby Defense Systems', ticker: 'MOSBY.DEF', sector: 'Defense & Robotics', qty: 350, avgBuyPrice: 380.00, cmp: 524.50, invested: 133000.00, currentValue: 183575.00, dailyChange: 2450.00, monthlyChange: 9800.00, yearChange: 50575.00, low52: 320, high52: 560 },
+    { id: 'st-2', name: 'Quantum Neural Labs', ticker: 'QUANTUM.AI', sector: 'Artificial Intelligence', qty: 220, avgBuyPrice: 850.00, cmp: 1180.00, invested: 187000.00, currentValue: 259600.00, dailyChange: 3100.00, monthlyChange: 15400.00, yearChange: 72600.00, low52: 780, high52: 1250 },
+    { id: 'st-3', name: 'Neo Clean Energy Utility', ticker: 'NEO.ENERGY', sector: 'Renewable Power', qty: 650, avgBuyPrice: 145.00, cmp: 228.40, invested: 94250.00, currentValue: 148460.00, dailyChange: 1120.00, monthlyChange: 7800.00, yearChange: 54210.00, low52: 130, high52: 260 },
+    { id: 'st-4', name: 'Indus Semiconductor Foundry', ticker: 'IND.SEMI', sector: 'Semiconductors', qty: 420, avgBuyPrice: 210.00, cmp: 335.00, invested: 88200.00, currentValue: 140700.00, dailyChange: 1680.00, monthlyChange: 11200.00, yearChange: 52500.00, low52: 190, high52: 360 },
+    { id: 'st-5', name: 'Cyber Defense Infrastructure', ticker: 'CYBER.SEC', sector: 'Cybersecurity', qty: 180, avgBuyPrice: 620.00, cmp: 765.00, invested: 111600.00, currentValue: 137700.00, dailyChange: -640.00, monthlyChange: 4200.00, yearChange: 26100.00, low52: 540, high52: 820 },
+    { id: 'st-6', name: 'Aerospace Dynamics Corp', ticker: 'AERO.DYN', sector: 'Aerospace', qty: 160, avgBuyPrice: 740.00, cmp: 945.00, invested: 118400.00, currentValue: 151200.00, dailyChange: 1280.00, monthlyChange: 6700.00, yearChange: 32800.00, low52: 680, high52: 1020 }
   ],
   ppf: {
-    totalDeposited: 220000,
-    currentBalance: 320710,
+    totalDeposited: 350000,
+    currentBalance: 492480,
     ledger: [
-      { fy: 'FY 2022-23', opening: 60000, deposit: 70000, rate: '7.1%', interest: 7810, closing: 137810 },
-      { fy: 'FY 2023-24', opening: 137810, deposit: 75000, rate: '7.1%', interest: 13320, closing: 226130 },
-      { fy: 'FY 2024-25', opening: 226130, deposit: 75000, rate: '7.1%', interest: 19580, closing: 320710 }
+      { fy: 'FY 2021-22', opening: 0, deposit: 100000, rate: '7.1%', interest: 7100, closing: 107100 },
+      { fy: 'FY 2022-23', opening: 107100, deposit: 100000, rate: '7.1%', interest: 14704, closing: 221804 },
+      { fy: 'FY 2023-24', opening: 221804, deposit: 75000, rate: '7.1%', interest: 21075, closing: 317879 },
+      { fy: 'FY 2024-25', opening: 317879, deposit: 75000, rate: '7.1%', interest: 27899, closing: 420778 },
+      { fy: 'FY 2025-26', opening: 420778, deposit: 50000, rate: '7.1%', interest: 33455, closing: 504233 }
     ]
   },
   sipConfig: [
-    { ticker: 'FICT:ADGF', sipAmount: 7500, sipDay: 10, fundName: 'Axis Small Cap Fund' },
-    { ticker: 'FICT:AQIS', sipAmount: 10000, sipDay: 13, fundName: 'SBI Nifty 50 Index Fund' },
-    { ticker: 'FICT:NM15', sipAmount: 8000, sipDay: 12, fundName: 'Parag Parikh Flexi Cap Fund' },
-    { ticker: 'FICT:MHFC', sipAmount: 6500, sipDay: 25, fundName: 'Black Rock Midcap 150 Index Fund' }
+    { ticker: 'APEX:FLX', sipAmount: 10000, sipDay: 5, fundName: 'Apex Sovereign Flexi Cap Fund' },
+    { ticker: 'CHRN:Q15', sipAmount: 8500, sipDay: 11, fundName: 'Chronos Quantum 150 Midcap Index' },
+    { ticker: 'VNGR:TTN', sipAmount: 7500, sipDay: 13, fundName: 'Vanguard Titan Small Cap Growth' },
+    { ticker: 'HLOS:BLU', sipAmount: 12000, sipDay: 18, fundName: 'Helios Global Bluechip Index' },
+    { ticker: 'AEGS:TAX', sipAmount: 5000, sipDay: 25, fundName: 'Aegis Sovereign Tax Shield (ELSS)' }
   ],
-  sipTransactions: []
+  sipTransactions: [
+    { date: '18 Aug 2026', fundName: 'Helios Global Bluechip Index', amount: 12000, nav: 236.10, units: 50.826, currentValue: 12116.92, gain: 116.92, gainPct: 0.97 },
+    { date: '13 Aug 2026', fundName: 'Vanguard Titan Small Cap Growth', amount: 7500, nav: 145.20, units: 51.653, currentValue: 7675.64, gain: 175.64, gainPct: 2.34 },
+    { date: '11 Aug 2026', fundName: 'Chronos Quantum 150 Midcap Index', amount: 8500, nav: 14.50, units: 586.207, currentValue: 8705.17, gain: 205.17, gainPct: 2.41 },
+    { date: '05 Aug 2026', fundName: 'Apex Sovereign Flexi Cap Fund', amount: 10000, nav: 105.80, units: 94.518, currentValue: 10245.75, gain: 245.75, gainPct: 2.46 },
+    { date: '25 Jul 2026', fundName: 'Aegis Sovereign Tax Shield (ELSS)', amount: 5000, nav: 43.90, units: 113.895, currentValue: 5102.50, gain: 102.50, gainPct: 2.05 }
+  ]
 };
 
 let AppState = JSON.parse(JSON.stringify(DEMO_STATE));
@@ -3877,7 +3878,7 @@ function parseNum(val) {
   if (val === undefined || val === null || val === '') return 0;
   if (typeof val === 'number') return isNaN(val) ? 0 : val;
   const str = String(val).trim();
-  if (str.startsWith('#') || str.includes('N/A') || str.includes('VALUE')) return 0;
+  if (str.startsWith('#') || str.includes('N/A') || str.includes('VALUE') || str.includes('REF!') || str.includes('DIV/0') || str.includes('NAME?')) return 0;
   const clean = str.replace(/[^\d.-]/g, '');
   const parsed = Number(clean);
   return isNaN(parsed) ? 0 : parsed;
@@ -3885,27 +3886,58 @@ function parseNum(val) {
 
 function getRootArray(data, ...candidateKeys) {
   if (!data || typeof data !== 'object') return [];
-  for (const k of candidateKeys) {
-    if (Array.isArray(data[k]) && data[k].length) return data[k];
-  }
-  const entries = Object.entries(data);
-  for (const k of candidateKeys) {
-    const cleanK = k.toLowerCase().replace(/[^a-z0-9]/g, '');
-    for (const [objKey, objVal] of entries) {
-      const cleanObjKey = objKey.toLowerCase().replace(/[^a-z0-9]/g, '');
-      if (cleanObjKey === cleanK && Array.isArray(objVal) && objVal.length) {
-        return objVal;
+
+  // Check possible nested envelopes (data, sheets, payload, result)
+  const containers = [data];
+  if (data.data && typeof data.data === 'object' && !Array.isArray(data.data)) containers.push(data.data);
+  if (data.sheets && typeof data.sheets === 'object' && !Array.isArray(data.sheets)) containers.push(data.sheets);
+  if (data.result && typeof data.result === 'object' && !Array.isArray(data.result)) containers.push(data.result);
+  if (data.payload && typeof data.payload === 'object' && !Array.isArray(data.payload)) containers.push(data.payload);
+
+  for (const container of containers) {
+    if (Array.isArray(container) && container.length) return container;
+
+    // 1. Direct key match
+    for (const k of candidateKeys) {
+      if (Array.isArray(container[k]) && container[k].length) return container[k];
+    }
+
+    // 2. Normalized alphanumeric key match
+    const entries = Object.entries(container);
+    for (const k of candidateKeys) {
+      const cleanK = k.toLowerCase().replace(/[^a-z0-9]/g, '');
+      for (const [objKey, objVal] of entries) {
+        const cleanObjKey = objKey.toLowerCase().replace(/[^a-z0-9]/g, '');
+        if (cleanObjKey === cleanK && Array.isArray(objVal) && objVal.length) {
+          return objVal;
+        }
+      }
+    }
+
+    // 3. Substring / loose key match
+    for (const k of candidateKeys) {
+      const cleanK = k.toLowerCase().replace(/[^a-z0-9]/g, '');
+      if (cleanK.length >= 2) {
+        for (const [objKey, objVal] of entries) {
+          const cleanObjKey = objKey.toLowerCase().replace(/[^a-z0-9]/g, '');
+          if ((cleanObjKey.includes(cleanK) || cleanK.includes(cleanObjKey)) && Array.isArray(objVal) && objVal.length) {
+            return objVal;
+          }
+        }
       }
     }
   }
+
   return [];
 }
 
 function getField(obj, ...keys) {
   if (!obj || typeof obj !== 'object') return null;
+  // 1. Direct match
   for (const k of keys) {
     if (obj[k] !== undefined && obj[k] !== null && obj[k] !== '') return obj[k];
   }
+  // 2. Normalized match (ignoring whitespace, casing, underscores, non-breaking spaces)
   const entries = Object.entries(obj);
   for (const k of keys) {
     const cleanK = k.toLowerCase().replace(/[^a-z0-9]/g, '');
@@ -3913,6 +3945,18 @@ function getField(obj, ...keys) {
       const cleanObjKey = objKey.toLowerCase().replace(/[^a-z0-9]/g, '');
       if (cleanObjKey === cleanK && objVal !== undefined && objVal !== null && objVal !== '') {
         return objVal;
+      }
+    }
+  }
+  // 3. Loose substring match
+  for (const k of keys) {
+    const cleanK = k.toLowerCase().replace(/[^a-z0-9]/g, '');
+    if (cleanK.length >= 3) {
+      for (const [objKey, objVal] of entries) {
+        const cleanObjKey = objKey.toLowerCase().replace(/[^a-z0-9]/g, '');
+        if ((cleanObjKey.includes(cleanK) || cleanK.includes(cleanObjKey)) && objVal !== undefined && objVal !== null && objVal !== '') {
+          return objVal;
+        }
       }
     }
   }
@@ -3966,7 +4010,11 @@ function simpleDecipher(cipherBase64, key) {
       const charCode = text.charCodeAt(i) ^ key.charCodeAt(i % kLen) ^ ((i * 13) & 0xFF);
       result += String.fromCharCode(charCode);
     }
-    return JSON.parse(result);
+    try {
+      return JSON.parse(result);
+    } catch(parseErr) {
+      return result;
+    }
   } catch (e) {
     return null;
   }
@@ -3995,36 +4043,53 @@ function loadEncryptedVault(passcode) {
 }
 
 function normalizeMFData(data) {
-  const rows = getRootArray(data, 'Mutual_Funds', 'mutualFunds', 'mutual_funds', 'funds', 'MF', 'MutualFunds')
-    .filter(r => {
-      const name = String(getField(r, 'Fund Name', 'fundName', 'name', 'fund') || '').trim().toUpperCase();
-      return name && name !== 'TOTAL' && !name.startsWith('TOTAL ') && name !== 'GRAND TOTAL';
+  const rawCandidateRows = getRootArray(data, 'Mutual_Funds', 'mutualFunds', 'mutual_funds', 'funds', 'MF', 'MutualFunds', 'Mutual_Fund', 'Mutual Funds', 'Mutualfunds', 'Holdings_MF', 'MF_Holdings');
+  
+  let rows = rawCandidateRows.filter(r => {
+    const rawName = getField(r, 'Fund Name', 'fundName', 'name', 'fund', 'Scheme Name', 'schemeName', 'Scheme', 'scheme', 'Instrument', 'Mutual Fund', 'Mutual Funds', 'Security', 'Particulars', 'Asset Name', 'Asset');
+    const name = String(rawName || '').trim().toUpperCase();
+    return name && name !== 'TOTAL' && !name.startsWith('TOTAL ') && name !== 'GRAND TOTAL' && name !== 'SUMMARY';
+  });
+
+  // Fallback: If no rows passed strict name filter, check for any row containing units or investment
+  if (!rows.length && rawCandidateRows.length) {
+    rows = rawCandidateRows.filter(r => {
+      const inv = parseNum(getField(r, 'Total Invested', 'Invested', 'invested', 'Total Inves', 'Investment'));
+      const unt = parseNum(getField(r, 'Total Units', 'Units', 'units', 'Quantity'));
+      const val = parseNum(getField(r, 'Current Value', 'currentValue', 'Value'));
+      const firstStr = String(Object.values(r).find(v => typeof v === 'string' && v.trim().length > 1) || '').toUpperCase();
+      return (inv > 0 || unt > 0 || val > 0) && !firstStr.startsWith('TOTAL');
     });
+  }
 
   return rows.map((r, i) => {
-    const invested = parseNum(getField(r, 'invested', 'totalInvested', 'investment', 'Total Invested', 'Invested')) || 0;
-    const units = parseNum(getField(r, 'units', 'totalUnits', 'unitBalance', 'Total Units', 'Units')) || 0;
-    const nav = parseNum(getField(r, 'nav', 'liveNAV', 'currentNAV', 'Live NAV', 'NAV')) || 0;
-    const rawCur = parseNum(getField(r, 'currentValue', 'current_value', 'value', 'Current Value'));
-    const currentValue = rawCur > 0 ? rawCur : (units > 0 && nav > 0 ? units * nav : invested);
-    const avgNav = parseNum(getField(r, 'avgNav', 'averageNAV', 'Avg NAV')) || (units > 0 ? (invested / units) : nav);
-    const name = getField(r, 'Fund Name', 'fundName', 'name', 'fund', 'schemeName') || `Mutual Fund ${i+1}`;
-    const rawCategory = getField(r, 'Category', 'category', 'type');
+    const name = getField(r, 'Fund Name', 'fundName', 'name', 'fund', 'Scheme Name', 'schemeName', 'Scheme', 'scheme', 'Instrument', 'Mutual Fund', 'Mutual Funds', 'Security', 'Particulars', 'Asset Name', 'Asset') || 
+                 Object.values(r).find(v => typeof v === 'string' && v.trim().length > 2 && !v.toUpperCase().startsWith('TOTAL')) || 
+                 `Mutual Fund ${i+1}`;
+                 
+    const invested = parseNum(getField(r, 'Total Invested', 'Total_Invested', 'totalInvested', 'Invested', 'invested', 'Total Inves', 'Investment', 'Principal', 'Cost')) || 0;
+    const units = parseNum(getField(r, 'Total Units', 'Total_Units', 'totalUnits', 'Units', 'units', 'Unit Balance', 'Quantity', 'Qty', 'Balance')) || 0;
+    const nav = parseNum(getField(r, 'Live NAV', 'Live_NAV', 'liveNAV', 'LiveNav', 'NAV', 'nav', 'Current NAV', 'Price', 'CMP', 'Latest NAV')) || 0;
+    
+    const rawCur = parseNum(getField(r, 'Current Value', 'Current_Value', 'currentValue', 'CurrentVal', 'Market Value', 'Market_Value', 'Value', 'value', 'Total Value', 'Valuation', 'Present Value'));
+    const currentValue = rawCur > 0 ? rawCur : (units > 0 && nav > 0 ? (units * nav) : invested);
+    const avgNav = parseNum(getField(r, 'Avg NAV', 'avgNav', 'Average NAV', 'averageNAV', 'Avg Buy Price', 'Purchase NAV')) || (units > 0 && invested > 0 ? (invested / units) : nav);
+    const rawCategory = getField(r, 'Category', 'category', 'type', 'Fund Type', 'Class');
     const category = inferMFCategory(name, rawCategory);
 
     // Time horizon change fields
-    const dailyChange = parseNum(getField(r, 'Daily Change', 'dailyChange', 'dayChange', 'day_change', 'DailyChange'));
-    const monthlyChange = parseNum(getField(r, 'Monthly Change', 'monthlyChange', 'monthChange', 'Last Month', 'LastMonth'));
-    const yearChange = parseNum(getField(r, 'Year Change', 'yearChange', 'Last Year', 'LastYear', 'yearlyChange'));
+    const dailyChange = parseNum(getField(r, 'Daily Change', 'dailyChange', 'dayChange', 'day_change', 'DailyChange', '1D Change', 'Today Change'));
+    const monthlyChange = parseNum(getField(r, 'Monthly Change', 'monthlyChange', 'monthChange', 'Last Month', 'Last_Month', 'LastMonth', '1M Change'));
+    const yearChange = parseNum(getField(r, 'Year Change', 'yearChange', 'Last Year', 'Last_Year', 'LastYear', 'yearlyChange', '1Y Change'));
 
-    const rawDay = getField(r, 'SIP Day of Month', 'sipDayOfMonth', 'sipDay', 'day');
+    const rawDay = getField(r, 'SIP Day of Month', 'sipDayOfMonth', 'sipDay', 'day', 'SIP Date', 'Debit Date', 'Date');
     let parsedDay = parseNum(rawDay);
     if (!parsedDay && typeof rawDay === 'string') {
       const match = rawDay.match(/\d+/);
       if (match) parsedDay = parseInt(match[0], 10);
     }
     const sipDay = (parsedDay && parsedDay >= 1 && parsedDay <= 31) ? parsedDay : null;
-    const sipAmount = parseNum(getField(r, 'SIP Amount', 'sipAmount', 'monthlySIP', 'amount')) || 0;
+    const sipAmount = parseNum(getField(r, 'SIP Amount', 'sipAmount', 'monthlySIP', 'amount', 'Monthly SIP', 'SIP')) || 0;
 
     return {
       id: 'mf-' + i,
@@ -4041,37 +4106,48 @@ function normalizeMFData(data) {
       monthlySip: sipAmount,
       sipDay,
       sipActive: sipAmount > 0 || sipDay !== null,
-      ticker: String(getField(r, 'Ticker Symbol', 'tickerSymbol', 'ticker', 'symbol') || ''),
+      ticker: String(getField(r, 'Ticker Symbol', 'tickerSymbol', 'ticker', 'symbol', 'Google Ticker', 'Scheme Code') || ''),
       raw: r
     };
   });
 }
 
 function normalizeStockData(data) {
-  const rows = getRootArray(data, 'Stocks', 'stocks', 'equity', 'equities', 'Direct_Stocks', 'directStocks')
-    .filter(r => {
-      const name = String(getField(r, 'instrument', 'name', 'stockName', 'Instrument', 'symbol') || '').trim().toUpperCase();
-      return name && name !== 'TOTAL' && !name.startsWith('TOTAL ') && name !== 'GRAND TOTAL';
+  const rawCandidateRows = getRootArray(data, 'Stocks', 'stocks', 'equity', 'equities', 'Direct_Stocks', 'directStocks', 'Direct Stocks', 'Direct_Equities', 'Equities');
+  
+  let rows = rawCandidateRows.filter(r => {
+    const rawName = getField(r, 'Instrument', 'instrument', 'name', 'stockName', 'Stock Name', 'symbol', 'Symbol', 'Security', 'Company');
+    const name = String(rawName || '').trim().toUpperCase();
+    return name && name !== 'TOTAL' && !name.startsWith('TOTAL ') && name !== 'GRAND TOTAL' && name !== 'SUMMARY';
+  });
+
+  if (!rows.length && rawCandidateRows.length) {
+    rows = rawCandidateRows.filter(r => {
+      const inv = parseNum(getField(r, 'Total Invested', 'Total Inves', 'Invested', 'invested'));
+      const qty = parseNum(getField(r, 'Qty', 'Quantity', 'quantity', 'qty'));
+      const firstStr = String(Object.values(r).find(v => typeof v === 'string' && v.trim().length > 1) || '').toUpperCase();
+      return (inv > 0 || qty > 0) && !firstStr.startsWith('TOTAL');
     });
+  }
 
   return rows.map((r, i) => {
-    const invested = parseNum(getField(r, 'invested', 'totalInvested', 'Total Inves', 'investment', 'Invested')) || 0;
-    const qty = parseNum(getField(r, 'quantity', 'qty', 'Qty', 'shares', 'Shares')) || 0;
-    const rawCur = parseNum(getField(r, 'currentValue', 'current_value', 'value', 'Current Value'));
-    const avgPrice = parseNum(getField(r, 'averagePrice', 'avgPrice', 'Avg Price', 'buyPrice')) || (qty > 0 ? invested / qty : 0);
-    const livePrice = parseNum(getField(r, 'livePrice', 'cmp', 'currentPrice', 'Live Price', 'CMP')) || (qty > 0 && rawCur > 0 ? rawCur / qty : avgPrice);
-    const currentValue = rawCur > 0 ? rawCur : (qty > 0 && livePrice > 0 ? qty * livePrice : invested);
+    const invested = parseNum(getField(r, 'Total Invested', 'Total Inves', 'totalInvested', 'investment', 'Invested', 'invested', 'Principal', 'Cost')) || 0;
+    const qty = parseNum(getField(r, 'Quantity', 'quantity', 'qty', 'Qty', 'shares', 'Shares')) || 0;
+    const rawCur = parseNum(getField(r, 'Current Value', 'Current_Value', 'currentValue', 'current_value', 'value', 'Market Value'));
+    const avgPrice = parseNum(getField(r, 'Avg Price', 'averagePrice', 'avgPrice', 'buyPrice', 'Avg Buy Price')) || (qty > 0 ? (invested / qty) : 0);
+    const livePrice = parseNum(getField(r, 'Live Price', 'livePrice', 'cmp', 'CMP', 'currentPrice', 'Price')) || (qty > 0 && rawCur > 0 ? (rawCur / qty) : avgPrice);
+    const currentValue = rawCur > 0 ? rawCur : (qty > 0 && livePrice > 0 ? (qty * livePrice) : invested);
 
     // Time horizon change fields
-    const dailyChange = parseNum(getField(r, 'Daily Change', 'dailyChange', 'dayChange', 'Day Change'));
-    const monthlyChange = parseNum(getField(r, 'Last Month', 'LastMonth', 'monthlyChange', 'Monthly Change', 'monthChange'));
-    const yearChange = parseNum(getField(r, 'Last Year', 'LastYear', 'yearChange', 'Year Change', 'yearlyChange'));
+    const dailyChange = parseNum(getField(r, 'Daily Change', 'dailyChange', 'dayChange', 'Day Change', '1D Change', 'Today Change'));
+    const monthlyChange = parseNum(getField(r, 'Last Month', 'Last_Month', 'LastMonth', 'monthlyChange', 'Monthly Change', 'monthChange', '1M Change'));
+    const yearChange = parseNum(getField(r, 'Last Year', 'Last_Year', 'LastYear', 'yearChange', 'Year Change', 'yearlyChange', '1Y Change'));
 
     return {
       id: 'st-' + i,
-      name: getField(r, 'Instrument', 'instrument', 'name', 'stockName', 'Stock Name') || 'Stock',
-      ticker: getField(r, 'Google Ticker', 'ticker', 'symbol', 'googleTicker') || 'TICKER',
-      sector: getField(r, 'sector', 'industry', 'Sector') || 'Equities',
+      name: getField(r, 'Instrument', 'instrument', 'name', 'stockName', 'Stock Name', 'Security', 'Company') || `Stock ${i+1}`,
+      ticker: getField(r, 'Google Ticker', 'ticker', 'symbol', 'googleTicker', 'Symbol') || 'TICKER',
+      sector: getField(r, 'Sector', 'sector', 'industry', 'Industry') || 'Equities',
       qty, avgBuyPrice: avgPrice, cmp: livePrice, invested, currentValue,
       dailyChange, monthlyChange, yearChange,
       low52: parseNum(getField(r, 'low52', '52wLow', '52W Low')) || Math.round(livePrice * 0.8),
@@ -4082,7 +4158,7 @@ function normalizeStockData(data) {
 }
 
 function normalizePPFData(data) {
-  const rows = getRootArray(data, 'PPF', 'ppf', 'PPF_Ledger', 'ppfLedger', 'sovereign_ppf')
+  const rows = getRootArray(data, 'PPF', 'ppf', 'PPF_Ledger', 'ppfLedger', 'sovereign_ppf', 'PPF Account', 'PPF_Account')
     .filter(r => {
       const name = String(getField(r, 'name', 'fundName', 'fy', 'year') || '').trim().toUpperCase();
       return !name.startsWith('TOTAL') || name.includes('FY') || name.includes('20');
@@ -4090,7 +4166,7 @@ function normalizePPFData(data) {
 
   let totalDep = 0;
   const ledger = rows.map((r, i) => {
-    const dep = parseNum(getField(r, 'deposited', 'totalDeposited', 'invested', 'deposit', 'Deposit')) || 0;
+    const dep = parseNum(getField(r, 'deposited', 'totalDeposited', 'invested', 'deposit', 'Deposit', 'Total Deposit')) || 0;
     totalDep += dep;
     return {
       fy: getField(r, 'name', 'fundName', 'fy', 'year', 'financialYear', 'FY') || `FY ${2020+i}-${(2021+i).toString().slice(2)}`,
@@ -4104,8 +4180,8 @@ function normalizePPFData(data) {
   });
 
   const lastRow = ledger.length ? ledger[ledger.length - 1] : null;
-  const latestClosing = lastRow ? (lastRow.closing || lastRow.currentValue || 0) : parseNum(getField(data, 'ppfBalance', 'currentPPFBalance'));
-  const directTotalDeposited = totalDep || parseNum(getField(data, 'ppfDeposited', 'totalPPFDeposited')) || 0;
+  const latestClosing = lastRow ? (lastRow.closing || lastRow.currentValue || 0) : parseNum(getField(data, 'ppfBalance', 'currentPPFBalance', 'ppf_balance'));
+  const directTotalDeposited = totalDep || parseNum(getField(data, 'ppfDeposited', 'totalPPFDeposited', 'ppf_deposited')) || 0;
 
   return {
     totalDeposited: directTotalDeposited,
@@ -5560,10 +5636,11 @@ function initGlobalMarketClocks() {
 /* ==========================================================================
    AUTHENTICATION & TELEMETRY SYNC
    ========================================================================== */
-async function connectLiveSheet() {
+async function connectLiveSheet(explicitPass = '') {
   const passInputEl = document.getElementById('passcodeInput');
   const modalPassInputEl = document.getElementById('inputModalPasscode');
-  const enteredPass = (passInputEl ? passInputEl.value.trim() : '') || 
+  const enteredPass = (explicitPass && explicitPass.trim()) ||
+                      (passInputEl ? passInputEl.value.trim() : '') || 
                       (modalPassInputEl ? modalPassInputEl.value.trim() : '') || 
                       activePasscode;
 
@@ -5573,6 +5650,7 @@ async function connectLiveSheet() {
   }
 
   const pass = enteredPass;
+  activePasscode = pass;
   let hydratedFromCache = false;
 
   try {
@@ -5843,14 +5921,22 @@ async function authenticateWithFaceId() {
 
     if (assertion) {
       if (btn) btn.classList.remove('pulse-scan');
-      const decryptedPass = simpleDecipher(encryptedPass, "MOSBY_BIOMETRIC_SALT_77");
-      if (decryptedPass) {
-        showToast("Apple Face ID Verified! Syncing...");
+      const decrypted = simpleDecipher(encryptedPass, "MOSBY_BIOMETRIC_SALT_77");
+      const decryptedPass = typeof decrypted === 'string' ? decrypted : (decrypted ? String(decrypted) : '');
+      
+      if (decryptedPass && decryptedPass.trim()) {
+        const finalPass = decryptedPass.trim();
+        showToast("Apple Biometric Verified! Loading live portfolio...");
         const passInputEl = document.getElementById('passcodeInput');
-        if (passInputEl) passInputEl.value = decryptedPass;
-        activePasscode = decryptedPass;
-        await connectLiveSheet();
+        if (passInputEl) passInputEl.value = finalPass;
+        const modalPassInput = document.getElementById('inputModalPasscode');
+        if (modalPassInput) modalPassInput.value = finalPass;
+        activePasscode = finalPass;
+        await connectLiveSheet(finalPass);
         return true;
+      } else {
+        console.warn("Face ID decipher returned empty value:", decrypted);
+        showToast("Biometric key expired or unreadable. Please tap 'Pair Face ID' again.");
       }
     }
   } catch (err) {
