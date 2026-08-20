@@ -6011,6 +6011,17 @@ async function triggerLiveRefresh() {
 
     updateTopLeftStatus();
     showToast("Telemetry Refreshed Successfully");
+  } catch (err) {
+    console.error("Refresh Telemetry Error:", err);
+    showToast(`Refresh failed: ${err.message || "Check connection"}`);
+    if (btn) {
+      btn.innerHTML = `<i data-lucide="refresh-cw" style="width:12px;height:12px;"></i> Refresh`;
+      btn.disabled = false;
+      if (typeof renderAllLucideIcons === 'function') renderAllLucideIcons();
+    }
+  }
+}
+
 let liveAutoPulseTimer = null;
 
 function startAutoPulseEngine() {
