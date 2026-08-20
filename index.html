@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Dashboard</title>
+  <title>Vageesh's Wealth Dossier // Architectural Portfolio</title>
   <meta name="description" content="An authentic architectural portfolio archive engineered with physical folder architecture, tracking Mutual Funds, Direct Equities, Sovereign PPF, and FIRE Freedom horizons.">
 
   <!-- Google Fonts: Fraunces + IBM Plex Mono + JetBrains Mono -->
@@ -18,7 +18,7 @@
   <!-- Apple PWA Standalone App & Mobile Web App Meta Tags -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Dossier">
+  <meta name="apple-mobile-web-app-title" content="Wealth Dossier">
   <link rel="manifest" href="manifest.json">
   <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='128' fill='%23181E29'/><circle cx='256' cy='256' r='180' fill='none' stroke='%236ee7b7' stroke-width='24'/><path d='M256 120v272M180 200l76-80 76 80' fill='none' stroke='%236ee7b7' stroke-width='24' stroke-linecap='round' stroke-linejoin='round'/></svg>">
 
@@ -4040,36 +4040,92 @@ function loadEncryptedVault(passcode) {
   }
 }
 
+function extractStructuredSheetRows(candidateRows, targetType = 'MF') {
+  if (!Array.isArray(candidateRows) || !candidateRows.length) return [];
+
+  let headerIdx = -1;
+  let detectedHeaders = [];
+
+  for (let i = 0; i < candidateRows.length; i++) {
+    const row = candidateRows[i];
+    const vals = Array.isArray(row) ? row : Object.values(row);
+    const cleanVals = vals.map(v => String(v || '').trim().toLowerCase().replace(/[^a-z0-9]/g, ''));
+    
+    if (targetType === 'MF') {
+      if (cleanVals.includes('fundticker') || cleanVals.includes('schemecode') || cleanVals.includes('fundname') || (cleanVals.includes('totalunits') && cleanVals.includes('livenav')) || (cleanVals.includes('totalinvested') && cleanVals.includes('dailychange'))) {
+        headerIdx = i;
+        detectedHeaders = cleanVals;
+        break;
+      }
+    } else { // Stocks
+      if (cleanVals.includes('instrumen') || cleanVals.includes('instrument') || cleanVals.includes('googleticker') || (cleanVals.includes('qty') && cleanVals.includes('liveprice')) || (cleanVals.includes('totalinves') && cleanVals.includes('dailychange'))) {
+        headerIdx = i;
+        detectedHeaders = cleanVals;
+        break;
+      }
+    }
+  }
+
+  if (headerIdx !== -1 && detectedHeaders.length) {
+    const structuredRows = [];
+    for (let i = headerIdx + 1; i < candidateRows.length; i++) {
+      const row = candidateRows[i];
+      const vals = Array.isArray(row) ? row : Object.values(row);
+      
+      const firstStr = String(vals[0] || '').trim().toUpperCase();
+      if (!firstStr || firstStr === 'TOTAL' || firstStr === 'TOTAL PORTFOLIO' || firstStr.startsWith('TOTAL ') || firstStr === 'SUMMARY') {
+        continue;
+      }
+
+      const hasAnyVal = vals.some(v => v !== null && v !== undefined && String(v).trim() !== '');
+      if (!hasAnyVal) continue;
+
+      const rowObj = {};
+      detectedHeaders.forEach((h, colIdx) => {
+        if (h) rowObj[h] = vals[colIdx];
+      });
+      if (row && typeof row === 'object' && !Array.isArray(row)) {
+        Object.assign(rowObj, row);
+      }
+      rowObj._rawVals = vals;
+      structuredRows.push(rowObj);
+    }
+    if (structuredRows.length) return structuredRows;
+  }
+
+  return candidateRows;
+}
+
 function normalizeMFData(data) {
   const rawCandidateRows = getRootArray(data, 'Mutual_Funds', 'mutualFunds', 'mutual_funds', 'funds', 'MF', 'MutualFunds', 'Mutual_Fund', 'Mutual Funds', 'Mutualfunds', 'Holdings_MF', 'MF_Holdings');
+  const candidateRows = extractStructuredSheetRows(rawCandidateRows, 'MF');
   
-  let rows = rawCandidateRows.filter(r => {
-    const rawName = getField(r, 'Fund Name', 'fundName', 'name', 'fund', 'Scheme Name', 'schemeName', 'Scheme', 'scheme', 'Instrument', 'Mutual Fund', 'Mutual Funds', 'Security', 'Particulars', 'Asset Name', 'Asset');
+  let rows = candidateRows.filter(r => {
+    const rawName = getField(r, 'Fund Ticker', 'fundTicker', 'Fund Name', 'fundName', 'name', 'fund', 'Scheme Name', 'schemeName', 'Scheme', 'scheme', 'Instrument', 'Mutual Fund', 'Mutual Funds', 'Security', 'Particulars', 'Asset Name', 'Asset');
     const name = String(rawName || '').trim().toUpperCase();
-    return name && name !== 'TOTAL' && !name.startsWith('TOTAL ') && name !== 'GRAND TOTAL' && name !== 'SUMMARY';
+    return name && name !== 'TOTAL' && !name.startsWith('TOTAL ') && name !== 'GRAND TOTAL' && name !== 'SUMMARY' && name !== 'TOTAL PORTFOLIO' && name !== 'FUND TICKER';
   });
 
-  // Fallback: If no rows passed strict name filter, check for any row containing units or investment
-  if (!rows.length && rawCandidateRows.length) {
-    rows = rawCandidateRows.filter(r => {
-      const inv = parseNum(getField(r, 'Total Invested', 'Invested', 'invested', 'Total Inves', 'Investment'));
-      const unt = parseNum(getField(r, 'Total Units', 'Units', 'units', 'Quantity'));
-      const val = parseNum(getField(r, 'Current Value', 'currentValue', 'Value'));
+  if (!rows.length && candidateRows.length) {
+    rows = candidateRows.filter(r => {
+      const inv = parseNum(getField(r, 'Total Invested', 'Invested', 'invested', 'Total Inves', 'Investment', 'totalinvested'));
+      const unt = parseNum(getField(r, 'Total Units', 'Units', 'units', 'Quantity', 'totalunits'));
+      const val = parseNum(getField(r, 'Current Value', 'currentValue', 'Value', 'currentvalue'));
       const firstStr = String(Object.values(r).find(v => typeof v === 'string' && v.trim().length > 1) || '').toUpperCase();
-      return (inv > 0 || unt > 0 || val > 0) && !firstStr.startsWith('TOTAL');
+      return (inv > 0 || unt > 0 || val > 0) && !firstStr.startsWith('TOTAL') && firstStr !== 'FUND TICKER';
     });
   }
 
   return rows.map((r, i) => {
-    const name = getField(r, 'Fund Name', 'fundName', 'name', 'fund', 'Scheme Name', 'schemeName', 'Scheme', 'scheme', 'Instrument', 'Mutual Fund', 'Mutual Funds', 'Security', 'Particulars', 'Asset Name', 'Asset') || 
-                 Object.values(r).find(v => typeof v === 'string' && v.trim().length > 2 && !v.toUpperCase().startsWith('TOTAL')) || 
+    const name = getField(r, 'Fund Ticker', 'fundTicker', 'fundticker', 'Fund Name', 'fundName', 'name', 'fund', 'Scheme Name', 'schemeName', 'Scheme', 'scheme', 'Instrument', 'Mutual Fund', 'Mutual Funds', 'Security', 'Particulars', 'Asset Name', 'Asset') || 
+                 Object.values(r).find(v => typeof v === 'string' && v.trim().length > 2 && !v.toUpperCase().startsWith('TOTAL') && !v.toUpperCase().includes('TICKER')) || 
                  `Mutual Fund ${i+1}`;
                  
-    const invested = parseNum(getField(r, 'Total Invested', 'Total_Invested', 'totalInvested', 'Invested', 'invested', 'Total Inves', 'Investment', 'Principal', 'Cost')) || 0;
-    const units = parseNum(getField(r, 'Total Units', 'Total_Units', 'totalUnits', 'Units', 'units', 'Unit Balance', 'Quantity', 'Qty', 'Balance')) || 0;
-    const nav = parseNum(getField(r, 'Live NAV', 'Live_NAV', 'liveNAV', 'LiveNav', 'NAV', 'nav', 'Current NAV', 'Price', 'CMP', 'Latest NAV')) || 0;
+    const invested = parseNum(getField(r, 'Total Invested', 'Total_Invested', 'totalInvested', 'totalinvested', 'Invested', 'invested', 'Total Inves', 'Investment', 'Principal', 'Cost')) || 0;
+    const units = parseNum(getField(r, 'Total Units', 'Total_Units', 'totalUnits', 'totalunits', 'Units', 'units', 'Unit Balance', 'Quantity', 'Qty', 'Balance')) || 0;
+    const nav = parseNum(getField(r, 'Live NAV', 'Live_NAV', 'liveNAV', 'livenav', 'LiveNav', 'NAV', 'nav', 'Current NAV', 'Price', 'CMP', 'Latest NAV')) || 0;
     
-    const rawCur = parseNum(getField(r, 'Current Value', 'Current_Value', 'currentValue', 'CurrentVal', 'Market Value', 'Market_Value', 'Value', 'value', 'Total Value', 'Valuation', 'Present Value'));
+    const rawCur = parseNum(getField(r, 'Current Value', 'Current_Value', 'currentValue', 'currentvalue', 'CurrentVal', 'Market Value', 'Market_Value', 'Value', 'value', 'Total Value', 'Valuation', 'Present Value'));
     const currentValue = rawCur > 0 ? rawCur : (units > 0 && nav > 0 ? (units * nav) : invested);
     const avgNav = parseNum(getField(r, 'Avg NAV', 'avgNav', 'Average NAV', 'averageNAV', 'Avg Buy Price', 'Purchase NAV')) || (units > 0 && invested > 0 ? (invested / units) : nav);
     const rawCategory = getField(r, 'Category', 'category', 'type', 'Fund Type', 'Class');
@@ -4077,22 +4133,22 @@ function normalizeMFData(data) {
 
     // Time horizon change fields
     let dailyChange = parseNum(getField(r, 
-      'Daily Change', 'Daily_Change', 'dailyChange', 'dayChange', 'Day Change', 'Day_Change', 
+      'Daily Change', 'Daily_Change', 'dailyChange', 'dailychange', 'dayChange', 'Day Change', 'Day_Change', 
       '1D Change', '1D_Change', '1D', 'Today Change', 'Today_Change', 'Today', 'Daily', 'Day', 
       'Daily Gain', 'Day Gain', 'Day P&L', 'Daily P&L', 'Day P/L', 'Daily P/L', 'DayProfit', 'DailyProfit',
       '1 Day Change', 'Change Today', 'Daily Movement', 'Day Return', 'Daily Change (Rs)', 'Daily Change (INR)'
     ));
 
     let monthlyChange = parseNum(getField(r, 
-      'Monthly Change', 'Monthly_Change', 'monthlyChange', 'monthChange', 'Month Change', 'Month_Change',
-      'Last Month', 'Last_Month', 'LastMonth', '1M Change', '1M_Change', '1M', 'Monthly', 'Month', 
+      'Monthly Change', 'Monthly_Change', 'monthlyChange', 'monthlychange', 'monthChange', 'Month Change', 'Month_Change',
+      'Last Month', 'Last_Month', 'LastMonth', 'lastmonth', '1M Change', '1M_Change', '1M', 'Monthly', 'Month', 
       'Monthly Gain', 'Month Gain', 'Monthly P&L', 'Month P&L', 'Monthly P/L', '30 Days Change', '30D Change',
       'Last 30 Days', '1 Month Change', 'Month Return', 'Monthly Change (Rs)', 'Monthly Change (INR)'
     ));
 
     let yearChange = parseNum(getField(r, 
-      'Year Change', 'Year_Change', 'yearChange', 'Yearly Change', 'Yearly_Change', 'yearlyChange',
-      'Last Year', 'Last_Year', 'LastYear', '1Y Change', '1Y_Change', '1Y', 'Yearly', 'Year', 
+      'Year Change', 'Year_Change', 'yearChange', 'yearchange', 'Yearly Change', 'Yearly_Change', 'yearlyChange',
+      'Last Year', 'Last_Year', 'LastYear', 'lastyear', '1Y Change', '1Y_Change', '1Y', 'Yearly', 'Year', 
       '1 Year Change', 'Year Gain', 'Yearly Gain', 'Year P&L', 'Yearly P&L', '365 Days Change', 
       '52W Change', '52 Week Change', 'Annual Change', 'Annual Trajectory', 'Year Return', 'Year Change (Rs)', 'Year Change (INR)'
     ));
@@ -4128,7 +4184,7 @@ function normalizeMFData(data) {
       monthlySip: sipAmount,
       sipDay,
       sipActive: sipAmount > 0 || sipDay !== null,
-      ticker: String(getField(r, 'Ticker Symbol', 'tickerSymbol', 'ticker', 'symbol', 'Google Ticker', 'Scheme Code') || ''),
+      ticker: String(getField(r, 'Scheme Code', 'schemecode', 'Ticker Symbol', 'tickerSymbol', 'ticker', 'symbol', 'Google Ticker') || ''),
       raw: r
     };
   });
@@ -4136,48 +4192,49 @@ function normalizeMFData(data) {
 
 function normalizeStockData(data) {
   const rawCandidateRows = getRootArray(data, 'Stocks', 'stocks', 'equity', 'equities', 'Direct_Stocks', 'directStocks', 'Direct Stocks', 'Direct_Equities', 'Equities');
+  const candidateRows = extractStructuredSheetRows(rawCandidateRows, 'Stocks');
   
-  let rows = rawCandidateRows.filter(r => {
-    const rawName = getField(r, 'Instrument', 'instrument', 'name', 'stockName', 'Stock Name', 'symbol', 'Symbol', 'Security', 'Company');
+  let rows = candidateRows.filter(r => {
+    const rawName = getField(r, 'Instrumen', 'instrumen', 'Instrument', 'instrument', 'name', 'stockName', 'Stock Name', 'symbol', 'Symbol', 'Security', 'Company');
     const name = String(rawName || '').trim().toUpperCase();
-    return name && name !== 'TOTAL' && !name.startsWith('TOTAL ') && name !== 'GRAND TOTAL' && name !== 'SUMMARY';
+    return name && name !== 'TOTAL' && !name.startsWith('TOTAL ') && name !== 'GRAND TOTAL' && name !== 'SUMMARY' && name !== 'INSTRUMEN' && name !== 'INSTRUMENT';
   });
 
-  if (!rows.length && rawCandidateRows.length) {
-    rows = rawCandidateRows.filter(r => {
-      const inv = parseNum(getField(r, 'Total Invested', 'Total Inves', 'Invested', 'invested'));
-      const qty = parseNum(getField(r, 'Qty', 'Quantity', 'quantity', 'qty'));
+  if (!rows.length && candidateRows.length) {
+    rows = candidateRows.filter(r => {
+      const inv = parseNum(getField(r, 'Total Invested', 'Total Inves', 'totalinves', 'totalinvested', 'Invested', 'invested'));
+      const qty = parseNum(getField(r, 'Qty', 'qty', 'Quantity', 'quantity'));
       const firstStr = String(Object.values(r).find(v => typeof v === 'string' && v.trim().length > 1) || '').toUpperCase();
-      return (inv > 0 || qty > 0) && !firstStr.startsWith('TOTAL');
+      return (inv > 0 || qty > 0) && !firstStr.startsWith('TOTAL') && firstStr !== 'INSTRUMEN';
     });
   }
 
   return rows.map((r, i) => {
-    const invested = parseNum(getField(r, 'Total Invested', 'Total Inves', 'totalInvested', 'investment', 'Invested', 'invested', 'Principal', 'Cost')) || 0;
+    const invested = parseNum(getField(r, 'Total Invested', 'Total Inves', 'totalinves', 'totalinvested', 'investment', 'Invested', 'invested', 'Principal', 'Cost')) || 0;
     const qty = parseNum(getField(r, 'Quantity', 'quantity', 'qty', 'Qty', 'shares', 'Shares')) || 0;
-    const rawCur = parseNum(getField(r, 'Current Value', 'Current_Value', 'currentValue', 'current_value', 'value', 'Market Value'));
-    const avgPrice = parseNum(getField(r, 'Avg Price', 'averagePrice', 'avgPrice', 'buyPrice', 'Avg Buy Price')) || (qty > 0 ? (invested / qty) : 0);
-    const livePrice = parseNum(getField(r, 'Live Price', 'livePrice', 'cmp', 'CMP', 'currentPrice', 'Price')) || (qty > 0 && rawCur > 0 ? (rawCur / qty) : avgPrice);
+    const rawCur = parseNum(getField(r, 'Current Value', 'Current_Value', 'currentValue', 'currentvalue', 'current_value', 'value', 'Market Value'));
+    const avgPrice = parseNum(getField(r, 'Avg Price', 'Avg Pric', 'avgpric', 'averagePrice', 'avgPrice', 'buyPrice', 'Avg Buy Price')) || (qty > 0 ? (invested / qty) : 0);
+    const livePrice = parseNum(getField(r, 'Live Price', 'livePrice', 'liveprice', 'cmp', 'CMP', 'currentPrice', 'Price')) || (qty > 0 && rawCur > 0 ? (rawCur / qty) : avgPrice);
     const currentValue = rawCur > 0 ? rawCur : (qty > 0 && livePrice > 0 ? (qty * livePrice) : invested);
 
     // Time horizon change fields
     let dailyChange = parseNum(getField(r, 
-      'Daily Change', 'Daily_Change', 'dailyChange', 'dayChange', 'Day Change', 'Day_Change', 
+      'Daily Change', 'Daily_Change', 'dailyChange', 'dailychange', 'dayChange', 'Day Change', 'Day_Change', 
       '1D Change', '1D_Change', '1D', 'Today Change', 'Today_Change', 'Today', 'Daily', 'Day', 
       'Daily Gain', 'Day Gain', 'Day P&L', 'Daily P&L', 'Day P/L', 'Daily P/L', 'DayProfit', 'DailyProfit',
       '1 Day Change', 'Change Today', 'Daily Movement', 'Day Return', 'Daily Change (Rs)', 'Daily Change (INR)'
     ));
 
     let monthlyChange = parseNum(getField(r, 
-      'Last Month', 'Last_Month', 'LastMonth', 'monthlyChange', 'Monthly Change', 'Monthly_Change', 
-      'monthChange', 'Month Change', 'Month_Change', '1M Change', '1M_Change', '1M', 'Monthly', 'Month', 
+      'Last Month', 'Last_Month', 'LastMonth', 'lastmonth', 'monthlyChange', 'Monthly Change', 'Monthly_Change', 
+      'monthlychange', 'monthChange', 'Month Change', 'Month_Change', '1M Change', '1M_Change', '1M', 'Monthly', 'Month', 
       'Monthly Gain', 'Month Gain', 'Monthly P&L', 'Month P&L', 'Monthly P/L', '30 Days Change', '30D Change',
       'Last 30 Days', '1 Month Change', 'Month Return', 'Monthly Change (Rs)', 'Monthly Change (INR)'
     ));
 
     let yearChange = parseNum(getField(r, 
-      'Last Year', 'Last_Year', 'LastYear', 'yearChange', 'Year Change', 'Year_Change', 
-      'yearlyChange', 'Yearly Change', 'Yearly_Change', '1Y Change', '1Y_Change', '1Y', 'Yearly', 'Year', 
+      'Last Year', 'Last_Year', 'LastYear', 'lastyear', 'yearChange', 'Year Change', 'Year_Change', 
+      'yearchange', 'yearlyChange', 'Yearly Change', 'Yearly_Change', '1Y Change', '1Y_Change', '1Y', 'Yearly', 'Year', 
       '1 Year Change', 'Year Gain', 'Yearly Gain', 'Year P&L', 'Yearly P&L', '365 Days Change', 
       '52W Change', '52 Week Change', 'Annual Change', 'Annual Trajectory', 'Year Return', 'Year Change (Rs)', 'Year Change (INR)'
     ));
@@ -4191,8 +4248,8 @@ function normalizeStockData(data) {
 
     return {
       id: 'st-' + i,
-      name: getField(r, 'Instrument', 'instrument', 'name', 'stockName', 'Stock Name', 'Security', 'Company') || `Stock ${i+1}`,
-      ticker: getField(r, 'Google Ticker', 'ticker', 'symbol', 'googleTicker', 'Symbol') || 'TICKER',
+      name: getField(r, 'Instrumen', 'instrumen', 'Instrument', 'instrument', 'name', 'stockName', 'Stock Name', 'Security', 'Company') || `Stock ${i+1}`,
+      ticker: getField(r, 'Google Ticker', 'googleticker', 'ticker', 'symbol', 'googleTicker', 'Symbol') || 'TICKER',
       sector: getField(r, 'Sector', 'sector', 'industry', 'Industry') || 'Equities',
       qty, avgBuyPrice: avgPrice, cmp: livePrice, invested, currentValue,
       dailyChange, monthlyChange, yearChange,
@@ -4434,8 +4491,8 @@ function calculateTotals() {
   }
   const ppfInterest = Math.max(0, ppfCur - ppfInv);
 
-  // PPF Continuous Accrual for 1D, 1M, 1Y
-  const ppfDailyInterest = Math.round((ppfCur * 0.071) / 365);
+  // PPF Continuous Accrual for 1M, 1Y (PPF removed from Daily Change)
+  const ppfDailyInterest = 0;
   const ppfMonthlyInterest = Math.round((ppfCur * 0.071) / 12);
   const ppfYearlyInterest = Math.round(ppfCur * 0.071);
 
@@ -4444,21 +4501,23 @@ function calculateTotals() {
   const totalProfit = totalNetWorth - totalInv;
   const totalProfitPct = totalInv > 0 ? ((totalProfit / totalInv) * 100).toFixed(2) : '0.00';
 
-  // Consolidated Net Worth Horizon Changes
+  // Consolidated Net Worth Horizon Changes (PPF explicitly excluded from 1-Day)
   const dashSummary = normalizeDashboardSummary(AppState.rawPayload || {});
   const totalDayChange = (dashSummary.totalDayChange !== null && dashSummary.totalDayChange !== 0) 
     ? dashSummary.totalDayChange 
-    : (mfDayChange + stDayChange + ppfDailyInterest);
+    : (mfDayChange + stDayChange);
+    
   const totalMonthChange = (dashSummary.totalMonthChange !== null && dashSummary.totalMonthChange !== 0) 
     ? dashSummary.totalMonthChange 
     : (mfMonthChange + stMonthChange + ppfMonthlyInterest);
+    
   const totalYearChange = (dashSummary.totalYearChange !== null && dashSummary.totalYearChange !== 0) 
     ? dashSummary.totalYearChange 
     : (mfYearChange + stYearChange + ppfYearlyInterest);
 
-  const totalDayChangePct = totalNetWorth > 0 ? ((totalDayChange / (totalNetWorth - totalDayChange)) * 100).toFixed(2) : '0.00';
-  const totalMonthChangePct = totalNetWorth > 0 ? ((totalMonthChange / (totalNetWorth - totalMonthChange)) * 100).toFixed(2) : '0.00';
-  const totalYearChangePct = totalNetWorth > 0 ? ((totalYearChange / (totalNetWorth - totalYearChange)) * 100).toFixed(2) : '0.00';
+  const totalDayChangePct = (totalNetWorth - totalDayChange) > 0 ? ((totalDayChange / (totalNetWorth - totalDayChange)) * 100).toFixed(2) : '0.00';
+  const totalMonthChangePct = (totalNetWorth - totalMonthChange) > 0 ? ((totalMonthChange / (totalNetWorth - totalMonthChange)) * 100).toFixed(2) : '0.00';
+  const totalYearChangePct = (totalNetWorth - totalYearChange) > 0 ? ((totalYearChange / (totalNetWorth - totalYearChange)) * 100).toFixed(2) : '0.00';
 
   return {
     mfInv, mfCur, mfSip, mfDayChange, mfMonthChange, mfYearChange,
@@ -4805,7 +4864,6 @@ function renderTimeHorizonDeck(metrics) {
       <div style="text-align:right; font-size:9.5px; opacity:0.65;">
         <div>MF: ${metrics.mfDayChange >= 0 ? '+' : ''}${formatVal(metrics.mfDayChange)}</div>
         <div>Stocks: ${metrics.stDayChange >= 0 ? '+' : ''}${formatVal(metrics.stDayChange)}</div>
-        <div>PPF: +${formatVal(metrics.ppfDailyInterest)}</div>
       </div>
     </div>
 
@@ -5772,6 +5830,12 @@ async function connectLiveSheet(explicitPass = '') {
     AppState.rawPayload = data;
     console.log("=== RAW GOOGLE SHEET TELEMETRY PAYLOAD ===", data);
 
+    // Save trusted device active session (Zerodha-style Instant Launch)
+    try {
+      localStorage.setItem('MOSBY_SESSION_ACTIVE', 'true');
+      localStorage.setItem('MOSBY_TRUSTED_SESSION', simpleCipher(pass, "MOSBY_DEVICE_TRUST_KEY_88"));
+    } catch(e) {}
+
     AppState.mutualFunds = normalizeMFData(data);
     AppState.stocks = normalizeStockData(data);
     AppState.ppf = normalizePPFData(data);
@@ -6149,6 +6213,9 @@ function updateAuthVisuals(isSyncing = false) {
 function lockPortfolioSession() {
   isLiveSession = false;
   activePasscode = '';
+  try {
+    localStorage.removeItem('MOSBY_SESSION_ACTIVE');
+  } catch(e) {}
   AppState = JSON.parse(JSON.stringify(DEMO_STATE));
   updateAuthVisuals();
   renderCompleteDossiers();
@@ -6412,7 +6479,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (typeof renderAllLucideIcons === 'function') renderAllLucideIcons();
   
-  // Auto Face ID Prompt on iPhone / WebApp Launch
+  // Auto-Login on Trusted Device (Zerodha-style Instant Open)
+  try {
+    if (localStorage.getItem('MOSBY_SESSION_ACTIVE') === 'true') {
+      const cipher = localStorage.getItem('MOSBY_TRUSTED_SESSION');
+      if (cipher) {
+        const trustedPass = simpleDecipher(cipher, "MOSBY_DEVICE_TRUST_KEY_88");
+        const cleanPass = typeof trustedPass === 'string' ? trustedPass : String(trustedPass || '');
+        if (cleanPass && cleanPass.trim()) {
+          connectLiveSheet(cleanPass.trim());
+        }
+      }
+    }
+  } catch(e) {}
+
+  // Auto Face ID Prompt on iPhone / WebApp Launch (if not already logged in via trusted session)
   checkAutoFaceIdOnLoad();
 });
 
