@@ -4184,6 +4184,32 @@ function extractStructuredSheetRows(candidateRows, targetType = 'MF') {
   return candidateRows;
 }
 
+const MF_KNOWLEDGE_BASE = {
+  'axis small cap': { schemeCode: '125354', fallback1dPct: 0.3209, fallback1mPct: 4.5368, fallback1yPct: 25.733 },
+  'sbi nifty 50': { schemeCode: '119827', fallback1dPct: -0.5523, fallback1mPct: -0.7878, fallback1yPct: 9.8386 },
+  'parag parikh flexi cap': { schemeCode: '122639', fallback1dPct: -0.6148, fallback1mPct: -1.1292, fallback1yPct: 5.0564 },
+  'black rock midcap': { schemeCode: '153788', fallback1dPct: -0.3859, fallback1mPct: 2.0542, fallback1yPct: 0.0 },
+  'jio blackrock': { schemeCode: '153788', fallback1dPct: -0.3859, fallback1mPct: 2.0542, fallback1yPct: 0.0 },
+  'parag parikh elss': { schemeCode: '147481', fallback1dPct: -0.6946, fallback1mPct: -1.5138, fallback1yPct: 0.6896 }
+};
+
+const STOCK_KNOWLEDGE_BASE = {
+  'acmesolar': { ticker: 'NSE:ACMESOLAR', fallback1dPct: 4.1813, fallback1mPct: 6.0197, fallback1yPct: 26.826 },
+  'bel': { ticker: 'NSE:BEL', fallback1dPct: -0.3556, fallback1mPct: -0.5641, fallback1yPct: 8.804 },
+  'cdsl': { ticker: 'NSE:CDSL', fallback1dPct: 1.2556, fallback1mPct: -1.4116, fallback1yPct: -17.660 },
+  'goldbees': { ticker: 'NSE:GOLDBEES', fallback1dPct: 2.4062, fallback1mPct: 8.6158, fallback1yPct: 36.288 },
+  'hdfcbank': { ticker: 'NSE:HDFCBANK', fallback1dPct: 0.6965, fallback1mPct: -5.0205, fallback1yPct: -27.530 },
+  'irctc': { ticker: 'NSE:IRCTC', fallback1dPct: -0.2360, fallback1mPct: -2.5858, fallback1yPct: -33.450 },
+  'ireda': { ticker: 'NSE:IREDA', fallback1dPct: 0.8529, fallback1mPct: -5.4402, fallback1yPct: -22.748 },
+  'jiofin': { ticker: 'NSE:JIOFIN', fallback1dPct: 0.7145, fallback1mPct: 1.9883, fallback1yPct: -25.298 },
+  'lgeindia': { ticker: 'NSE:LGEINDIA', fallback1dPct: -0.8027, fallback1mPct: 4.1972, fallback1yPct: 0.0 },
+  'nhpc': { ticker: 'NSE:NHPC', fallback1dPct: 0.2618, fallback1mPct: -5.1593, fallback1yPct: -7.534 },
+  'premiere': { ticker: 'NSE:PREMIERENE', fallback1dPct: 3.6538, fallback1mPct: -0.8077, fallback1yPct: 0.240 },
+  'suzlon': { ticker: 'NSE:SUZLON', fallback1dPct: 0.6584, fallback1mPct: -11.4589, fallback1yPct: -21.206 },
+  'tmcv': { ticker: 'NSE:TMCV', fallback1dPct: -0.2305, fallback1mPct: 13.7153, fallback1yPct: 0.0 },
+  'tmpv': { ticker: 'NSE:TMPV', fallback1dPct: -0.4376, fallback1mPct: -4.3451, fallback1yPct: -23.414 }
+};
+
 function normalizeMFData(data) {
   const rawCandidateRows = getRootArray(data, 'Mutual_Funds', 'mutualFunds', 'mutual_funds', 'funds', 'MF', 'MutualFunds', 'Mutual_Fund', 'Mutual Funds', 'Mutualfunds', 'Holdings_MF', 'MF_Holdings');
   const candidateRows = extractStructuredSheetRows(rawCandidateRows, 'MF');
@@ -4240,32 +4266,6 @@ function normalizeMFData(data) {
       '1 Year Change', 'Year Gain', 'Yearly Gain', 'Year P&L', 'Yearly P&L', '365 Days Change', 
       '52W Change', '52 Week Change', 'Annual Change', 'Annual Trajectory', 'Year Return', 'Year Change (Rs)', 'Year Change (INR)'
     ));
-
-const MF_KNOWLEDGE_BASE = {
-  'axis small cap': { schemeCode: '125354', fallback1dPct: 0.3209, fallback1mPct: 4.5368, fallback1yPct: 25.733 },
-  'sbi nifty 50': { schemeCode: '119827', fallback1dPct: -0.5523, fallback1mPct: -0.7878, fallback1yPct: 9.8386 },
-  'parag parikh flexi cap': { schemeCode: '122639', fallback1dPct: -0.6148, fallback1mPct: -1.1292, fallback1yPct: 5.0564 },
-  'black rock midcap': { schemeCode: '153788', fallback1dPct: -0.3859, fallback1mPct: 2.0542, fallback1yPct: 0.0 },
-  'jio blackrock': { schemeCode: '153788', fallback1dPct: -0.3859, fallback1mPct: 2.0542, fallback1yPct: 0.0 },
-  'parag parikh elss': { schemeCode: '147481', fallback1dPct: -0.6946, fallback1mPct: -1.5138, fallback1yPct: 0.6896 }
-};
-
-const STOCK_KNOWLEDGE_BASE = {
-  'acmesolar': { ticker: 'NSE:ACMESOLAR', fallback1dPct: 4.1813, fallback1mPct: 6.0197, fallback1yPct: 26.826 },
-  'bel': { ticker: 'NSE:BEL', fallback1dPct: -0.3556, fallback1mPct: -0.5641, fallback1yPct: 8.804 },
-  'cdsl': { ticker: 'NSE:CDSL', fallback1dPct: 1.2556, fallback1mPct: -1.4116, fallback1yPct: -17.660 },
-  'goldbees': { ticker: 'NSE:GOLDBEES', fallback1dPct: 2.4062, fallback1mPct: 8.6158, fallback1yPct: 36.288 },
-  'hdfcbank': { ticker: 'NSE:HDFCBANK', fallback1dPct: 0.6965, fallback1mPct: -5.0205, fallback1yPct: -27.530 },
-  'irctc': { ticker: 'NSE:IRCTC', fallback1dPct: -0.2360, fallback1mPct: -2.5858, fallback1yPct: -33.450 },
-  'ireda': { ticker: 'NSE:IREDA', fallback1dPct: 0.8529, fallback1mPct: -5.4402, fallback1yPct: -22.748 },
-  'jiofin': { ticker: 'NSE:JIOFIN', fallback1dPct: 0.7145, fallback1mPct: 1.9883, fallback1yPct: -25.298 },
-  'lgeindia': { ticker: 'NSE:LGEINDIA', fallback1dPct: -0.8027, fallback1mPct: 4.1972, fallback1yPct: 0.0 },
-  'nhpc': { ticker: 'NSE:NHPC', fallback1dPct: 0.2618, fallback1mPct: -5.1593, fallback1yPct: -7.534 },
-  'premiere': { ticker: 'NSE:PREMIERENE', fallback1dPct: 3.6538, fallback1mPct: -0.8077, fallback1yPct: 0.240 },
-  'suzlon': { ticker: 'NSE:SUZLON', fallback1dPct: 0.6584, fallback1mPct: -11.4589, fallback1yPct: -21.206 },
-  'tmcv': { ticker: 'NSE:TMCV', fallback1dPct: -0.2305, fallback1mPct: 13.7153, fallback1yPct: 0.0 },
-  'tmpv': { ticker: 'NSE:TMPV', fallback1dPct: -0.4376, fallback1mPct: -4.3451, fallback1yPct: -23.414 }
-};
 
     if (dailyChange === 0) {
       const dayPct = parseNum(getField(r, 'Day Change %', 'Daily %', 'Change %', '1D %', 'Day %', 'Day Change (%)', 'Change (%)'));
