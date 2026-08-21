@@ -509,12 +509,12 @@ svg.lucide, i[data-lucide], svg {
 .section-hero__greetings {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.4rem;
   font-family: var(--font-mono);
   font-size: 0.85rem;
   color: #ffc46b;
   text-transform: uppercase;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.14em;
   margin-bottom: 0.75rem;
 }
 
@@ -1651,7 +1651,7 @@ svg.lucide, i[data-lucide], svg {
        ========================================================================== -->
   <section class="section-hero container" id="hero">
     <div class="section-hero__greetings">
-      <i data-lucide="sparkles" style="width: 13px; height: 13px;"></i>
+      <i data-lucide="sparkles" style="width: 13px; height: 13px; color: #ffc46b;"></i>
       <span id="typewriterGreetingText">Namaste</span>, Vageesh
     </div>
     <h1 class="section-hero__title">Consolidated Wealth Archive</h1>
@@ -6087,22 +6087,88 @@ async function triggerLiveRefresh() {
 }
 
 let liveAutoPulseTimer = null;
+let lastAutoPulseTimestamp = 0;
+let isLowBatteryPowerSave = false;
+
+// Battery Protection & Low Power Mode Monitor
+if (typeof navigator !== 'undefined' && navigator.getBattery) {
+  navigator.getBattery().then(battery => {
+    const checkBattery = () => {
+      // If unplugged and battery <= 20%, halt background network polling to preserve laptop/phone battery
+      isLowBatteryPowerSave = (!battery.charging && battery.level <= 0.20);
+    };
+    checkBattery();
+    battery.addEventListener('chargingchange', checkBattery);
+    battery.addEventListener('levelchange', checkBattery);
+  }).catch(() => {});
+}
+
+function getMarketSessionInfo() {
+  const now = new Date();
+  // IST offset: UTC + 5:30
+  const istOffset = 5.5 * 60 * 60 * 1000;
+  const istTime = new Date(now.getTime() + (now.getTimezoneOffset() * 60000) + istOffset);
+  const day = istTime.getDay(); // 0 = Sun, 6 = Sat
+  const hours = istTime.getHours();
+  const minutes = istTime.getMinutes();
+  const totalMinutes = hours * 60 + minutes;
+
+  const isWeekend = (day === 0 || day === 6);
+  // NSE Equity Trading Hours: 9:15 AM - 3:30 PM (555 mins to 930 mins)
+  const isEquityTradingHours = !isWeekend && (totalMinutes >= (9 * 60 + 15) && totalMinutes <= (15 * 60 + 30));
+  // AMFI NAV Settlement Hours: 12:00 AM - 2:00 AM IST (0 mins to 120 mins)
+  const isNavSettlementHours = (totalMinutes >= 0 && totalMinutes <= (2 * 60));
+
+  if (isEquityTradingHours) {
+    return { session: 'EQUITY_OPEN', intervalMs: 60 * 1000, desc: 'Live NSE Trading (1m heartbeat)' };
+  } else if (isNavSettlementHours) {
+    return { session: 'NAV_SETTLEMENT', intervalMs: 5 * 60 * 1000, desc: 'AMFI NAV Settlement (5m heartbeat)' };
+  } else {
+    // Outside market hours & weekends: exactly 1-hour heartbeat (60m) when site is open on screen
+    return { session: 'MARKET_CLOSED', intervalMs: 60 * 60 * 1000, desc: 'Market Closed (1-hour relaxed heartbeat)' };
+  }
+}
 
 function startAutoPulseEngine() {
-  if (liveAutoPulseTimer) clearInterval(liveAutoPulseTimer);
-  liveAutoPulseTimer = setInterval(async () => {
-    if (isLiveSession && activePasscode) {
-      await refreshTelemetrySilently();
-    }
-  }, 60000);
+  stopAutoPulseEngine();
+  
+  function scheduleNextPulse() {
+    const session = getMarketSessionInfo();
+    liveAutoPulseTimer = setTimeout(async () => {
+      // STRICT BATTERY & SLEEP GUARDS:
+      // 1. Never poll if tab is hidden / asleep in background (document.hidden)
+      // 2. Never poll if device is on low battery unplugged (isLowBatteryPowerSave)
+      if (!document.hidden && !isLowBatteryPowerSave && isLiveSession && activePasscode) {
+        await refreshTelemetrySilently();
+        lastAutoPulseTimestamp = Date.now();
+      }
+      scheduleNextPulse();
+    }, session.intervalMs);
+  }
+
+  scheduleNextPulse();
 }
 
 function stopAutoPulseEngine() {
   if (liveAutoPulseTimer) {
-    clearInterval(liveAutoPulseTimer);
+    clearTimeout(liveAutoPulseTimer);
     liveAutoPulseTimer = null;
   }
 }
+
+// Adaptive refresh when switching back to tab (Sleep / Background Wakeup)
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden && !isLowBatteryPowerSave && isLiveSession && activePasscode) {
+    const session = getMarketSessionInfo();
+    const timeSinceLast = Date.now() - lastAutoPulseTimestamp;
+    // 1m for active market, 5m for NAV settlement, 1 hour (3,600,000 ms) for closed market
+    const threshold = session.session === 'EQUITY_OPEN' ? 60000 : (session.session === 'NAV_SETTLEMENT' ? 300000 : 3600000);
+    if (timeSinceLast >= threshold) {
+      refreshTelemetrySilently();
+      lastAutoPulseTimestamp = Date.now();
+    }
+  }
+});
 
 async function refreshTelemetrySilently() {
   if (!isLiveSession || !activePasscode) return;
@@ -6632,14 +6698,66 @@ function hydrateActiveSessionSync() {
 hydrateActiveSessionSync();
 
 /* ==========================================================================
+   DYNAMIC ROTATING MULTILINGUAL TYPEWRITER GREETING
+   ========================================================================== */
+const ROTATING_GREETINGS = [
+  'Namaste',
+  'Konnichiwa',
+  'Guten Tag',
+  'Bonjour',
+  'Hola',
+  'Ciao',
+  'Vanakkam',
+  'Aloha',
+  'Sawubona',
+  'Salam',
+  'Shalom',
+  'Nǐ Hǎo',
+  'Olá',
+  'Anyoung',
+  'Zdravstvuyte'
+];
+
+let typewriterWordIdx = 0;
+let typewriterCharIdx = 0;
+let typewriterIsDeleting = false;
+let typewriterTimer = null;
+
+function initTypewriterGreeting() {
+  const greetingEl = document.getElementById('typewriterGreetingText');
+  if (!greetingEl) return;
+
+  if (typewriterTimer) clearTimeout(typewriterTimer);
+
+  const currentWord = ROTATING_GREETINGS[typewriterWordIdx];
+
+  if (typewriterIsDeleting) {
+    typewriterCharIdx--;
+    greetingEl.innerText = currentWord.substring(0, typewriterCharIdx);
+  } else {
+    typewriterCharIdx++;
+    greetingEl.innerText = currentWord.substring(0, typewriterCharIdx);
+  }
+
+  let typeSpeed = typewriterIsDeleting ? 50 : 90;
+
+  if (!typewriterIsDeleting && typewriterCharIdx === currentWord.length) {
+    typeSpeed = 2400; // Pause on full word
+    typewriterIsDeleting = true;
+  } else if (typewriterIsDeleting && typewriterCharIdx === 0) {
+    typewriterIsDeleting = false;
+    typewriterWordIdx = (typewriterWordIdx + 1) % ROTATING_GREETINGS.length;
+    typeSpeed = 450; // Pause before typing next word
+  }
+
+  typewriterTimer = setTimeout(initTypewriterGreeting, typeSpeed);
+}
+
+/* ==========================================================================
    INITIALIZATION & KEYBOARD DISPATCHER
    ========================================================================== */
 document.addEventListener('DOMContentLoaded', () => {
-  const greetingEl = document.getElementById('typewriterGreetingText');
-  if (greetingEl) {
-    const h = new Date().getHours();
-    greetingEl.innerText = h < 12 ? 'Good morning' : (h < 17 ? 'Good afternoon' : 'Namaste');
-  }
+  initTypewriterGreeting();
 
   ['INR', 'USD', 'EUR', 'GBP'].forEach(c => {
     const btn = document.getElementById(`btnCur${c}`);
