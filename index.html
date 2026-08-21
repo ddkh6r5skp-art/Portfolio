@@ -6353,13 +6353,9 @@ async function authenticateWithFaceId() {
   } catch (err) {
     if (btn) btn.classList.remove('pulse-scan');
     console.error("Face ID Auth Error:", err);
-    // If the passkey was deleted from Apple Keychain / device
-    if (err.name === 'NotFoundError' || err.name === 'NotSupportedError' || err.name === 'InvalidStateError' || (err.message && (err.message.toLowerCase().includes('not found') || err.message.toLowerCase().includes('deleted')))) {
-      clearFaceIdBiometrics();
-      showToast("Passkey removed from Apple Keychain. Tap 'Pair Face ID' to set up again.");
-    } else if (err.name !== 'NotAllowedError' && err.name !== 'AbortError') {
-      showToast(`Face ID: ${err.message || "Verification failed"}`);
-    }
+    // On any biometric failure/rejection/missing key, reset local flag so user can re-pair immediately
+    clearFaceIdBiometrics();
+    showToast("Face ID not detected. Reset to 'Pair Face ID' — click to set up again.");
     return false;
   }
   return false;
