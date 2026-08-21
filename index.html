@@ -1879,12 +1879,12 @@ svg.lucide, i[data-lucide], svg {
           <div class="dossier-kpi-card">
             <span class="dossier-kpi-label">Total Wealth Created</span>
             <span class="dossier-kpi-val num-mono privacy-blur" id="kpiProfit" style="color: #6ee7b7;">₹0</span>
-            <span style="font-size:11px; opacity:0.75;" id="kpiProfitSub">+0.0% Gain</span>
+            <span style="font-size:11px; opacity:0.75;" id="kpiProfitSub">+0.0% Net Return</span>
           </div>
           <div class="dossier-kpi-card">
-            <span class="dossier-kpi-label">Portfolio Alpha</span>
-            <span class="dossier-kpi-val num-mono" id="kpiReturn" style="color: #fde047;">0.0%</span>
-            <span style="font-size:11px; opacity:0.75;">Weighted Alpha</span>
+            <span class="dossier-kpi-label">Wealth Multiplier (MOIC)</span>
+            <span class="dossier-kpi-val num-mono" id="kpiReturn" style="color: #fde047;">1.00x</span>
+            <span style="font-size:11px; opacity:0.75;" id="kpiReturnSub">Capital Growth Factor</span>
           </div>
           <div class="dossier-kpi-card">
             <span class="dossier-kpi-label">Compounding Velocity</span>
@@ -4227,26 +4227,17 @@ const DEMO_STATE = {
     { date: '25 Jul 2026', fundName: 'Aegis Sovereign Tax Shield (ELSS)', amount: 1000, nav: 43.90, units: 22.779, currentValue: 1020.50, gain: 20.50, gainPct: 2.05 }
   ],
   dividends: [
-    { date: '18 Aug 2026', ticker: 'BEL', companyName: 'Bharat Electronics Ltd', amount: 1850, fy: 'FY 2026-27', status: 'Credited' },
-    { date: '12 Aug 2026', ticker: 'CDSL', companyName: 'Central Depository Services', amount: 920, fy: 'FY 2026-27', status: 'Credited' },
-    { date: '28 Jul 2026', ticker: 'HDFCBANK', companyName: 'HDFC Bank Ltd', amount: 2450, fy: 'FY 2026-27', status: 'Credited' },
-    { date: '15 Jul 2026', ticker: 'IRCTC', companyName: 'Indian Railway Catering & Tourism', amount: 650, fy: 'FY 2026-27', status: 'Credited' }
+    { date: '18 Aug 2026', ticker: 'MOSBY.DEF', companyName: 'Mosby Defense Systems', amount: 1850, fy: 'FY 2026-27', status: 'Credited' },
+    { date: '12 Aug 2026', ticker: 'QUANTUM.AI', companyName: 'Quantum Neural Labs', amount: 920, fy: 'FY 2026-27', status: 'Credited' },
+    { date: '28 Jul 2026', ticker: 'NEO.ENERGY', companyName: 'Neo Clean Energy Utility', amount: 2450, fy: 'FY 2026-27', status: 'Credited' },
+    { date: '15 Jul 2026', ticker: 'IND.SEMI', companyName: 'Indus Semiconductor Foundry', amount: 650, fy: 'FY 2026-27', status: 'Credited' }
   ],
   stockCatalysts: [
-    { ticker: 'IRCTC', title: 'Q1 Net Profit Grows 17.5% Driven by Internet Ticketing & Vande Bharat Catering', summary: 'Non-fare revenue and internet ticketing transaction volume sustain high operating EBITDA margins above 34%.', sentiment: 'earnings', date: '13 Aug 2026', sources: ['Railway Board Financial Disclosures', 'Livemint'] },
-    { ticker: 'LGEINDIA', title: 'LG Electronics Selects Investment Banks for $1.5 Billion Indian Arm IPO', summary: 'Consumer electronics and HVAC market leadership strengthens ahead of benchmark domestic equity market IPO.', sentiment: 'earnings', date: '12 Aug 2026', sources: ['SEBI Draft Prospectus Desk', 'Reuters India'] },
-    { ticker: 'GOLDBEES', title: 'RBI Adds 24 Tonnes of Sovereign Gold to Vaults as Domestic ETF Inflows Hit High', summary: 'Domestic ETF inflows see persistent retail accumulation as hedge against global currency and tariff volatility.', sentiment: 'neutral', date: '05 Aug 2026', sources: ['World Gold Council', 'Reserve Bank of India'] },
-    { ticker: 'PREMIERENE', title: 'Commissioning of 1.4 GW TopCon Solar Cell & Module Facility in Hyderabad', summary: 'Expanded capacity operational in Hyderabad with strong export order pipeline to US and European utility developers.', sentiment: 'bullish', date: '26 Jul 2026', sources: ['PV Tech Industry Dispatches', 'Economic Times'] },
-    { ticker: 'SUZLON', title: 'Wins 400 MW Wind Energy Mandate for S144 3.14 MW Turbines from JSP Green', summary: 'Order book reaches historical peak of 3.8 GW with captive industrial and utility-scale renewable power developers.', sentiment: 'bullish', date: '24 Jul 2026', sources: ['NSE Corporate Disclosure', 'CNBC-TV18'] },
-    { ticker: 'ACMESOLAR', title: 'Signs 25-Year Power Purchase Agreement with SECI for 1,500 MW Hybrid Project', summary: 'Secures 25-year fixed tariff power purchase agreement with evacuation infrastructure clearance from SECI.', sentiment: 'bullish', date: '18 Jul 2026', sources: ['SECI Regulatory Registry', 'PV Magazine'] },
-    { ticker: 'TMCV', title: 'Tata Motors Commercial Fleet Transition Sees Fleet Edge Telematics Boom', summary: 'Heavy commercial vehicle replacement cycle accelerates with increased penetration of zero-emission electric buses.', sentiment: 'bullish', date: '15 Jul 2026', sources: ['FADA Commercial Registry', 'Automotive News India'] },
-    { ticker: 'IREDA', title: 'Q1 Net Profit Jumps 30.2% YoY to ₹384 Cr on Record Loan Disbursements', summary: 'Robust demand for renewable power financing lifts loan book past ₹63,200 Cr with gross NPA declining to 2.19%.', sentiment: 'earnings', date: '12 Jul 2026', sources: ['BSE Financial Filing', 'Moneycontrol'] },
-    { ticker: 'HDFCBANK', title: 'HDFC Bank Logs Double-Digit Growth with Deposits Up 14.7% and Advances Up 15.4%', summary: 'Branch deposit mobilization outpaces loan growth, restoring liquidity coverage ratio and stabilizing net interest margins.', sentiment: 'bullish', date: '06 Jul 2026', sources: ['Economic Times (BFSI)', 'NDTV Profit'] },
-    { ticker: 'CDSL', title: 'Active Retail Demat Registry Crosses 12.5 Crore Accounts Milestone', summary: 'Continues dominant 68% market share in demat account additions driven by systemic retail investment surge.', sentiment: 'bullish', date: '02 Jul 2026', sources: ['CDSL Official Telemetry', 'Livemint'] },
-    { ticker: 'BEL', title: 'Secures ₹1,150 Cr Multi-Band Electronic Warfare System Contract from MoD', summary: 'Ministry of Defence signs order for indigenous airborne jammers and electronic countermeasures for frontline fighters.', sentiment: 'bullish', date: '28 Jun 2026', sources: ['Press Information Bureau (PIB)', 'Economic Times'] },
-    { ticker: 'NHPC', title: '500 MW Subansiri Hydroelectric Unit-1 Achieves Successful Spin Test', summary: 'First unit synchronization on track for Q3 commercial operations, adding high-margin base-load green energy.', sentiment: 'bullish', date: '19 Jun 2026', sources: ['Central Electricity Authority', 'Business Standard'] },
-    { ticker: 'TMPV', title: 'Tata Passenger Electric Vehicles Surpass 1.5 Lakh Cumulative Sales Milestone', summary: 'Nexon.ev and Punch.ev maintain 70%+ Indian electric four-wheeler market share with nationwide charging expansion.', sentiment: 'bullish', date: '10 Jun 2026', sources: ['SIAM Official Registry', 'Economic Times'] },
-    { ticker: 'JIOFIN', title: 'RBI Approves Key Managerial Personnel for Jio BlackRock Mutual Fund Venture', summary: 'Joint venture roll-out with BlackRock progresses towards retail wealth index fund and digital credit platform launch.', sentiment: 'bullish', date: '21 May 2026', sources: ['Reserve Bank of India (RBI)', 'Moneycontrol'] }
+    { ticker: 'MOSBY.DEF', title: 'Secures ₹1,850 Cr Airborne Radar Deal with Sovereign Aerospace Command', summary: 'Next-gen electronic countermeasure suites contracted for frontline interceptor fleet.', sentiment: 'bullish', date: '18 Aug 2026', sources: ['Defense Procurement Desk', 'Aerospace Weekly'] },
+    { ticker: 'QUANTUM.AI', title: 'Quantum Neural Engine v4.0 Achieves 3x Faster Inference Throughput', summary: 'Breakthrough in tensor compilation unlocks enterprise multi-modal LLM reasoning with 40% reduced energy.', sentiment: 'bullish', date: '14 Aug 2026', sources: ['Neural Labs Whitepaper', 'AI Systems Dispatches'] },
+    { ticker: 'NEO.ENERGY', title: 'Grid Synchronization of 450 MW Hybrid Solar-Storage Utility Farm', summary: 'Fixed tariff power purchase agreement finalized with state transmission utility with round-the-clock power guarantees.', sentiment: 'bullish', date: '08 Aug 2026', sources: ['Renewable Energy Gazette', 'Clean Power Registry'] },
+    { ticker: 'IND.SEMI', title: 'Tape-Out Complete for 7nm Gallium Nitride High-Power Semiconductor', summary: 'Foundry validation yields exceed 88% with automotive EV inverter manufacturers securing advance capacity.', sentiment: 'earnings', date: '02 Aug 2026', sources: ['Semiconductor Industry News', 'Foundry Dispatches'] },
+    { ticker: 'CYBER.SEC', title: 'Wins Zero-Trust Enterprise Security Mandate with Global Banking Consortium', summary: 'Recurring ARR growth accelerates 42% YoY with AI-driven threat response telemetry adopted across 14 banks.', sentiment: 'bullish', date: '25 Jul 2026', sources: ['Cybersecurity Wire', 'Enterprise Tech Review'] }
   ]
 };
 
@@ -5255,13 +5246,18 @@ function renderCompleteDossiers() {
   }
   const kpiProfSub = document.getElementById('kpiProfitSub');
   if (kpiProfSub) {
-    kpiProfSub.innerText = `${profitPctSign}${metrics.totalProfitPct}% Overall Alpha`;
+    kpiProfSub.innerText = `${profitPctSign}${metrics.totalProfitPct}% Net Return`;
     kpiProfSub.style.color = isProfitable ? '#6ee7b7' : '#fca5a5';
   }
   const kpiRet = document.getElementById('kpiReturn');
   if (kpiRet) {
-    kpiRet.innerText = `${profitPctSign}${metrics.totalProfitPct}%`;
-    kpiRet.style.color = parseFloat(metrics.totalProfitPct) >= 0 ? '#fde047' : '#fca5a5';
+    const moic = metrics.totalInv > 0 ? (metrics.totalNetWorth / metrics.totalInv).toFixed(2) : '1.00';
+    kpiRet.innerText = `${moic}x`;
+    kpiRet.style.color = parseFloat(moic) >= 1.0 ? '#fde047' : '#fca5a5';
+  }
+  const kpiRetSub = document.getElementById('kpiReturnSub');
+  if (kpiRetSub) {
+    kpiRetSub.innerText = "Capital Growth Factor";
   }
 
   const trueXirr = calculateTruePortfolioXIRR();
@@ -5938,16 +5934,23 @@ function renderStockCatalysts() {
   const catalysts = AppState.stockCatalysts || [];
 
   if (chipsContainer) {
-    const stockTickers = (AppState.stocks || []).map(s => s.ticker).filter(Boolean);
-    const catTickers = catalysts.map(c => c.ticker).filter(Boolean);
-    const default14 = ['ACMESOLAR', 'BEL', 'CDSL', 'GOLDBEES', 'HDFCBANK', 'IRCTC', 'IREDA', 'JIOFIN', 'LGEINDIA', 'NHPC', 'PREMIERENE', 'SUZLON', 'TMCV', 'TMPV'];
-    const allUniqueTickers = ['ALL', ...new Set([...stockTickers, ...catTickers, ...default14])];
+    let allUniqueTickers = [];
+    if (!isLiveSession) {
+      const demoTickers = (AppState.stocks || []).map(s => s.ticker).filter(Boolean);
+      allUniqueTickers = ['ALL', ...new Set(demoTickers)];
+    } else {
+      const stockTickers = (AppState.stocks || []).map(s => s.ticker).filter(Boolean);
+      const catTickers = catalysts.map(c => c.ticker).filter(Boolean);
+      const default14 = ['ACMESOLAR', 'BEL', 'CDSL', 'GOLDBEES', 'HDFCBANK', 'IRCTC', 'IREDA', 'JIOFIN', 'LGEINDIA', 'NHPC', 'PREMIERENE', 'SUZLON', 'TMCV', 'TMPV'];
+      allUniqueTickers = ['ALL', ...new Set([...stockTickers, ...catTickers, ...default14])];
+    }
 
     chipsContainer.innerHTML = allUniqueTickers.map(t => {
       const isActive = t === activeCatalystFilter;
+      const label = t === 'ALL' ? (isLiveSession ? 'All 14 Stocks' : 'All Demo Equities') : t;
       return `
         <button class="filter-chip-btn ${isActive ? 'active' : ''}" onclick="filterCatalystByTicker('${t}')" style="font-size:10px; padding:3px 9px; border-radius:3px;">
-          ${t === 'ALL' ? 'All 14 Stocks' : t}
+          ${label}
         </button>
       `;
     }).join("");
@@ -6934,6 +6937,11 @@ async function registerFaceIdBiometrics(explicitPasscode = '') {
     passcode = passcode.trim();
   }
 
+  if (window.location.protocol === 'file:') {
+    showToast("Apple Face ID requires HTTPS (e.g. GitHub Pages) or a local web server to access Secure Enclave hardware.");
+    return false;
+  }
+
   if (!window.PublicKeyCredential) {
     showToast("WebAuthn / Biometrics not supported on this browser.");
     return false;
@@ -6945,10 +6953,12 @@ async function registerFaceIdBiometrics(explicitPasscode = '') {
     const userId = new Uint8Array(16);
     window.crypto.getRandomValues(userId);
 
+    const validRpId = (window.location.hostname && window.location.hostname !== '') ? window.location.hostname : 'localhost';
+
     const credential = await navigator.credentials.create({
       publicKey: {
         challenge,
-        rp: { name: "Vageesh's Wealth Dossier", id: window.location.hostname || "localhost" },
+        rp: { name: "Vageesh's Wealth Dossier", id: validRpId },
         user: {
           id: userId,
           name: "vageesh",
