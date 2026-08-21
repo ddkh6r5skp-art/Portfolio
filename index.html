@@ -2600,10 +2600,6 @@ svg.lucide, i[data-lucide], svg {
             <i data-lucide="volume-2" id="aiVoiceIcon" style="width: 12px; height: 12px;"></i>
             <span id="aiVoiceText">Listen Audio Brief</span>
           </button>
-          <button class="btn-passcode-unlock" id="btnRescanAI" onclick="askAICopilot('executive_briefing')" style="background: rgba(16,185,129,0.15); border-color: rgba(16,185,129,0.3); color: #6ee7b7; font-size: 11px; padding: 5px 11px; cursor: pointer;" title="Re-evaluate all holdings">
-            <i data-lucide="refresh-cw" id="aiScanSpinIcon" style="width: 12px; height: 12px;"></i>
-            <span id="aiScanBtnText">Re-Generate</span>
-          </button>
           <button class="btn-icon-nav" id="btnToggleAiFullscreen" onclick="toggleAiModalFullscreen()" title="Maximize / Restore Terminal View">
             <i data-lucide="maximize-2" id="aiFullscreenIcon" style="width: 13px; height: 13px;"></i>
           </button>
@@ -3604,7 +3600,38 @@ function getStrategicResponseText(strategyKey) {
   return responses[strategyKey] || responses.executive_briefing;
 }
 
-function askAICopilot(strategyKey, btnEl) {
+function getActivePasscode() {
+  if (typeof activePasscode !== 'undefined' && activePasscode && activePasscode.trim()) {
+    return activePasscode.trim();
+  }
+  try {
+    const raw = localStorage.getItem('MOSBY_TRUSTED_SESSION');
+    if (raw && typeof simpleDecipher === 'function') {
+      const dec = simpleDecipher(raw, "MOSBY_DEVICE_TRUST_KEY_88");
+      if (dec && String(dec).trim()) return String(dec).trim();
+    }
+  } catch(e) {}
+  try {
+    const raw = localStorage.getItem('MOSBY_FACEID_VAULT');
+    if (raw && typeof simpleDecipher === 'function') {
+      const dec = simpleDecipher(raw, "MOSBY_BIOMETRIC_SALT_77");
+      if (dec && String(dec).trim()) return String(dec).trim();
+    }
+  } catch(e) {}
+  return '';
+}
+
+const PROMPT_STRATEGY_MAP = {
+  executive_briefing: "Provide a comprehensive Executive Portfolio Intelligence Briefing analyzing my consolidated wealth, asset allocation, alpha, and top recommendations.",
+  market_crash: "Perform a quantitative stress test for a -20% broad market crash scenario on my specific portfolio. Calculate exact drawdowns across my mutual funds, stocks, and the defensive cushion of my PPF.",
+  sip_stepup: "Simulate a 10% annual SIP step-up compounding trajectory to ₹1.00 Crore based on my active monthly SIPs and current portfolio growth rate.",
+  alpha_benchmark: "Calculate and compare my portfolio's relative alpha against NIFTY 50 TRI, NIFTY Midcap 150, Gold, and Fixed Deposits.",
+  fire_swr: "Perform a Financial Independence & Safe Withdrawal Rate (4% SWR) analysis for my net worth. Calculate monthly passive income capacity and timeline to Lean & Fat FIRE.",
+  rebalance_matrix: "Evaluate my current asset mix against the target 50% Mutual Funds / 30% Equities / 20% PPF allocation and provide exact rebalancing steps.",
+  ppf_compounding: "Analyze my sovereign PPF 7.1% EEE compounding engine, tax-free interest generation, and 15-year maturity wealth trajectory."
+};
+
+async function askAICopilot(strategyKey, btnEl) {
   if (btnEl) {
     document.querySelectorAll('#aiPromptChipsDeck button').forEach(b => b.classList.remove('active'));
     btnEl.classList.add('active');
@@ -3612,11 +3639,25 @@ function askAICopilot(strategyKey, btnEl) {
 
   const outputContainer = document.getElementById('aiStreamContent');
   const pulse = document.getElementById('aiThinkingPulse');
+  const thinkingText = document.getElementById('aiThinkingText');
   if (!outputContainer) return;
 
-  if (pulse) pulse.style.display = 'flex';
+  if (pulse) {
+    pulse.style.display = 'flex';
+    if (thinkingText) thinkingText.innerText = "Gemini AI running quant models & live portfolio reasoning...";
+  }
   outputContainer.innerHTML = '';
 
+  const promptQuery = PROMPT_STRATEGY_MAP[strategyKey] || PROMPT_STRATEGY_MAP.executive_briefing;
+
+  // 1. Try Live Gemini API (via Google Apps Script backend)
+  const geminiResponse = await callLiveGeminiAPI(promptQuery);
+  if (geminiResponse) {
+    streamTextToTerminal(geminiResponse);
+    return;
+  }
+
+  // 2. Fallback to built-in Quant Template if offline
   const fullText = getStrategicResponseText(strategyKey);
   streamTextToTerminal(fullText);
 }
@@ -3641,10 +3682,101 @@ function streamTextToTerminal(markdownText) {
 
     container.innerHTML = html;
     isStreamingAI = false;
-  }, 350);
+  }, 250);
 }
 
-function handleCustomAIQuery() {
+function setSessionGeminiKey(key) {
+  if (key && typeof key === 'string') {
+    sessionGeminiApiKey = key.trim();
+    try { localStorage.setItem('MOSBY_GEMINI_KEY', sessionGeminiApiKey); } catch(e) {}
+  }
+}
+
+/* ==========================================================================
+   LIVE GOOGLE GEMINI API CONNECTOR (VIA APPS SCRIPT BACKEND OR DIRECT)
+   ========================================================================== */
+async function callLiveGeminiAPI(queryText) {
+  const metrics = typeof calculateTotals === 'function' ? calculateTotals() : { totalNetWorth: 0, totalProfit: 0, totalProfitPct: 0, mfCur: 0, stCur: 0, ppfCur: 0 };
+  const monthlySip = typeof getMonthlySIPTotal === 'function' ? getMonthlySIPTotal() : 0;
+
+  const portfolioSummary = {
+    netWorth: metrics.totalNetWorth,
+    totalProfit: metrics.totalProfit,
+    returnPct: metrics.totalProfitPct + '%',
+    monthlySip: monthlySip,
+    mutualFunds: (window.AppState?.mutualFunds || []).map(f => ({ name: f.name, value: f.currentValue, gain: f.profit, returnPct: f.returnPct })),
+    stocks: (window.AppState?.stocks || []).map(s => ({ name: s.name, ticker: s.ticker, value: s.currentValue, returnPct: s.returnPct })),
+    ppfBalance: metrics.ppfCur
+  };
+
+  const webhookUrl = AppState?.user?.apiUrl || DEFAULT_API_URL;
+  const pass = getActivePasscode();
+
+  // 1. Try via Google Apps Script backend (?action=askAI)
+  if (webhookUrl && pass) {
+    try {
+      const askUrl = `${webhookUrl}?action=askAI&passcode=${encodeURIComponent(pass)}&query=${encodeURIComponent(queryText)}&portfolio=${encodeURIComponent(JSON.stringify(portfolioSummary))}`;
+      const res = await fetch(askUrl, { method: 'GET', cache: 'no-store' });
+      if (res.ok) {
+        const json = await res.json();
+        const text = json?.candidates?.[0]?.content?.parts?.[0]?.text || json?.response || json?.text;
+        if (text && text.trim()) {
+          console.log("=== LIVE GEMINI AI RESPONSE RECEIVED ===", text);
+          return text.trim();
+        }
+      }
+    } catch(e) {
+      console.warn("Apps Script askAI error:", e);
+    }
+  }
+
+  // 2. Fallback to direct client API key if configured
+  const apiKey = sessionGeminiApiKey || localStorage.getItem('MOSBY_GEMINI_KEY');
+  if (apiKey) {
+    try {
+      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+      const systemPrompt = `You are the Lead Quantitative AI Copilot for Vageesh's Wealth Dossier.\nLive Portfolio State: ${JSON.stringify(portfolioSummary)}\nProvide concise, mathematical precision insights with bold numbers and bullet points.`;
+      
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ role: 'user', parts: [{ text: `${systemPrompt}\n\nQuery: ${queryText}` }] }],
+          generationConfig: { temperature: 0.3, maxOutputTokens: 1200 }
+        })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (text && text.trim()) return text.trim();
+      }
+    } catch(e) {
+      console.warn("Direct Gemini API error:", e);
+    }
+  }
+
+  return null;
+}
+
+function configureGeminiApiKey() {
+  const currentKey = localStorage.getItem('MOSBY_GEMINI_KEY') || sessionGeminiApiKey || '';
+  const newKey = prompt("Enter your Google Gemini API Key (from aistudio.google.com):", currentKey);
+  if (newKey !== null) {
+    const trimmed = newKey.trim();
+    if (trimmed) {
+      localStorage.setItem('MOSBY_GEMINI_KEY', trimmed);
+      sessionGeminiApiKey = trimmed;
+      if (typeof showToast === 'function') showToast("Google Gemini API Key Configured!");
+      askAICopilot('executive_briefing');
+    } else {
+      localStorage.removeItem('MOSBY_GEMINI_KEY');
+      sessionGeminiApiKey = '';
+      if (typeof showToast === 'function') showToast("Gemini Key Removed. Using Offline Quant Engine.");
+    }
+  }
+}
+
+async function handleCustomAIQuery() {
   const input = document.getElementById('aiCustomQueryInput');
   if (!input) return;
   const q = input.value.trim();
@@ -3652,9 +3784,23 @@ function handleCustomAIQuery() {
 
   const container = document.getElementById('aiStreamContent');
   const pulse = document.getElementById('aiThinkingPulse');
-  if (pulse) pulse.style.display = 'flex';
+  if (pulse) {
+    pulse.style.display = 'flex';
+    const t = document.getElementById('aiThinkingText');
+    if (t) t.innerText = `Gemini AI analyzing portfolio context for: "${q}"...`;
+  }
   if (container) container.innerHTML = '';
 
+  input.value = '';
+
+  // 1. Try Live Gemini API
+  const liveResult = await callLiveGeminiAPI(q);
+  if (liveResult) {
+    streamTextToTerminal(liveResult);
+    return;
+  }
+
+  // 2. Offline Fallback
   setTimeout(() => {
     if (pulse) pulse.style.display = 'none';
     const metrics = typeof calculateTotals === 'function' ? calculateTotals() : { totalNetWorth: 0 };
@@ -3664,16 +3810,8 @@ function handleCustomAIQuery() {
 - **Quant Assessment**: Your asset allocation is tuned for long-term power-law compounding with strong downside defense through Sovereign PPF and systematic monthly SIP cashflows.
 - **Tactical Rule of Thumb**: Maintain at least 6 months of liquid buffers in high-liquidity index funds, keep monthly SIP mandates continuous, and avoid timing volatile market peaks.
     `;
-    let html = answer
-      .replace(/### (.*)/g, '<h4 style="font-family:var(--font-serif); font-size:1.15rem; color:#FDFAF7; margin-bottom:0.6rem;">$1</h4>')
-      .replace(/\*\*(.*?)\*\*/g, '<strong style="color:#6ee7b7;">$1</strong>')
-      .replace(/\*(.*?)\*/g, '<em style="color:#fde047;">$1</em>')
-      .replace(/^- (.*)/gm, '<div style="margin-bottom:0.4rem; padding-left:1rem; position:relative;"><span style="position:absolute; left:0; color:#6ee7b7;">•</span>$1</div>');
-
-    if (container) container.innerHTML = html;
+    streamTextToTerminal(answer);
   }, 400);
-
-  input.value = '';
 }
 
 function askQuickPrompt(promptText) {
@@ -3749,17 +3887,6 @@ function updateVoiceButtonUI() {
     if (icon) icon.setAttribute('data-lucide', 'volume-2');
   }
   if (typeof renderAllLucideIcons === 'function') renderAllLucideIcons();
-}
-
-function loadEncryptedGeminiKey(passcode) {
-  try {
-    const key = localStorage.getItem('MOSBY_GEMINI_KEY');
-    if (key) sessionGeminiApiKey = key;
-  } catch(e) {}
-}
-
-function updateGeminiKeyButtonUI() {
-  // UI helper for API key indicators
 }
 
 
@@ -5990,6 +6117,18 @@ async function connectLiveSheet(explicitPass = '') {
     AppState.sipTransactions = normalizeSIPTransactionsData(data);
 
     syncMFWithSIPConfig();
+
+    // Auto-extract Gemini Key from Google Script Properties
+    const gKey = data.geminiKey || data.geminiApiKey || data.GEMINI_API_KEY || data.gemini_api_key || (data.config && data.config.geminiKey);
+    if (gKey && typeof gKey === 'string' && gKey.trim()) {
+      if (typeof setSessionGeminiKey === 'function') {
+        setSessionGeminiKey(gKey.trim());
+      } else {
+        sessionGeminiApiKey = gKey.trim();
+        try { localStorage.setItem('MOSBY_GEMINI_KEY', gKey.trim()); } catch(e) {}
+      }
+    }
+
     if (typeof loadEncryptedGeminiKey === 'function') loadEncryptedGeminiKey(pass);
     saveState();
     renderCompleteDossiers();
@@ -6274,7 +6413,7 @@ async function registerFaceIdBiometrics(explicitPasscode = '') {
         ],
         authenticatorSelection: {
           authenticatorAttachment: "platform",
-          userVerification: "required"
+          userVerification: "required" // Strict Apple Secure Enclave
         },
         timeout: 60000
       }
@@ -6325,7 +6464,7 @@ async function authenticateWithFaceId() {
     const assertion = await navigator.credentials.get({
       publicKey: {
         challenge,
-        userVerification: "required",
+        userVerification: "required", // Strict Apple Face ID
         timeout: 60000
       }
     });
