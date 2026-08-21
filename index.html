@@ -4968,6 +4968,7 @@ function applyMarketScenario(delta) {
    ========================================================================== */
 function renderCompleteDossiers() {
   const metrics = calculateTotals();
+  const monthlySip = getMonthlySIPTotal();
 
   // Pane 0: Master Dossier
   const subEl = document.getElementById('masterDossierSubtitle');
