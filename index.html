@@ -234,6 +234,10 @@ svg.lucide, i[data-lucide], svg {
   color: var(--text-dim);
   flex-shrink: 0;
 }
+.mobile-market-bar {
+  display: none;
+}
+
 @media (max-width: 1100px) {
   .market-pulse-strip { display: none; }
 }
@@ -370,37 +374,28 @@ svg.lucide, i[data-lucide], svg {
 
 @media (max-width: 768px) {
   .the-header {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
+    overflow: hidden;
   }
   .the-header__content {
-    height: 3.85rem;
-    min-width: max-content;
-    padding-left: 0.85rem;
-    padding-right: 0.85rem;
-    gap: 0.55rem;
+    height: 3.25rem;
+    width: 100%;
+    max-width: 100%;
+    padding: 0 0.75rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
-  .header-left-cluster, .the-nav, #headerAuthDock, .cmd-search-trigger {
+  .header-left-cluster {
+    display: flex;
+    align-items: center;
+    gap: 8px;
     flex-shrink: 0;
   }
-  .auth-passcode-capsule {
-    padding: 3px 3px 3px 8px;
-    background: rgba(0, 0, 0, 0.85);
-    border: 1px solid rgba(255, 255, 255, 0.35);
-  }
-  .auth-passcode-capsule input {
-    font-size: 13px;
-    width: 75px;
-  }
-  .btn-passcode-unlock {
-    padding: 6px 12px;
-    font-size: 10.5px;
-  }
-  .cmd-search-trigger {
-    padding: 5px 8px;
-  }
-  .cmd-search-trigger span:not(.kbd-tag) {
-    display: none;
+  .the-nav {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: auto;
   }
 }
 
@@ -676,6 +671,14 @@ svg.lucide, i[data-lucide], svg {
   transform: scaleY(1.01) translate(-1px);
 }
 
+/* Desktop: wrapper is transparent layout container, spines are hidden */
+.mobile-folder-wrapper {
+  display: contents;
+}
+.mobile-folder-spine {
+  display: none;
+}
+
 .folder-sheet-container {
   position: relative;
   width: 100%;
@@ -707,8 +710,334 @@ svg.lucide, i[data-lucide], svg {
   to { opacity: 1; transform: translateY(0); }
 }
 
+/* ==========================================================================
+   MOBILE RESPONSIVE ARCHITECTURE & SLIDE-IN DRAWER
+   ========================================================================== */
+.btn-mobile-menu {
+  display: none;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 6px;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-right: 6px;
+}
+.btn-mobile-menu:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.btn-mobile-refresh,
+#mobileRefreshBtn {
+  display: none !important;
+}
+
+/* Mobile Drawer Backdrop */
+.mobile-drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 990;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.mobile-drawer-backdrop.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Mobile Drawer Panel */
+.mobile-drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: min(320px, 85vw);
+  background: rgba(14, 18, 27, 0.98);
+  border-right: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 20px 0 50px rgba(0, 0, 0, 0.85);
+  z-index: 995;
+  transform: translateX(-100%);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  padding: 1.25rem;
+  overflow-y: auto;
+}
+.mobile-drawer.active {
+  transform: translateX(0);
+}
+
+.mobile-drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 1rem;
+}
+.btn-drawer-close {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.drawer-section {
+  margin-bottom: 1.25rem;
+}
+.drawer-section-label {
+  font-size: 10px;
+  font-family: var(--font-mono);
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+.drawer-currency-deck {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+.drawer-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  color: #FDFAF7;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+.drawer-action-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+.drawer-action-btn i {
+  width: 16px;
+  height: 16px;
+}
+
+.desktop-only-auth {
+  display: flex !important;
+}
+.mobile-only-auth {
+  display: none !important;
+}
+
 @media (max-width: 768px) {
-  .folder-pane { padding: 1.5rem 1.25rem; }
+  .desktop-only-auth {
+    display: none !important;
+  }
+  .mobile-only-auth {
+    display: inline-flex !important;
+  }
+
+  .btn-mobile-menu {
+    display: inline-flex;
+    order: 1;
+  }
+  .the-header__logo {
+    order: 2;
+  }
+  .top-left-status {
+    order: 3;
+    display: inline-flex !important;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 6px;
+    font-size: 8.5px;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: var(--text-dim);
+    cursor: pointer;
+  }
+
+  /* Pinned top bar scaling */
+  .cmd-search-trigger,
+  .the-nav .btn-smart-audit,
+  .the-nav .currency-segmented-deck,
+  .the-nav #soundToggleBtn,
+  .the-nav #fullscreenToggleBtn {
+    display: none !important;
+  }
+
+  .the-header__content {
+    padding: 0 0.75rem;
+  }
+
+  /* Physical tabs transform to stacked vertical accordion */
+  .folder-tab-deck {
+    display: none !important;
+  }
+  
+  .folder-sheet-container {
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+    min-height: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 0;
+  }
+
+  .mobile-folder-wrapper {
+    display: flex;
+    flex-direction: column;
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--folder-color, #181e29);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .mobile-folder-wrapper.active {
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.25);
+  }
+
+  .mobile-folder-spine {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 16px;
+    cursor: pointer;
+    user-select: none;
+    background: rgba(0, 0, 0, 0.35);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    transition: background 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .mobile-folder-spine:active {
+    background: rgba(0, 0, 0, 0.55);
+  }
+  .mobile-spine-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .mobile-spine-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    box-shadow: 0 0 8px currentColor;
+  }
+  .mobile-spine-title {
+    font-family: var(--font-serif);
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #FDFAF7;
+    letter-spacing: -0.01em;
+  }
+  .mobile-spine-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .mobile-spine-chevron {
+    width: 16px;
+    height: 16px;
+    color: rgba(255, 255, 255, 0.7);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .mobile-folder-wrapper.active .mobile-spine-chevron {
+    transform: rotate(180deg);
+    color: #fff;
+  }
+
+  /* Force collapse when wrapper is not active */
+  .folder-pane,
+  .folder-pane.active {
+    display: none !important;
+    padding: 1.25rem 1rem;
+    max-height: none;
+    overflow: visible;
+  }
+  .mobile-folder-wrapper.active > .folder-pane,
+  .mobile-folder-wrapper.active > .folder-pane.active {
+    display: flex !important;
+    animation: mobileFolderExpand 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  @keyframes mobileFolderExpand {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Mobile Market Barometer Pinned Header */
+  .the-header {
+    overflow: visible !important;
+  }
+  .mobile-market-bar {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    background: rgba(14, 18, 27, 0.98);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    padding: 6px 12px;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    width: 100%;
+  }
+  .mobile-market-bar-inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+    scrollbar-width: none;
+  }
+  .mobile-market-bar-inner::-webkit-scrollbar { display: none; }
+  .ticker-dot { color: rgba(255, 255, 255, 0.35); font-size: 8px; }
+
+  /* Padding & Hero adjustments */
+  .section-hero {
+    padding-top: 6.5rem !important;
+    padding-bottom: 1rem;
+  }
+  .section-hero__greetings {
+    font-size: 0.82rem;
+    margin-bottom: 0.5rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .section-hero__title {
+    font-size: clamp(1.85rem, 7vw, 2.5rem);
+  }
+  .keyboard-shortcuts-pill {
+    display: none;
+  }
+  .dossier-hero-strip {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  .dossier-hero-strip > div:last-child {
+    text-align: left !important;
+  }
 }
 
 /* Dossier Typography & KPIs */
@@ -1726,6 +2055,10 @@ svg.lucide, i[data-lucide], svg {
       
       <!-- Left: Dynamic Status & Dossier Brand & Live Market Pulse Strip -->
       <div class="header-left-cluster">
+        <button class="btn-mobile-menu" id="mobileMenuToggleBtn" onclick="toggleMobileDrawer()" title="Open Menu" aria-label="Open Menu">
+          <i style="width: 18px; height: 18px;" data-lucide="menu"></i>
+        </button>
+
         <div class="top-left-status" id="topLeftStatusBadge" onclick="openConfigModal()" style="cursor: pointer;" title="Telemetry Settings & Passcode">
           <span class="status-led-dot" id="topLeftLed"></span>
           <span id="topLeftStatusText">DEMO ARCHIVE</span>
@@ -1782,14 +2115,14 @@ svg.lucide, i[data-lucide], svg {
           <button class="currency-btn" id="btnCurGBP" onclick="changeCurrency('GBP')">£</button>
         </div>
 
+        <!-- Privacy Mask -->
+        <button class="btn-icon-nav" id="privacyToggleBtn" onclick="togglePrivacyMask()" title="Privacy Mask (P)">
+          <svg  class="lucide lucide-eye" style="width: 14px; height: 14px;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+
         <!-- Sound Engine Toggle -->
         <button class="btn-icon-nav active" id="soundToggleBtn" onclick="toggleSoundEngine()" title="Toggle Soundscape">
           <svg id="soundIcon" class="lucide lucide-volume-2" style="width: 14px; height: 14px;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
-        </button>
-
-        <!-- Privacy Mask -->
-        <button class="btn-icon-nav" onclick="togglePrivacyMask()" title="Privacy Mask (P)">
-          <svg  class="lucide lucide-eye" style="width: 14px; height: 14px;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
         </button>
 
         <!-- Fullscreen App Toggle -->
@@ -1798,7 +2131,88 @@ svg.lucide, i[data-lucide], svg {
         </button>
       </nav>
     </div>
+
+    <!-- Pinned Mobile Live Market Barometer -->
+    <div class="mobile-market-bar" id="mobileMarketBar">
+      <div class="mobile-market-bar-inner">
+        <span class="pulse-item up" id="mobTickerNifty">NIFTY 24,252 ▲0.08%</span>
+        <span class="ticker-dot">•</span>
+        <span class="pulse-item down" id="mobTickerSensex">SENSEX 77,541 ▼0.12%</span>
+        <span class="ticker-dot">•</span>
+        <span class="pulse-item" id="mobTickerGold">GOLD ₹72.1k</span>
+      </div>
+    </div>
   </header>
+
+  <!-- ==========================================================================
+       MOBILE EXECUTIVE SLIDE-IN DRAWER
+       ========================================================================== -->
+  <div class="mobile-drawer-backdrop" id="mobileDrawerBackdrop" onclick="closeMobileDrawer()"></div>
+  <aside class="mobile-drawer" id="mobileDrawer">
+    <div class="mobile-drawer-header">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <div class="status-led-dot" id="drawerStatusLed"></div>
+        <span style="font-family: var(--font-serif); font-size: 1.1rem; font-weight: 600; color: #fff;">VAGEESH'S DOSSIER</span>
+      </div>
+      <button class="btn-drawer-close" onclick="closeMobileDrawer()" aria-label="Close Drawer"><svg  class="lucide lucide-x" style="width: 18px; height: 18px;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+    </div>
+
+    <div class="mobile-drawer-body">
+      <!-- Currency Switcher -->
+      <div class="drawer-section">
+        <div class="drawer-section-label">Base Currency</div>
+        <div class="drawer-currency-deck">
+          <button class="currency-btn active" id="drawerBtnCurINR" onclick="changeCurrency('INR')">₹ INR</button>
+          <button class="currency-btn" id="drawerBtnCurUSD" onclick="changeCurrency('USD')">$ USD</button>
+          <button class="currency-btn" id="drawerBtnCurEUR" onclick="changeCurrency('EUR')">€ EUR</button>
+          <button class="currency-btn" id="drawerBtnCurGBP" onclick="changeCurrency('GBP')">£ GBP</button>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="drawer-section">
+        <div class="drawer-section-label">Executive Controls</div>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <button class="drawer-action-btn" onclick="openAuditModal(); closeMobileDrawer();">
+            <svg  class="lucide lucide-sparkles" style="color: #6ee7b7;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/></svg>
+            <span>AI Intelligence &amp; Diagnostics</span>
+          </button>
+          <button class="drawer-action-btn" onclick="openCommandPalette(); closeMobileDrawer();">
+            <svg  class="lucide lucide-search" style="color: #60a5fa;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <span>Command Palette (Search)</span>
+          </button>
+          <button class="drawer-action-btn" id="drawerFaceIdBtn" onclick="registerFaceIdBiometrics()">
+            <svg  class="lucide lucide-scan-face" style="color: #c084fc;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01"/><path d="M15 9h.01"/></svg>
+            <span>Pair Face ID / Unlock</span>
+          </button>
+          <button class="drawer-action-btn" id="drawerSoundBtn" onclick="toggleSoundEngine()">
+            <svg id="drawerSoundIcon" class="lucide lucide-volume-2" style="color: #fde047;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+            <span>Ambient Audio Soundscape</span>
+          </button>
+          <button class="drawer-action-btn" onclick="openConfigModal(); closeMobileDrawer();">
+            <i style="color: #94a3b8;" data-lucide="shield"></i>
+            <span>Vault Security &amp; Biometrics</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Global Market Clocks -->
+      <div class="drawer-section">
+        <div class="drawer-section-label">Global Market Clocks</div>
+        <div style="display: flex; flex-direction: column; gap: 6px; padding: 10px; background: rgba(0,0,0,0.3); border-radius: 6px; border: 1px solid rgba(255,255,255,0.08);">
+          <div style="display:flex; justify-content:space-between; font-size:11px;"><span style="color:var(--text-dim);">Mumbai (BSE/NSE)</span><strong class="num-mono" id="clockMumbaiDrawer" style="color:#6ee7b7;">--:--</strong></div>
+          <div style="display:flex; justify-content:space-between; font-size:11px;"><span style="color:var(--text-dim);">London (LSE)</span><strong class="num-mono" id="clockLondonDrawer">--:--</strong></div>
+          <div style="display:flex; justify-content:space-between; font-size:11px;"><span style="color:var(--text-dim);">New York (NYSE)</span><strong class="num-mono" id="clockNewYorkDrawer">--:--</strong></div>
+          <div style="display:flex; justify-content:space-between; font-size:11px;"><span style="color:var(--text-dim);">Tokyo (TSE)</span><strong class="num-mono" id="clockTokyoDrawer">--:--</strong></div>
+        </div>
+      </div>
+
+      <!-- Footer status -->
+      <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px dashed rgba(255,255,255,0.1); font-size: 10px; color: var(--text-dim); text-align: center; font-family: var(--font-mono);">
+        ARCHIVAL DOSSIER // FINANCIAL SOVEREIGNTY
+      </div>
+    </div>
+  </aside>
 
   <!-- ==========================================================================
        MOSBY FILES SECTION-HERO
@@ -1888,8 +2302,19 @@ svg.lucide, i[data-lucide], svg {
     <!-- Active Physical Folder Leaf -->
     <div class="folder-sheet-container" id="folderContainer">
 
-      <!-- PANE 0: MASTER DOSSIER -->
-      <div class="folder-pane active" id="pane-0">
+      <!-- FOLDER 0: MASTER DOSSIER -->
+      <div class="mobile-folder-wrapper active" id="mobileFolderWrap0" style="--folder-color: var(--color-blue);">
+        <div class="mobile-folder-spine" onclick="toggleMobileFolder(0)">
+          <div class="mobile-spine-left">
+            <span class="mobile-spine-dot" style="background: var(--color-blue);"></span>
+            <span class="mobile-spine-title">01 // Master Dossier</span>
+          </div>
+          <div class="mobile-spine-right">
+            <span class="badge-capsule num-mono privacy-blur" id="mobileSpineBadge0">₹0</span>
+            <svg id="mobileSpineChevron0" class="mobile-spine-chevron lucide lucide-chevron-down" style="" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+        </div>
+        <div class="folder-pane active" id="pane-0">
         <div class="dossier-hero-strip">
           <div>
             <h2 class="dossier-title">Consolidated Net Worth</h2>
@@ -2186,11 +2611,21 @@ svg.lucide, i[data-lucide], svg {
             <span style="font-size:10px; opacity:0.65; margin-top:4px;">Spot Conversion Rate</span>
           </div>
         </div>
-
       </div>
 
-      <!-- PANE 1: MUTUAL FUNDS & SIPS -->
-      <div class="folder-pane" id="pane-1">
+      <!-- FOLDER 1: MUTUAL FUNDS & SIPS -->
+      <div class="mobile-folder-wrapper" id="mobileFolderWrap1" style="--folder-color: var(--color-green);">
+        <div class="mobile-folder-spine" onclick="toggleMobileFolder(1)">
+          <div class="mobile-spine-left">
+            <span class="mobile-spine-dot" style="background: var(--color-green);"></span>
+            <span class="mobile-spine-title">02 // Mutual Funds &amp; SIPs</span>
+          </div>
+          <div class="mobile-spine-right">
+            <span class="badge-capsule num-mono privacy-blur" id="mobileSpineBadge1">5 Funds</span>
+            <svg id="mobileSpineChevron1" class="mobile-spine-chevron lucide lucide-chevron-down" style="" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+        </div>
+        <div class="folder-pane" id="pane-1">
         <div class="dossier-hero-strip">
           <div>
             <h2 class="dossier-title">Mutual Funds &amp; Systematic Inflows</h2>
@@ -2327,11 +2762,21 @@ svg.lucide, i[data-lucide], svg {
             </table>
           </div>
         </div>
-
       </div>
 
-      <!-- PANE 2: DIRECT EQUITIES -->
-      <div class="folder-pane" id="pane-2">
+      <!-- FOLDER 2: DIRECT EQUITIES -->
+      <div class="mobile-folder-wrapper" id="mobileFolderWrap2" style="--folder-color: var(--color-purple);">
+        <div class="mobile-folder-spine" onclick="toggleMobileFolder(2)">
+          <div class="mobile-spine-left">
+            <span class="mobile-spine-dot" style="background: var(--color-purple);"></span>
+            <span class="mobile-spine-title">03 // Direct Equities</span>
+          </div>
+          <div class="mobile-spine-right">
+            <span class="badge-capsule num-mono privacy-blur" id="mobileSpineBadge2">13 Equities</span>
+            <svg id="mobileSpineChevron2" class="mobile-spine-chevron lucide lucide-chevron-down" style="" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+        </div>
+        <div class="folder-pane" id="pane-2">
         <div class="dossier-hero-strip">
           <div>
             <h2 class="dossier-title">Direct Equities Floor</h2>
@@ -2434,11 +2879,21 @@ svg.lucide, i[data-lucide], svg {
             </table>
           </div>
         </div>
-
       </div>
 
-      <!-- PANE 3: SOVEREIGN & GOLD ASSETS -->
-      <div class="folder-pane" id="pane-3">
+      <!-- FOLDER 3: SOVEREIGN & GOLD ASSETS -->
+      <div class="mobile-folder-wrapper" id="mobileFolderWrap3" style="--folder-color: var(--color-red);">
+        <div class="mobile-folder-spine" onclick="toggleMobileFolder(3)">
+          <div class="mobile-spine-left">
+            <span class="mobile-spine-dot" style="background: var(--color-red);"></span>
+            <span class="mobile-spine-title">04 // Sovereign &amp; Gold</span>
+          </div>
+          <div class="mobile-spine-right">
+            <span class="badge-capsule num-mono privacy-blur" id="mobileSpineBadge3">PPF + Gold</span>
+            <svg id="mobileSpineChevron3" class="mobile-spine-chevron lucide lucide-chevron-down" style="" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+        </div>
+        <div class="folder-pane" id="pane-3">
         <div class="dossier-hero-strip">
           <div>
             <h2 class="dossier-title">Sovereign &amp; Gold Reserves</h2>
@@ -2565,10 +3020,22 @@ svg.lucide, i[data-lucide], svg {
             <tbody id="tableBodyPPF"></tbody>
           </table>
         </div>
+        </div>
       </div>
 
-      <!-- PANE 4: PROJECTIONS & SIMULATOR -->
-      <div class="folder-pane" id="pane-4">
+      <!-- FOLDER 4: PROJECTIONS & SIMULATOR -->
+      <div class="mobile-folder-wrapper" id="mobileFolderWrap4" style="--folder-color: var(--color-noir);">
+        <div class="mobile-folder-spine" onclick="toggleMobileFolder(4)">
+          <div class="mobile-spine-left">
+            <span class="mobile-spine-dot" style="background: #94a3b8;"></span>
+            <span class="mobile-spine-title">05 // FIRE &amp; Projections</span>
+          </div>
+          <div class="mobile-spine-right">
+            <span class="badge-capsule num-mono privacy-blur" id="mobileSpineBadge4">15Y Target</span>
+            <svg id="mobileSpineChevron4" class="mobile-spine-chevron lucide lucide-chevron-down" style="" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+        </div>
+        <div class="folder-pane" id="pane-4">
         <div class="dossier-hero-strip">
           <div>
             <h2 class="dossier-title">Wealth Projections &amp; FIRE Horizons</h2>
@@ -2649,6 +3116,7 @@ svg.lucide, i[data-lucide], svg {
             <span style="font-size:10px; font-family:var(--font-mono); color:var(--text-dim);">POWER-LAW COMPOUNDING TRAJECTORY</span>
           </div>
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-top: 10px;" id="milestonesContainer"></div>
+        </div>
         </div>
       </div>
 
@@ -2779,15 +3247,12 @@ svg.lucide, i[data-lucide], svg {
   <div class="mosby-modal-overlay" id="configModal">
     <div class="mosby-modal-card">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-        <h3 style="font-family: var(--font-serif); font-size: 1.5rem;">Cloud Telemetry Settings</h3>
+        <h3 style="font-family: var(--font-serif); font-size: 1.5rem;">Vault Security &amp; Biometrics</h3>
         <button class="btn-icon-nav" onclick="closeConfigModal()"><svg  class="lucide lucide-x" style="" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
       </div>
 
-      <label style="font-size: 11px; text-transform: uppercase; color: var(--text-muted); display: block; margin-bottom: 0.4rem;">Cloud Webhook Endpoint URL</label>
-      <input type="text" class="folder-search-input" id="inputWebhookUrl" style="margin-bottom: 1.25rem;" placeholder="https://script.google.com/macros/s/.../exec">
-
       <label style="font-size: 11px; text-transform: uppercase; color: var(--text-muted); display: block; margin-bottom: 0.4rem;">Secret Portfolio Passcode</label>
-      <input type="password" class="folder-search-input" id="inputModalPasscode" style="margin-bottom: 1rem;" placeholder="Enter secret passcode">
+      <input type="password" class="folder-search-input" id="inputModalPasscode" style="margin-bottom: 1.25rem;" placeholder="Enter secret passcode">
 
       <!-- Apple Face ID & Biometrics Security -->
       <div class="faceid-config-card">
@@ -3355,8 +3820,10 @@ function toggleSoundEngine() {
   window.AppState.user.sound = !window.AppState.user.sound;
   const btn = document.getElementById('soundToggleBtn');
   const icon = document.getElementById('soundIcon');
+  const drawerIcon = document.getElementById('drawerSoundIcon');
   if (btn) btn.classList.toggle('active', window.AppState.user.sound);
   if (icon) icon.setAttribute('data-lucide', window.AppState.user.sound ? 'volume-2' : 'volume-x');
+  if (drawerIcon) drawerIcon.setAttribute('data-lucide', window.AppState.user.sound ? 'volume-2' : 'volume-x');
   if (typeof saveState === 'function') saveState();
   if (typeof renderAllLucideIcons === 'function') renderAllLucideIcons();
   if (window.AppState.user.sound) {
@@ -5096,10 +5563,75 @@ function activateFolder(idx) {
     pane.classList.toggle('active', i === idx);
   });
 
+  document.querySelectorAll('.mobile-folder-wrapper').forEach((wrap, i) => {
+    wrap.classList.toggle('active', i === idx);
+  });
+
   const container = document.getElementById('folderContainer');
   if (container && FOLDER_COLORS[idx]) {
     container.style.backgroundColor = FOLDER_COLORS[idx];
   }
+}
+
+function toggleMobileFolder(idx) {
+  const wrap = document.getElementById(`mobileFolderWrap${idx}`);
+  if (!wrap) return;
+  const isCurrentlyActive = wrap.classList.contains('active');
+
+  if (isCurrentlyActive) {
+    // If user taps already open accordion, gently collapse it
+    wrap.classList.remove('active');
+    const pane = document.getElementById(`pane-${idx}`);
+    if (pane) pane.classList.remove('active');
+    playFolderTone(380);
+  } else {
+    // Expand this accordion folder and collapse all others
+    document.querySelectorAll('.mobile-folder-wrapper').forEach((w, i) => {
+      w.classList.toggle('active', i === idx);
+    });
+    document.querySelectorAll('.folder-pane').forEach((p, i) => {
+      p.classList.toggle('active', i === idx);
+    });
+    document.querySelectorAll('.tag-unit').forEach((t, i) => {
+      t.classList.toggle('active', i === idx);
+    });
+    activeFolderIdx = idx;
+    if (SoundEngine && SoundEngine.playFolderOpen) SoundEngine.playFolderOpen(idx);
+
+    const container = document.getElementById('folderContainer');
+    if (container && FOLDER_COLORS[idx]) {
+      container.style.backgroundColor = FOLDER_COLORS[idx];
+    }
+
+    if (window.innerWidth <= 768) {
+      setTimeout(() => {
+        const topPos = wrap.getBoundingClientRect().top + window.pageYOffset - 110;
+        window.scrollTo({ top: topPos, behavior: 'smooth' });
+      }, 80);
+    }
+  }
+}
+
+function toggleMobileDrawer() {
+  const drawer = document.getElementById('mobileDrawer');
+  const isOpen = drawer && drawer.classList.contains('active');
+  if (isOpen) closeMobileDrawer();
+  else openMobileDrawer();
+}
+
+function openMobileDrawer() {
+  const drawer = document.getElementById('mobileDrawer');
+  const backdrop = document.getElementById('mobileDrawerBackdrop');
+  if (drawer) drawer.classList.add('active');
+  if (backdrop) backdrop.classList.add('active');
+  playFolderTone(480);
+}
+
+function closeMobileDrawer() {
+  const drawer = document.getElementById('mobileDrawer');
+  const backdrop = document.getElementById('mobileDrawerBackdrop');
+  if (drawer) drawer.classList.remove('active');
+  if (backdrop) backdrop.classList.remove('active');
 }
 
 function toggleMFHoldings() {
@@ -5760,6 +6292,20 @@ function renderCompleteDossiers() {
   updateUpcomingSipWidget();
   updateBenchmarkAlphaCards();
   renderPassiveCashflowStream(metrics);
+
+  // Update Mobile Folder Spine Preview Badges
+  const mb0 = document.getElementById('mobileSpineBadge0');
+  const mb1 = document.getElementById('mobileSpineBadge1');
+  const mb2 = document.getElementById('mobileSpineBadge2');
+  const mb3 = document.getElementById('mobileSpineBadge3');
+  const mb4 = document.getElementById('mobileSpineBadge4');
+
+  const pureStocksCount = (AppState.stocks || []).filter(s => !isGoldEtf(s)).length;
+  if (mb0) mb0.innerText = `${formatVal(metrics.totalNetWorth)}`;
+  if (mb1) mb1.innerText = `${(AppState.mutualFunds || []).length} Funds • ${formatVal(metrics.mfSip)}/mo`;
+  if (mb2) mb2.innerText = `${pureStocksCount} Equities`;
+  if (mb3) mb3.innerText = `${formatVal(metrics.sovereignCur)} • 7.1%`;
+  if (mb4) mb4.innerText = `FIRE Radar`;
 
   if (AppState.user.privacy) document.body.classList.add('privacy-active');
   else document.body.classList.remove('privacy-active');
@@ -6941,6 +7487,16 @@ function initGlobalMarketClocks() {
         </div>
       `;
     }).join("");
+
+    // Update Drawer Clocks
+    const cMum = document.getElementById('clockMumbaiDrawer');
+    const cLon = document.getElementById('clockLondonDrawer');
+    const cNy = document.getElementById('clockNewYorkDrawer');
+    const cTok = document.getElementById('clockTokyoDrawer');
+    if (cMum) cMum.innerText = now.toLocaleTimeString('en-US', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+    if (cLon) cLon.innerText = now.toLocaleTimeString('en-US', { timeZone: 'Europe/London', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+    if (cNy) cNy.innerText = now.toLocaleTimeString('en-US', { timeZone: 'America/New_York', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+    if (cTok) cTok.innerText = now.toLocaleTimeString('en-US', { timeZone: 'Asia/Tokyo', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
   }
 
   updateClocks();
@@ -7228,7 +7784,14 @@ document.addEventListener('visibilitychange', () => {
 });
 
 async function refreshTelemetrySilently() {
-  if (!isLiveSession || !activePasscode) return;
+  const icon = document.getElementById('mobileRefreshIcon');
+  if (icon) icon.classList.add('spin');
+  fetchLiveMarketIndices();
+
+  if (!isLiveSession || !activePasscode) {
+    setTimeout(() => { if (icon) icon.classList.remove('spin'); }, 500);
+    return;
+  }
   const url = AppState.user.apiUrl || DEFAULT_API_URL;
   try {
     const resp = await fetch(`${url}?passcode=${encodeURIComponent(activePasscode)}&t=${Date.now()}`, { method: 'GET', cache: 'no-store' });
@@ -7254,7 +7817,7 @@ async function refreshTelemetrySilently() {
     syncMFWithSIPConfig();
     renderCompleteDossiers();
     updateTopLeftStatus();
- 
+
     const newTotals = calculateTotals();
     const newNW = newTotals.totalNetWorth;
     if (newNW !== prevNW) {
@@ -7262,7 +7825,9 @@ async function refreshTelemetrySilently() {
       flashElementDelta('masterPortfolioValuationSub', newNW > prevNW);
     }
   } catch(e) {
-    console.warn("Silent 60s auto-pulse error:", e);
+    console.warn("Silent auto-pulse error:", e);
+  } finally {
+    if (icon) icon.classList.remove('spin');
   }
 }
 
@@ -7515,7 +8080,7 @@ function updateAuthVisuals(isSyncing = false) {
       dock.innerHTML = `
         <div style="display:flex; align-items:center; gap:5px;">
           ${!isEnrolled ? `
-            <button class="btn-faceid" onclick="registerFaceIdBiometrics()" title="Pair Apple Face ID with active session" style="background:rgba(16,185,129,0.18); border-color:rgba(16,185,129,0.5);">
+            <button class="btn-faceid desktop-only-auth" onclick="registerFaceIdBiometrics()" title="Pair Apple Face ID with active session" style="background:rgba(16,185,129,0.18); border-color:rgba(16,185,129,0.5);">
               <i data-lucide="scan-face" style="width:13px;height:13px;"></i>
               <span>Pair Face ID</span>
             </button>
@@ -7524,8 +8089,8 @@ function updateAuthVisuals(isSyncing = false) {
             <i data-lucide="refresh-cw" style="width:12px;height:12px;"></i>
             <span>Refresh</span>
           </button>
-          <button class="btn-icon-nav" onclick="lockPortfolioSession()" title="Lock Session (L)" style="width:24px; height:24px; padding:0; display:inline-flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.15); border-radius:4px; cursor:pointer;">
-            <i data-lucide="lock" style="width:12px;height:12px;"></i>
+          <button class="btn-icon-nav" onclick="lockPortfolioSession()" title="Lock Session (L)" style="width:28px; height:28px; padding:0; display:inline-flex; align-items:center; justify-content:center;">
+            <i data-lucide="lock" style="width:13px;height:13px;"></i>
           </button>
         </div>
       `;
@@ -7533,7 +8098,7 @@ function updateAuthVisuals(isSyncing = false) {
   } else {
     if (dock) {
       dock.innerHTML = `
-        <div style="display:flex; align-items:center; gap:5px;">
+        <div class="desktop-only-auth" style="display:flex; align-items:center; gap:5px;">
           <button class="btn-faceid" id="headerFaceIdBtn" onclick="${isEnrolled ? 'authenticateWithFaceId()' : 'registerFaceIdBiometrics()'}" title="${isEnrolled ? 'Unlock with Apple Face ID' : 'Pair Apple Face ID'}">
             <i data-lucide="scan-face" style="width:13px;height:13px;"></i>
             <span>${isEnrolled ? 'Face ID' : 'Pair Face ID'}</span>
@@ -7543,9 +8108,31 @@ function updateAuthVisuals(isSyncing = false) {
             <button class="btn-passcode-unlock" id="unlockBtn" onclick="connectLiveSheet()">Unlock</button>
           </div>
         </div>
+        <div class="mobile-only-auth">
+          <button class="btn-passcode-unlock" onclick="${isEnrolled ? 'authenticateWithFaceId()' : 'openConfigModal()'}" title="Unlock Portfolio Vault" style="padding: 4px 10px; font-size: 10.5px; gap: 4px;">
+            <i data-lucide="${isEnrolled ? 'scan-face' : 'lock'}" style="width:12px;height:12px;"></i>
+            <span>${isEnrolled ? 'Face ID' : 'Locked'}</span>
+          </button>
+        </div>
       `;
     }
     attachPasscodeListeners();
+  }
+
+  const drawerFaceBtn = document.getElementById('drawerFaceIdBtn');
+  if (drawerFaceBtn) {
+    if (isLiveSession) {
+      drawerFaceBtn.innerHTML = `<i data-lucide="lock" style="color:#fca5a5;"></i><span>Lock Live Session (L)</span>`;
+      drawerFaceBtn.onclick = () => { lockPortfolioSession(); closeMobileDrawer(); };
+    } else {
+      drawerFaceBtn.innerHTML = `<i data-lucide="scan-face" style="color:#c084fc;"></i><span>${isEnrolled ? 'Unlock with Face ID' : 'Pair Face ID / Unlock'}</span>`;
+      drawerFaceBtn.onclick = () => { if (isEnrolled) authenticateWithFaceId(); else registerFaceIdBiometrics(); closeMobileDrawer(); };
+    }
+  }
+
+  const drawerLed = document.getElementById('drawerStatusLed');
+  if (drawerLed) {
+    drawerLed.className = `status-led-dot ${isLiveSession ? 'live' : ''}`;
   }
 
   updateTopLeftStatus(isSyncing);
@@ -7568,10 +8155,17 @@ function lockPortfolioSession() {
 }
 
 function saveAndConnectWebhook() {
-  const url = document.getElementById('inputWebhookUrl').value.trim();
-  if (url) AppState.user.apiUrl = url;
+  const urlEl = document.getElementById('inputWebhookUrl');
+  if (urlEl && urlEl.value.trim()) {
+    AppState.user.apiUrl = urlEl.value.trim();
+  }
+  const modalPassEl = document.getElementById('inputModalPasscode');
+  if (modalPassEl && modalPassEl.value.trim()) {
+    activePasscode = modalPassEl.value.trim();
+  }
   saveState();
   connectLiveSheet();
+  closeConfigModal();
 }
 
 function attachPasscodeListeners() {
@@ -7589,6 +8183,9 @@ function attachPasscodeListeners() {
 function togglePrivacyMask() {
   AppState.user.privacy = !AppState.user.privacy;
   saveState();
+  const privBtn = document.getElementById('privacyToggleBtn');
+  if (privBtn) privBtn.classList.toggle('active', AppState.user.privacy);
+
   if (AppState.user.privacy) {
     document.body.classList.add('privacy-active');
     showToast('Privacy Mask Enabled');
@@ -7603,7 +8200,9 @@ function changeCurrency(curCode) {
   AppState.user.currency = curCode;
   ['INR', 'USD', 'EUR', 'GBP'].forEach(c => {
     const btn = document.getElementById(`btnCur${c}`);
+    const drawerBtn = document.getElementById(`drawerBtnCur${c}`);
     if (btn) btn.classList.toggle('active', c === curCode);
+    if (drawerBtn) drawerBtn.classList.toggle('active', c === curCode);
   });
   saveState();
   renderCompleteDossiers();
@@ -7687,25 +8286,44 @@ function renderMarketIndicesUI(data) {
   const nEl = document.getElementById('tickerNifty');
   const sEl = document.getElementById('tickerSensex');
   const gEl = document.getElementById('tickerGold');
+  const mobNEl = document.getElementById('mobTickerNifty');
+  const mobSEl = document.getElementById('mobTickerSensex');
+  const mobGEl = document.getElementById('mobTickerGold');
 
-  if (nEl && data.nifty && data.nifty.price) {
+  if (data.nifty && data.nifty.price) {
     const isUp = Boolean(data.nifty.isUp);
     const arrow = isUp ? '▲' : '▼';
     const cleanPct = String(data.nifty.changePct || '').replace(/[+\-▲▼]/g, '').trim();
-    nEl.className = `pulse-item ${isUp ? 'up' : 'down'}`;
-    nEl.innerText = `NIFTY ${Math.round(data.nifty.price).toLocaleString('en-IN')} ${arrow}${cleanPct}`;
+    const str = `NIFTY ${Math.round(data.nifty.price).toLocaleString('en-IN')} ${arrow}${cleanPct}`;
+    if (nEl) {
+      nEl.className = `pulse-item ${isUp ? 'up' : 'down'}`;
+      nEl.innerText = str;
+    }
+    if (mobNEl) {
+      mobNEl.className = `pulse-item ${isUp ? 'up' : 'down'}`;
+      mobNEl.innerText = str;
+    }
   }
 
-  if (sEl && data.sensex && data.sensex.price) {
+  if (data.sensex && data.sensex.price) {
     const isUp = Boolean(data.sensex.isUp);
     const arrow = isUp ? '▲' : '▼';
     const cleanPct = String(data.sensex.changePct || '').replace(/[+\-▲▼]/g, '').trim();
-    sEl.className = `pulse-item ${isUp ? 'up' : 'down'}`;
-    sEl.innerText = `SENSEX ${Math.round(data.sensex.price).toLocaleString('en-IN')} ${arrow}${cleanPct}`;
+    const str = `SENSEX ${Math.round(data.sensex.price).toLocaleString('en-IN')} ${arrow}${cleanPct}`;
+    if (sEl) {
+      sEl.className = `pulse-item ${isUp ? 'up' : 'down'}`;
+      sEl.innerText = str;
+    }
+    if (mobSEl) {
+      mobSEl.className = `pulse-item ${isUp ? 'up' : 'down'}`;
+      mobSEl.innerText = str;
+    }
   }
 
-  if (gEl && data.gold) {
-    gEl.innerText = `GOLD ${data.gold}`;
+  if (data.gold) {
+    const str = `GOLD ${data.gold}`;
+    if (gEl) gEl.innerText = str;
+    if (mobGEl) mobGEl.innerText = str;
   }
 }
 
