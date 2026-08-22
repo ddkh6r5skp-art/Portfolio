@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Dashboard</title>
-  <meta name="description" content="An authentic architectural portfolio archive engineered with physical folder architecture, tracking Mutual Funds, Direct Equities, Sovereign PPF, and FIRE Freedom horizons.">
+  <meta name="description" content="An authentic architectural portfolio archive engineered with physical folder architecture, tracking Mutual Funds, Direct Equities, Sovereign & Gold Reserves, and FIRE Freedom horizons.">
 
   <!-- Google Fonts: Fraunces + IBM Plex Mono + JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1755,7 +1755,7 @@ svg.lucide, i[data-lucide], svg {
     </div>
     <h1 class="section-hero__title">Consolidated Wealth Archive</h1>
     <p class="section-hero__desc">
-      A research-driven architectural dossier tracking Mutual Funds, Direct Equities, and Sovereign PPF with live telemetry, automated SIP outflow run-rates, and cumulative sovereign compounding.
+      A research-driven architectural dossier tracking Mutual Funds, Direct Equities, and Sovereign &amp; Gold Reserves with live telemetry, automated SIP outflow run-rates, and cumulative sovereign compounding.
     </p>
     <div class="keyboard-shortcuts-pill">
       <span>Command Palette: <span class="kbd-tag">⌘K</span></span>
@@ -1811,7 +1811,7 @@ svg.lucide, i[data-lucide], svg {
         <svg class="tag__start" viewBox="0 0 62 44" preserveAspectRatio="none">
           <path d="M1.1449 -2.54901e-05L-521.145 -2.66006e-06C-531.065 -2.22644e-06 -540.343 4.90374 -545.932 13.0999L-558.55 31.6066C-563.837 39.3607 -572.615 44 -582 44L62 44C52.6151 44 43.8369 39.3607 38.5499 31.6066L25.9318 13.0999C20.3434 4.90373 11.0649 -2.59237e-05 1.1449 -2.54901e-05Z" fill="currentColor"></path>
         </svg>
-        <div class="tag__middle"><span>04 // Sovereign PPF</span></div>
+        <div class="tag__middle"><span>04 // Sovereign &amp; Gold</span></div>
         <svg class="tag__end" viewBox="0 0 62 44" preserveAspectRatio="none">
           <path d="M1.1449 -2.54901e-05L-521.145 -2.66006e-06C-531.065 -2.22644e-06 -540.343 4.90374 -545.932 13.0999L-558.55 31.6066C-563.837 39.3607 -572.615 44 -582 44L62 44C52.6151 44 43.8369 39.3607 38.5499 31.6066L25.9318 13.0999C20.3434 4.90373 11.0649 -2.59237e-05 1.1449 -2.54901e-05Z" fill="currentColor"></path>
         </svg>
@@ -1932,11 +1932,11 @@ svg.lucide, i[data-lucide], svg {
 
             <div class="spectrum-chip ppf">
               <div style="display:flex; justify-content:space-between; font-size:11px; opacity:0.8; text-transform:uppercase;">
-                <span>03 // Sovereign PPF</span>
+                <span>03 // Sovereign &amp; Gold</span>
                 <span id="specPpfPct">0.0%</span>
               </div>
               <div class="num-mono privacy-blur" style="font-size:1.35rem; font-weight:700; margin-top:4px;" id="specPpfVal">₹0</div>
-              <div style="font-size:11px; opacity:0.75; margin-top:2px;" id="specPpfSub">Interest: +₹0</div>
+              <div style="font-size:11px; opacity:0.75; margin-top:2px;" id="specPpfSub">Accrued: +₹0</div>
             </div>
           </div>
 
@@ -1961,7 +1961,7 @@ svg.lucide, i[data-lucide], svg {
                 <div class="rebalance-action neutral" id="rebStockAction">—</div>
               </div>
               <div class="rebalance-col">
-                <div class="rebalance-label">Sovereign PPF (Target: 20%)</div>
+                <div class="rebalance-label">Sovereign &amp; Gold (Target: 20%)</div>
                 <div class="rebalance-val" id="rebPpfStat">Actual: 0.0%</div>
                 <div class="rebalance-action neutral" id="rebPpfAction">—</div>
               </div>
@@ -2054,7 +2054,7 @@ svg.lucide, i[data-lucide], svg {
           <div class="dossier-kpi-card">
             <span class="dossier-kpi-label">Growth / Defense Ratio</span>
             <span class="dossier-kpi-val num-mono" id="kpiGrowthRatio" style="font-size:1.35rem;">74% / 26%</span>
-            <span style="font-size:11px; opacity:0.75;">Equity vs Sovereign Debt</span>
+            <span style="font-size:11px; opacity:0.75;">Equity vs Sovereign &amp; Gold</span>
           </div>
           <div class="dossier-kpi-card">
             <span class="dossier-kpi-label">Portfolio Beta &amp; Volatility</span>
@@ -2331,17 +2331,67 @@ svg.lucide, i[data-lucide], svg {
 
       </div>
 
-      <!-- PANE 3: SOVEREIGN PPF -->
+      <!-- PANE 3: SOVEREIGN & GOLD ASSETS -->
       <div class="folder-pane" id="pane-3">
         <div class="dossier-hero-strip">
           <div>
-            <h2 class="dossier-title">Sovereign PPF 7.1% Vault</h2>
-            <div class="dossier-subtitle">Cumulative Capital Outlay &amp; Compound Interest Accretion</div>
+            <h2 class="dossier-title">Sovereign &amp; Gold Reserves</h2>
+            <div class="dossier-subtitle">Guaranteed Sovereign PPF Compounding &amp; Physical 24K Gold Hedge</div>
           </div>
           <div style="text-align: right;">
-            <div class="dossier-metric-huge num-mono privacy-blur" id="ppfTotalCorpus">₹3,20,710</div>
-            <div class="badge-capsule num-mono privacy-blur" id="ppfTotalInterest">+₹1,00,710 Accrued Interest</div>
+            <div class="dossier-metric-huge num-mono privacy-blur" id="sovereignTotalCorpus">₹0</div>
+            <div class="badge-capsule num-mono privacy-blur" id="sovereignTotalGain">+₹0 (+0.0%)</div>
           </div>
+        </div>
+
+        <!-- SOVEREIGN GOLD BULLION & ETF VAULT CARD -->
+        <div class="dossier-kpi-card" style="padding: 1.25rem; margin-bottom: 1.25rem; border: 1px solid rgba(251,191,36,0.3); background: linear-gradient(135deg, rgba(251,191,36,0.06) 0%, rgba(20,24,33,0.9) 100%);">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <div style="width:28px; height:28px; border-radius:6px; background:rgba(251,191,36,0.18); display:flex; align-items:center; justify-content:center; color:#fbbf24;">
+                <i style="width:15px; height:15px;" data-lucide="shield"></i>
+              </div>
+              <div>
+                <div style="font-size:12px; font-weight:700; color:#fbbf24; letter-spacing:0.02em;">Nippon India ETF Gold BeES (GOLDBEES)</div>
+                <div style="font-size:10px; color:var(--text-dim);">Physical 24K Gold Bullion Hedge (99.5% Sovereign Purity)</div>
+              </div>
+            </div>
+            <span class="badge-capsule" style="color:#fbbf24; border-color:rgba(251,191,36,0.35); font-size:9px;">
+              ● Sovereign Bullion Reserve
+            </span>
+          </div>
+
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:12px; margin-top:14px;">
+            <div style="background:rgba(0,0,0,0.35); border:1px solid rgba(255,255,255,0.08); border-radius:4px; padding:12px;">
+              <div style="font-size:10px; opacity:0.7; text-transform:uppercase;">Gold ETF Valuation</div>
+              <div class="num-mono privacy-blur" style="font-size:1.4rem; font-weight:700; color:#fbbf24; margin-top:4px;" id="goldValuation">₹0</div>
+              <div style="font-size:11px; color:#6ee7b7; margin-top:4px;" id="goldReturnSub">Principal: ₹0 (+0.0%)</div>
+            </div>
+
+            <div style="background:rgba(0,0,0,0.35); border:1px solid rgba(255,255,255,0.08); border-radius:4px; padding:12px;">
+              <div style="font-size:10px; opacity:0.7; text-transform:uppercase;">24K Physical Gold Backing</div>
+              <div class="num-mono privacy-blur" style="font-size:1.4rem; font-weight:700; color:#FDFAF7; margin-top:4px;" id="goldGramsEquivalent">0.00 g</div>
+              <div style="font-size:11px; opacity:0.8; margin-top:4px;" id="goldUnitsCount">0 Units Held</div>
+            </div>
+
+            <div style="background:rgba(0,0,0,0.35); border:1px solid rgba(255,255,255,0.08); border-radius:4px; padding:12px;">
+              <div style="font-size:10px; opacity:0.7; text-transform:uppercase;">Live Unit CMP &amp; 52W Peak</div>
+              <div class="num-mono" style="font-size:1.4rem; font-weight:700; color:#FDFAF7; margin-top:4px;" id="goldLiveCmp">₹0.00</div>
+              <div style="font-size:11px; color:#fde047; margin-top:4px;" id="gold52wAthGap">52W Peak Gap: 0.0%</div>
+            </div>
+
+            <div style="background:rgba(0,0,0,0.35); border:1px solid rgba(255,255,255,0.08); border-radius:4px; padding:12px;">
+              <div style="font-size:10px; opacity:0.7; text-transform:uppercase;">Sovereign Cushion Ratio</div>
+              <div class="num-mono" style="font-size:1.4rem; font-weight:700; color:#60a5fa; margin-top:4px;" id="goldPortfolioRatio">0.0%</div>
+              <div style="font-size:11px; opacity:0.8; margin-top:4px;">Safe-Haven Net Worth Hedge</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PPF SECTION HEADER -->
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px; margin-top:1.5rem;">
+          <i style="width:14px; height:14px; color:#6ee7b7;" data-lucide="landmark"></i>
+          <span style="font-family:var(--font-serif); font-size:1.1rem; font-weight:600; color:#fff;">Sovereign PPF 7.1% EEE Accretion Vault</span>
         </div>
 
         <!-- CUMULATIVE PRINCIPAL VS INTEREST ACCRETION -->
@@ -2349,7 +2399,7 @@ svg.lucide, i[data-lucide], svg {
           <div class="dossier-kpi-card">
             <div style="display:flex; justify-content:space-between; font-size:13px; font-weight:600;">
               <span>Cumulative Principal vs Pure Sovereign Interest</span>
-              <span class="num-mono privacy-blur" id="ppfCumulativeText" style="color: #6ee7b7;">₹2.2L Principal + ₹1.0L Interest</span>
+              <span class="num-mono privacy-blur" id="ppfCumulativeText" style="color: #6ee7b7;">₹0 Principal + ₹0 Interest</span>
             </div>
             
             <div style="height: 12px; background: rgba(0,0,0,0.5); border-radius: 100px; display: flex; overflow: hidden; margin: 10px 0; border: 1px solid rgba(255,255,255,0.15);">
@@ -2366,7 +2416,7 @@ svg.lucide, i[data-lucide], svg {
 
           <div class="dossier-kpi-card">
             <span class="dossier-kpi-label">Annual Sovereign Compounding Run-Rate</span>
-            <div class="num-mono privacy-blur" style="font-family:var(--font-serif); font-size:1.85rem; font-weight:700; color:#6ee7b7;" id="ppfAnnualYieldRate">₹22,770 / yr</div>
+            <div class="num-mono privacy-blur" style="font-family:var(--font-serif); font-size:1.85rem; font-weight:700; color:#6ee7b7;" id="ppfAnnualYieldRate">₹0 / yr</div>
             <span style="font-size:11px; opacity:0.75;">7.1% EEE Tax-Free Accrual on Total Corpus</span>
           </div>
         </div>
@@ -4979,6 +5029,16 @@ function toggleMFTxSection() {
   if (label) label.innerText = mfTxOpen ? 'Click to Hide Ledger' : 'Click to Reveal Ledger';
 }
 
+function isGoldEtf(item) {
+  if (!item) return false;
+  const ticker = String(item.ticker || item.symbol || '').toUpperCase().trim();
+  const name = String(item.name || item.companyName || '').toUpperCase().trim();
+  const sector = String(item.sector || '').toUpperCase().trim();
+  return ticker === 'GOLDBEES' || ticker.includes('GOLD') || ticker.includes('SILVER') || 
+         name.includes('GOLDBEES') || name.includes('GOLD ETF') || name.includes('GOLD BEES') || 
+         sector.includes('GOLD') || sector.includes('COMMODIT');
+}
+
 /* ==========================================================================
    CALCULATION ENGINE & TIME-HORIZON CHANGES
    ========================================================================== */
@@ -5003,16 +5063,30 @@ function calculateTotals() {
   let stInv = 0, stCur = 0;
   let stDayChange = 0, stMonthChange = 0, stYearChange = 0;
 
+  let goldInv = 0, goldCur = 0;
+  let goldDayChange = 0, goldMonthChange = 0, goldYearChange = 0;
+
   if (Array.isArray(AppState.stocks)) {
     AppState.stocks.forEach(s => {
       const inv = parseNum(s.invested !== undefined ? s.invested : (s.qty * s.avgBuyPrice)) || 0;
       const cur = parseNum(s.currentValue !== undefined ? s.currentValue : (s.qty * s.cmp)) || inv;
-      stInv += inv;
-      stCur += cur;
+      const dC = parseNum(s.dailyChange);
+      const mC = parseNum(s.monthlyChange);
+      const yC = parseNum(s.yearChange);
 
-      stDayChange += parseNum(s.dailyChange);
-      stMonthChange += parseNum(s.monthlyChange);
-      stYearChange += parseNum(s.yearChange);
+      if (isGoldEtf(s)) {
+        goldInv += inv;
+        goldCur += cur;
+        goldDayChange += dC;
+        goldMonthChange += mC;
+        goldYearChange += yC;
+      } else {
+        stInv += inv;
+        stCur += cur;
+        stDayChange += dC;
+        stMonthChange += mC;
+        stYearChange += yC;
+      }
     });
   }
 
@@ -5029,42 +5103,38 @@ function calculateTotals() {
   }
   const ppfInterest = Math.max(0, ppfCur - ppfInv);
 
-  // PPF Continuous Accrual (PPF removed from 1-Day, 1-Month, and 1-Year changes per user request)
-  const ppfDailyInterest = 0;
-  const ppfMonthlyInterest = 0;
-  const ppfYearlyInterest = 0;
+  const sovereignCur = ppfCur + goldCur;
+  const sovereignInv = ppfInv + goldInv;
+  const sovereignProfit = sovereignCur - sovereignInv;
+  const sovereignProfitPct = sovereignInv > 0 ? ((sovereignProfit / sovereignInv) * 100).toFixed(2) : '0.00';
 
-  const totalInv = mfInv + stInv + ppfInv;
-  const totalNetWorth = mfCur + stCur + ppfCur;
+  const totalInv = mfInv + stInv + sovereignInv;
+  const totalNetWorth = mfCur + stCur + sovereignCur;
   const totalProfit = totalNetWorth - totalInv;
   const totalProfitPct = totalInv > 0 ? ((totalProfit / totalInv) * 100).toFixed(2) : '0.00';
 
-  // Consolidated Net Worth Horizon Changes (Pure MF + Stocks Direct Market Movement)
+  // Consolidated Net Worth Horizon Changes (Pure MF + Stocks Direct Market Movement + Gold)
   const dashSummary = normalizeDashboardSummary(AppState.rawPayload || {});
   const totalDayChange = (dashSummary.totalDayChange !== null && dashSummary.totalDayChange !== 0) 
     ? dashSummary.totalDayChange 
-    : (mfDayChange + stDayChange);
+    : (mfDayChange + stDayChange + goldDayChange);
     
   const totalMonthChange = (dashSummary.totalMonthChange !== null && dashSummary.totalMonthChange !== 0) 
     ? dashSummary.totalMonthChange 
-    : (mfMonthChange + stMonthChange);
+    : (mfMonthChange + stMonthChange + goldMonthChange);
     
   const totalYearChange = (dashSummary.totalYearChange !== null && dashSummary.totalYearChange !== 0) 
     ? dashSummary.totalYearChange 
-    : (mfYearChange + stYearChange);
-
-  const totalDayChangePct = (totalNetWorth - totalDayChange) > 0 ? ((totalDayChange / (totalNetWorth - totalDayChange)) * 100).toFixed(2) : '0.00';
-  const totalMonthChangePct = (totalNetWorth - totalMonthChange) > 0 ? ((totalMonthChange / (totalNetWorth - totalMonthChange)) * 100).toFixed(2) : '0.00';
-  const totalYearChangePct = (totalNetWorth - totalYearChange) > 0 ? ((totalYearChange / (totalNetWorth - totalYearChange)) * 100).toFixed(2) : '0.00';
+    : (mfYearChange + stYearChange + goldYearChange);
 
   return {
     mfInv, mfCur, mfSip, mfDayChange, mfMonthChange, mfYearChange,
     stInv, stCur, stDayChange, stMonthChange, stYearChange,
-    ppfInv, ppfCur, ppfInterest, ppfDailyInterest, ppfMonthlyInterest, ppfYearlyInterest,
+    goldInv, goldCur, goldDayChange, goldMonthChange, goldYearChange,
+    ppfInv, ppfCur, ppfInterest,
+    sovereignInv, sovereignCur, sovereignProfit, sovereignProfitPct,
     totalInv, totalNetWorth, totalProfit, totalProfitPct,
-    totalDayChange, totalDayChangePct,
-    totalMonthChange, totalMonthChangePct,
-    totalYearChange, totalYearChangePct
+    totalDayChange, totalMonthChange, totalYearChange
   };
 }
 
@@ -5330,8 +5400,8 @@ function renderCompleteDossiers() {
   const specPpfVal = document.getElementById('specPpfVal');
   const specPpfSub = document.getElementById('specPpfSub');
   if (specPpfPct) specPpfPct.innerText = `${ppfPct}%`;
-  if (specPpfVal) specPpfVal.innerText = formatVal(metrics.ppfCur);
-  if (specPpfSub) specPpfSub.innerText = `Interest: +${formatVal(metrics.ppfInterest)}`;
+  if (specPpfVal) specPpfVal.innerText = formatVal(metrics.sovereignCur);
+  if (specPpfSub) specPpfSub.innerText = `Accrued: +${formatVal(metrics.sovereignProfit)}`;
 
   // Rebalancing Radar
   const targetMf = totalNW * 0.50;
@@ -5340,7 +5410,7 @@ function renderCompleteDossiers() {
 
   const diffMf = targetMf - metrics.mfCur;
   const diffStock = targetStock - metrics.stCur;
-  const diffPpf = targetPpf - metrics.ppfCur;
+  const diffPpf = targetPpf - metrics.sovereignCur;
 
   const rebMfStat = document.getElementById('rebMfStat');
   const rebMfAction = document.getElementById('rebMfAction');
@@ -5442,7 +5512,7 @@ function renderCompleteDossiers() {
   renderTopAlphaDrivers();
 
   // Stress Test Simulator
-  const simulatedNetWorth = (metrics.mfCur + metrics.stCur) * (1 + activeScenarioDelta) + metrics.ppfCur;
+  const simulatedNetWorth = (metrics.mfCur + metrics.stCur) * (1 + activeScenarioDelta) + metrics.sovereignCur;
   const simDelta = simulatedNetWorth - metrics.totalNetWorth;
   const projValEl = document.getElementById('scenarioProjectedVal');
   const profitDiffEl = document.getElementById('scenarioProfitDiff');
@@ -5475,7 +5545,8 @@ function renderCompleteDossiers() {
   renderMFTable();
   renderMFTxTable();
 
-  // Pane 2: Equities
+  // Pane 2: Equities (100% Pure Company Equities)
+  const pureStocks = (AppState.stocks || []).filter(s => !isGoldEtf(s));
   const stockTotalVal = document.getElementById('stockTotalVal');
   if (stockTotalVal) stockTotalVal.innerText = formatVal(metrics.stCur);
   const stP = metrics.stCur - metrics.stInv;
@@ -5487,17 +5558,59 @@ function renderCompleteDossiers() {
     stProfitEl.style.color = stPProfitable ? '#6ee7b7' : '#fca5a5';
   }
   const stockCntBadge = document.getElementById('stockHoldingCountBadge');
-  if (stockCntBadge) stockCntBadge.innerText = `${AppState.stocks.length} Equities`;
+  if (stockCntBadge) stockCntBadge.innerText = `${pureStocks.length} Pure Equities`;
 
   renderStockSmartMetrics();
   renderStockTable();
 
-  // Pane 3: Sovereign PPF
-  const ppfCorpus = document.getElementById('ppfTotalCorpus');
-  if (ppfCorpus) ppfCorpus.innerText = formatVal(metrics.ppfCur);
-  const ppfInterestEl = document.getElementById('ppfTotalInterest');
-  if (ppfInterestEl) ppfInterestEl.innerText = `+${formatVal(metrics.ppfInterest)} Accrued Interest`;
+  // Pane 3: Sovereign & Gold Assets
+  const sovereignCorpus = document.getElementById('sovereignTotalCorpus');
+  if (sovereignCorpus) sovereignCorpus.innerText = formatVal(metrics.sovereignCur);
+  const sovereignGainEl = document.getElementById('sovereignTotalGain');
+  if (sovereignGainEl) {
+    const isGain = metrics.sovereignProfit >= 0;
+    sovereignGainEl.innerText = `${isGain ? '+' : ''}${formatVal(metrics.sovereignProfit)} (${isGain ? '+' : ''}${metrics.sovereignProfitPct}% Net Gain)`;
+    sovereignGainEl.style.color = isGain ? '#6ee7b7' : '#fca5a5';
+  }
+
+  // Gold Bullion & ETF Telemetry Card
+  const goldHoldings = (AppState.stocks || []).filter(s => isGoldEtf(s));
+  const gVal = document.getElementById('goldValuation');
+  const gSub = document.getElementById('goldReturnSub');
+  const gGrams = document.getElementById('goldGramsEquivalent');
+  const gUnits = document.getElementById('goldUnitsCount');
+  const gCmp = document.getElementById('goldLiveCmp');
+  const gAth = document.getElementById('gold52wAthGap');
+  const gRatio = document.getElementById('goldPortfolioRatio');
+
+  if (goldHoldings.length > 0) {
+    const firstGold = goldHoldings[0];
+    const totalGoldUnits = goldHoldings.reduce((sum, g) => sum + (parseNum(g.qty) || 0), 0);
+    const approxGrams = (totalGoldUnits * 0.01).toFixed(2);
+    const goldGain = metrics.goldCur - metrics.goldInv;
+    const goldGainPct = metrics.goldInv > 0 ? ((goldGain / metrics.goldInv) * 100).toFixed(1) : '0.0';
+    const goldPortPct = totalNW > 0 ? ((metrics.goldCur / totalNW) * 100).toFixed(1) : '0.0';
+
+    if (gVal) gVal.innerText = formatVal(metrics.goldCur);
+    if (gSub) gSub.innerText = `Principal: ${formatVal(metrics.goldInv)} (${goldGain >= 0 ? '+' : ''}${goldGainPct}%)`;
+    if (gGrams) gGrams.innerText = `${approxGrams} g (24K)`;
+    if (gUnits) gUnits.innerText = `${totalGoldUnits.toLocaleString('en-IN')} Units Held`;
+    if (gCmp) gCmp.innerText = `₹${parseNum(firstGold.cmp).toFixed(2)}`;
+    
+    const athGap = firstGold.high52 > 0 ? (((firstGold.cmp - firstGold.high52) / firstGold.high52) * 100).toFixed(1) : '0.0';
+    if (gAth) gAth.innerText = `52W Peak Gap: ${athGap}%`;
+    if (gRatio) gRatio.innerText = `${goldPortPct}%`;
+  } else {
+    if (gVal) gVal.innerText = '₹0';
+    if (gSub) gSub.innerText = 'No Active Bullion Allocation';
+    if (gGrams) gGrams.innerText = '0.00 g';
+    if (gUnits) gUnits.innerText = '0 Units';
+    if (gCmp) gCmp.innerText = '₹0.00';
+    if (gAth) gAth.innerText = '—';
+    if (gRatio) gRatio.innerText = '0.0%';
+  }
   
+  // PPF Principal vs Interest Accretion
   const ppfPrincipalShare = metrics.ppfCur > 0 ? ((metrics.ppfInv / metrics.ppfCur) * 100).toFixed(0) : 68;
   const ppfInterestShare = metrics.ppfCur > 0 ? (100 - ppfPrincipalShare) : 32;
   const ppfMultiplier = metrics.ppfInv > 0 ? (metrics.ppfCur / metrics.ppfInv).toFixed(2) : '1.46';
@@ -5864,7 +5977,7 @@ function renderMFTxTable() {
 }
 
 function renderStockSmartMetrics() {
-  const stocks = AppState.stocks || [];
+  const stocks = (AppState.stocks || []).filter(s => !isGoldEtf(s));
   if (!stocks.length) return;
 
   let winCount = 0;
@@ -6099,9 +6212,13 @@ function filterStocksList(q) {
 
 function renderStockTable() {
   const tbody = document.getElementById('tableBodyStocks');
+  const badge = document.getElementById('stockHoldingCountBadge');
   if (!tbody) return;
 
-  const filtered = AppState.stocks.filter(s => {
+  const pureStocks = (AppState.stocks || []).filter(s => !isGoldEtf(s));
+  if (badge) badge.innerText = `${pureStocks.length} Pure Equities`;
+
+  const filtered = pureStocks.filter(s => {
     return !filterStockQuery || s.name.toLowerCase().includes(filterStockQuery) || s.ticker.toLowerCase().includes(filterStockQuery) || s.sector.toLowerCase().includes(filterStockQuery);
   });
 
@@ -6503,7 +6620,7 @@ function renderPaletteResults(query) {
     { name: 'Switch to Master Dossier (Tab 01)', action: () => activateFolder(0), icon: 'folder' },
     { name: 'Switch to Mutual Funds & SIPs (Tab 02)', action: () => activateFolder(1), icon: 'folder' },
     { name: 'Switch to Direct Equities (Tab 03)', action: () => activateFolder(2), icon: 'folder' },
-    { name: 'Switch to Sovereign PPF (Tab 04)', action: () => activateFolder(3), icon: 'folder' },
+    { name: 'Switch to Sovereign & Gold Reserves (Tab 04)', action: () => activateFolder(3), icon: 'shield' },
     { name: 'Switch to FIRE & Projections (Tab 05)', action: () => activateFolder(4), icon: 'folder' },
     { name: 'Launch AI Quant Copilot Intelligence', action: () => openAuditModal(), icon: 'sparkles' },
     { name: 'Authenticate with Apple Face ID', action: () => authenticateWithFaceId(), icon: 'scan-face' },
@@ -6517,6 +6634,14 @@ function renderPaletteResults(query) {
     if (!q || a.name.toLowerCase().includes(q)) results.push(a);
   });
 
+  if (!q || 'sovereign ppf 7.1% eee'.includes(q) || 'ppf'.includes(q) || 'gold'.includes(q) || 'goldbees'.includes(q) || 'bullion'.includes(q)) {
+    results.push({
+      name: 'Sovereign PPF 7.1% Vault & 24K Gold Bullion Reserves',
+      action: () => activateFolder(3),
+      icon: 'shield'
+    });
+  }
+
   AppState.mutualFunds.forEach(f => {
     if (!q || f.name.toLowerCase().includes(q) || f.category.toLowerCase().includes(q)) {
       results.push({
@@ -6529,10 +6654,14 @@ function renderPaletteResults(query) {
 
   AppState.stocks.forEach(s => {
     if (!q || s.name.toLowerCase().includes(q) || s.ticker.toLowerCase().includes(q)) {
+      const isGold = isGoldEtf(s);
       results.push({
-        name: `Equity: ${s.name} (${s.ticker})`,
-        action: () => { activateFolder(2); openInspectionFromType('stock', s.id); },
-        icon: 'trending-up'
+        name: isGold ? `Gold Bullion ETF: ${s.name} (${s.ticker})` : `Equity: ${s.name} (${s.ticker})`,
+        action: () => { 
+          if (isGold) activateFolder(3); 
+          else { activateFolder(2); openInspectionFromType('stock', s.id); }
+        },
+        icon: isGold ? 'shield' : 'trending-up'
       });
     }
   });
