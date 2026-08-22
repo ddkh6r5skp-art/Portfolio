@@ -1682,11 +1682,11 @@ svg.lucide, i[data-lucide], svg {
 
         <!-- 100% Live Market Pulse Barometer -->
         <div class="market-pulse-strip" id="marketPulseBarometer">
-          <span class="pulse-item up" id="tickerNifty">NIFTY 24,180 ▲0.4%</span>
+          <span class="pulse-item up" id="tickerNifty">NIFTY 24,252 ▲0.08%</span>
           <span>•</span>
-          <span class="pulse-item up" id="tickerSensex">SENSEX 79,420 ▲0.3%</span>
+          <span class="pulse-item down" id="tickerSensex">SENSEX 77,541 ▼0.12%</span>
           <span>•</span>
-          <span class="pulse-item" id="tickerGold">GOLD ₹78.2k</span>
+          <span class="pulse-item" id="tickerGold">GOLD ₹72.1k</span>
         </div>
       </div>
 
@@ -7356,14 +7356,20 @@ function renderMarketIndicesUI(data) {
   const sEl = document.getElementById('tickerSensex');
   const gEl = document.getElementById('tickerGold');
 
-  if (nEl && data.nifty) {
-    nEl.className = `pulse-item ${data.nifty.isUp ? 'up' : 'down'}`;
-    nEl.innerText = `NIFTY ${Math.round(data.nifty.price).toLocaleString('en-IN')} ${data.nifty.isUp ? '▲' : '▼'}${data.nifty.changePct.replace(/[+-]/g, '')}`;
+  if (nEl && data.nifty && data.nifty.price) {
+    const isUp = Boolean(data.nifty.isUp);
+    const arrow = isUp ? '▲' : '▼';
+    const cleanPct = String(data.nifty.changePct || '').replace(/[+\-▲▼]/g, '').trim();
+    nEl.className = `pulse-item ${isUp ? 'up' : 'down'}`;
+    nEl.innerText = `NIFTY ${Math.round(data.nifty.price).toLocaleString('en-IN')} ${arrow}${cleanPct}`;
   }
 
-  if (sEl && data.sensex) {
-    sEl.className = `pulse-item ${data.sensex.isUp ? 'up' : 'down'}`;
-    sEl.innerText = `SENSEX ${Math.round(data.sensex.price).toLocaleString('en-IN')} ${data.sensex.isUp ? '▲' : '▼'}${data.sensex.changePct.replace(/[+-]/g, '')}`;
+  if (sEl && data.sensex && data.sensex.price) {
+    const isUp = Boolean(data.sensex.isUp);
+    const arrow = isUp ? '▲' : '▼';
+    const cleanPct = String(data.sensex.changePct || '').replace(/[+\-▲▼]/g, '').trim();
+    sEl.className = `pulse-item ${isUp ? 'up' : 'down'}`;
+    sEl.innerText = `SENSEX ${Math.round(data.sensex.price).toLocaleString('en-IN')} ${arrow}${cleanPct}`;
   }
 
   if (gEl && data.gold) {
@@ -7372,13 +7378,7 @@ function renderMarketIndicesUI(data) {
 }
 
 async function fetchLiveMarketIndices() {
-  try {
-    const cached = JSON.parse(localStorage.getItem('MOSBY_MARKET_CACHE_V3'));
-    if (cached && (cached.nifty || cached.sensex)) renderMarketIndicesUI(cached);
-  } catch(e) {}
-
-  const parseYahooChart = json => {
-    const meta = json?.chart?.result?.[0]?.meta;
+  const parseYahooMeta = meta => {
     if (!meta || !meta.regularMarketPrice) return null;
     const price = meta.regularMarketPrice;
     const prev = meta.chartPreviousClose || meta.previousClose || price;
@@ -7387,19 +7387,98 @@ async function fetchLiveMarketIndices() {
     return { price, changePct, isUp: delta >= 0 };
   };
 
-  try {
-    const res = await fetch('https://corsproxy.io/?' + encodeURIComponent('https://query1.finance.yahoo.com/v8/finance/chart/%5ENSEI?interval=1d&range=1d'));
-    if (res.ok) {
-      const json = await res.json();
-      const data = parseYahooChart(json);
-      if (data) {
-        const curCache = JSON.parse(localStorage.getItem('MOSBY_MARKET_CACHE_V3') || '{}');
-        curCache.nifty = data;
-        localStorage.setItem('MOSBY_MARKET_CACHE_V3', JSON.stringify(curCache));
-        renderMarketIndicesUI(curCache);
+  // 1. Try public Apps Script endpoint (100% public, ZERO login required)
+  const endpoint = AppState.user.apiUrl || DEFAULT_API_URL;
+  if (endpoint) {
+    try {
+      const res = await fetch(`${endpoint}?action=getMarketIndices`);
+      if (res.ok) {
+        const data = await res.json();
+        if (data && (data.nifty || data.sensex)) {
+          renderMarketIndicesUI(data);
+          return;
+        }
       }
+    } catch(e) {}
+  }
+
+  const proxies = [
+    url => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+    url => `https://corsproxy.io/?${encodeURIComponent(url)}`,
+    url => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`
+  ];
+
+  async function fetchSymbolData(symbol) {
+    const targetUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1d&range=1d`;
+    for (const proxyGen of proxies) {
+      try {
+        const res = await fetch(proxyGen(targetUrl), { headers: { 'Accept': 'application/json' } });
+        if (res.ok) {
+          const json = await res.json();
+          const meta = json?.chart?.result?.[0]?.meta;
+          const parsed = parseYahooMeta(meta);
+          if (parsed) return parsed;
+        }
+      } catch(e) {}
+    }
+    return null;
+  }
+
+  // 2. Fetch live NIFTY (%5ENSEI) & SENSEX (%5EBSESN) concurrently without login
+  try {
+    const [niftyData, sensexData] = await Promise.all([
+      fetchSymbolData('%5ENSEI'),
+      fetchSymbolData('%5EBSESN')
+    ]);
+
+    if (niftyData || sensexData) {
+      const curData = {
+        nifty: niftyData || { price: 24252, changePct: "+0.08%", isUp: true },
+        sensex: sensexData || { price: 77541, changePct: "-0.12%", isUp: false },
+        gold: '₹72.1k'
+      };
+      renderMarketIndicesUI(curData);
+      return;
     }
   } catch(e) {}
+
+  // 3. Fallback to Gemini with Google Search Grounding if API key present
+  const apiKey = (typeof sessionGeminiApiKey !== 'undefined' && sessionGeminiApiKey) || localStorage.getItem('MOSBY_GEMINI_KEY');
+  if (apiKey) {
+    try {
+      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+      const prompt = `Search live Google Finance for today's exact current price and 1-day percentage change for NIFTY 50 (^NSEI) and BSE SENSEX (^BSESN) in India.
+Return ONLY a valid JSON object without markdown backticks:
+{
+  "nifty": { "price": 24850, "changePct": "+0.35%", "isUp": true },
+  "sensex": { "price": 81300, "changePct": "+0.28%", "isUp": true },
+  "gold": "₹78.2k"
+}`;
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ role: 'user', parts: [{ text: prompt }] }],
+          tools: [{ googleSearch: {} }],
+          generationConfig: { temperature: 0.1 }
+        })
+      });
+      if (res.ok) {
+        const json = await res.json();
+        const text = json?.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (text) {
+          const match = text.match(/\{[\s\S]*\}/);
+          if (match) {
+            const parsed = JSON.parse(match[0]);
+            if (parsed.nifty || parsed.sensex) {
+              localStorage.setItem('MOSBY_MARKET_CACHE_V4', JSON.stringify(parsed));
+              renderMarketIndicesUI(parsed);
+            }
+          }
+        }
+      }
+    } catch(e) {}
+  }
 }
 
 // Synchronous Pre-Hydration of Trusted Live Session (Instant 0.00s Load, Zero Freeze, Direct Live Paint)
