@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Dashboard</title>
+  <title>Vageesh's Wealth Dossier // Architectural Portfolio</title>
   <meta name="description" content="An authentic architectural portfolio archive engineered with physical folder architecture, tracking Mutual Funds, Direct Equities, Sovereign & Gold Reserves, and FIRE Freedom horizons.">
 
   <!-- Google Fonts: Fraunces + IBM Plex Mono + JetBrains Mono -->
@@ -18,7 +18,7 @@
   <!-- Apple PWA Standalone App & Mobile Web App Meta Tags -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Dossier">
+  <meta name="apple-mobile-web-app-title" content="Wealth Dossier">
   <link rel="manifest" href="manifest.json">
   <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='128' fill='%23181E29'/><circle cx='256' cy='256' r='180' fill='none' stroke='%236ee7b7' stroke-width='24'/><path d='M256 120v272M180 200l76-80 76 80' fill='none' stroke='%236ee7b7' stroke-width='24' stroke-linecap='round' stroke-linejoin='round'/></svg>">
 
@@ -836,6 +836,16 @@ svg.lucide, i[data-lucide], svg {
   height: 16px;
 }
 
+.the-header__brand-block {
+  display: flex;
+  align-items: center;
+}
+.desktop-status {
+  display: inline-flex !important;
+}
+.mobile-status {
+  display: none !important;
+}
 .desktop-only-auth {
   display: flex !important;
 }
@@ -844,6 +854,31 @@ svg.lucide, i[data-lucide], svg {
 }
 
 @media (max-width: 768px) {
+  .desktop-status {
+    display: none !important;
+  }
+  .mobile-status {
+    display: inline-flex !important;
+    font-size: 8px !important;
+    padding: 1px 4px !important;
+    gap: 3px !important;
+    margin-top: 1px !important;
+    width: fit-content;
+    background: transparent !important;
+    border: none !important;
+    color: var(--text-dim);
+  }
+  .the-header__brand-block {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+  }
+  .the-header__logo span {
+    font-size: 0.98rem !important;
+    line-height: 1.1;
+  }
+
   .desktop-only-auth {
     display: none !important;
   }
@@ -853,23 +888,6 @@ svg.lucide, i[data-lucide], svg {
 
   .btn-mobile-menu {
     display: inline-flex;
-    order: 1;
-  }
-  .the-header__logo {
-    order: 2;
-  }
-  .top-left-status {
-    order: 3;
-    display: inline-flex !important;
-    align-items: center;
-    gap: 4px;
-    padding: 2px 6px;
-    font-size: 8.5px;
-    border-radius: 3px;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    color: var(--text-dim);
-    cursor: pointer;
   }
 
   /* Pinned top bar scaling */
@@ -2059,13 +2077,19 @@ svg.lucide, i[data-lucide], svg {
           <i style="width: 18px; height: 18px;" data-lucide="menu"></i>
         </button>
 
-        <div class="top-left-status" id="topLeftStatusBadge" onclick="openConfigModal()" style="cursor: pointer;" title="Telemetry Settings & Passcode">
+        <div class="top-left-status desktop-status" id="topLeftStatusBadge" onclick="openConfigModal()" style="cursor: pointer;" title="Telemetry Settings & Passcode">
           <span class="status-led-dot" id="topLeftLed"></span>
           <span id="topLeftStatusText">DEMO ARCHIVE</span>
         </div>
 
-        <div class="the-header__logo" onclick="triggerConfetti()">
-          <span style="font-family: var(--font-serif); font-size: 1.15rem; letter-spacing: -0.01em; font-weight: 500;">VAGEESH'S DOSSIER</span>
+        <div class="the-header__brand-block">
+          <div class="the-header__logo" onclick="triggerConfetti()">
+            <span style="font-family: var(--font-serif); font-size: 1.15rem; letter-spacing: -0.01em; font-weight: 500;">VAGEESH'S DOSSIER</span>
+          </div>
+          <div class="top-left-status mobile-status" id="topLeftStatusBadgeMobile" onclick="openConfigModal()" style="cursor: pointer;" title="Telemetry Settings & Passcode">
+            <span class="status-led-dot" id="topLeftLedMobile"></span>
+            <span id="topLeftStatusTextMobile">DEMO ARCHIVE</span>
+          </div>
         </div>
 
         <!-- 100% Live Market Pulse Barometer -->
@@ -8056,18 +8080,28 @@ async function checkAutoFaceIdOnLoad() {
 function updateTopLeftStatus(isSyncing = false) {
   const badge = document.getElementById('topLeftStatusBadge');
   const text = document.getElementById('topLeftStatusText');
-  if (!badge || !text) return;
+  const badgeMob = document.getElementById('topLeftStatusBadgeMobile');
+  const textMob = document.getElementById('topLeftStatusTextMobile');
+
   if (isLiveSession) {
-    badge.classList.add('live');
+    if (badge) badge.classList.add('live');
+    if (badgeMob) badgeMob.classList.add('live');
+
+    let labelStr = '';
     if (isSyncing) {
-      text.innerText = `● SYNCING TELEMETRY...`;
+      labelStr = `● SYNCING...`;
     } else {
       const timeStr = AppState.user.lastSync ? formatTimestampDetailed(new Date(AppState.user.lastSync)) : formatTimestampDetailed();
-      text.innerText = `SYNCED ${timeStr.toUpperCase()}`;
+      labelStr = `SYNCED ${timeStr.toUpperCase()}`;
     }
+
+    if (text) text.innerText = labelStr;
+    if (textMob) textMob.innerText = labelStr;
   } else {
-    badge.classList.remove('live');
-    text.innerText = `DEMO ARCHIVE`;
+    if (badge) badge.classList.remove('live');
+    if (badgeMob) badgeMob.classList.remove('live');
+    if (text) text.innerText = `DEMO ARCHIVE`;
+    if (textMob) textMob.innerText = `DEMO ARCHIVE`;
   }
 }
 
