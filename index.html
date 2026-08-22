@@ -37,9 +37,8 @@
   --color-blue: #1E4BD7;
   --color-green: #0C7866;
   --color-purple: #581E70;
-  --color-red: #B91C1C;
-  --color-amber: #0E7490;
-  --color-noir: #0E7490;
+  --color-red: #D71E1E;
+  --color-noir: #181E29;
 
   --bg-dark: #07090E;
   --text-pure: #FDFAF7;
@@ -1874,7 +1873,7 @@ svg.lucide, i[data-lucide], svg {
       </div>
 
       <!-- TAB 4 -->
-      <div class="tag-unit" data-tab="4" style="--tab-color: var(--color-amber);" onclick="activateFolder(4)">
+      <div class="tag-unit" data-tab="4" style="--tab-color: var(--color-noir);" onclick="activateFolder(4)">
         <svg class="tag__start" viewBox="0 0 62 44" preserveAspectRatio="none">
           <path d="M1.1449 -2.54901e-05L-521.145 -2.66006e-06C-531.065 -2.22644e-06 -540.343 4.90374 -545.932 13.0999L-558.55 31.6066C-563.837 39.3607 -572.615 44 -582 44L62 44C52.6151 44 43.8369 39.3607 38.5499 31.6066L25.9318 13.0999C20.3434 4.90373 11.0649 -2.59237e-05 1.1449 -2.54901e-05Z" fill="currentColor"></path>
         </svg>
@@ -2075,7 +2074,7 @@ svg.lucide, i[data-lucide], svg {
         </div>
 
         <!-- PASSIVE CASHFLOW & DIVIDEND ACCRETION STREAM -->
-        <div class="dossier-kpi-card" style="margin-bottom: 1.5rem; padding: 1.25rem; border: 1px solid rgba(110,231,183,0.25); background: linear-gradient(135deg, rgba(16,185,129,0.04) 0%, rgba(20,24,33,0.9) 100%);">
+        <div class="dossier-kpi-card" style="margin-bottom: 1.5rem; padding: 1.25rem;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
             <div style="display: flex; align-items: center; gap: 8px;">
               <div style="width: 28px; height: 28px; border-radius: 6px; background: rgba(16,185,129,0.15); display: flex; align-items: center; justify-content: center; color: #6ee7b7;">
@@ -2452,7 +2451,7 @@ svg.lucide, i[data-lucide], svg {
         </div>
 
         <!-- SOVEREIGN GOLD BULLION & ETF VAULT CARD -->
-        <div class="dossier-kpi-card" style="padding: 1.25rem; margin-bottom: 1.25rem; border: 1px solid rgba(251,191,36,0.3); background: linear-gradient(135deg, rgba(251,191,36,0.06) 0%, rgba(20,24,33,0.9) 100%);">
+        <div class="dossier-kpi-card" style="padding: 1.25rem; margin-bottom: 1.25rem;">
           <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
             <div style="display:flex; align-items:center; gap:8px;">
               <div style="width:28px; height:28px; border-radius:6px; background:rgba(251,191,36,0.18); display:flex; align-items:center; justify-content:center; color:#fbbf24;">
@@ -4334,7 +4333,7 @@ const FOLDER_COLORS = [
   'var(--color-green)',
   'var(--color-purple)',
   'var(--color-red)',
-  'var(--color-amber)'
+  'var(--color-noir)'
 ];
 
 const DEMO_STATE = {
@@ -5229,10 +5228,19 @@ function calculateTotals() {
   const totalMonthChange = (dashSummary.totalMonthChange !== null && dashSummary.totalMonthChange !== 0) 
     ? dashSummary.totalMonthChange 
     : (mfMonthChange + stMonthChange + goldMonthChange);
-    
+
   const totalYearChange = (dashSummary.totalYearChange !== null && dashSummary.totalYearChange !== 0) 
     ? dashSummary.totalYearChange 
     : (mfYearChange + stYearChange + goldYearChange);
+    
+  const prevDayNW = totalNetWorth - totalDayChange;
+  const totalDayChangePct = prevDayNW > 0 ? ((totalDayChange / prevDayNW) * 100).toFixed(2) : '0.00';
+
+  const prevMonthNW = totalNetWorth - totalMonthChange;
+  const totalMonthChangePct = prevMonthNW > 0 ? ((totalMonthChange / prevMonthNW) * 100).toFixed(2) : '0.00';
+
+  const prevYearNW = totalNetWorth - totalYearChange;
+  const totalYearChangePct = prevYearNW > 0 ? ((totalYearChange / prevYearNW) * 100).toFixed(2) : '0.00';
 
   return {
     mfInv, mfCur, mfSip, mfDayChange, mfMonthChange, mfYearChange,
@@ -5241,7 +5249,9 @@ function calculateTotals() {
     ppfInv, ppfCur, ppfInterest,
     sovereignInv, sovereignCur, sovereignProfit, sovereignProfitPct,
     totalInv, totalNetWorth, totalProfit, totalProfitPct,
-    totalDayChange, totalMonthChange, totalYearChange
+    totalDayChange, totalDayChangePct,
+    totalMonthChange, totalMonthChangePct,
+    totalYearChange, totalYearChangePct
   };
 }
 
@@ -5838,24 +5848,28 @@ function renderTimeHorizonDeck(metrics) {
   const container = document.getElementById('horizonChangeDeckContainer');
   if (!container) return;
 
-  const isDayUp = metrics.totalDayChange >= 0;
-  const isMonthUp = metrics.totalMonthChange >= 0;
-  const isYearUp = metrics.totalYearChange >= 0;
+  const isDayUp = (metrics.totalDayChange || 0) >= 0;
+  const isMonthUp = (metrics.totalMonthChange || 0) >= 0;
+  const isYearUp = (metrics.totalYearChange || 0) >= 0;
+
+  const dayPct = Math.abs(parseFloat(metrics.totalDayChangePct) || 0).toFixed(2);
+  const monthPct = Math.abs(parseFloat(metrics.totalMonthChangePct) || 0).toFixed(2);
+  const yearPct = Math.abs(parseFloat(metrics.totalYearChangePct) || 0).toFixed(2);
 
   container.innerHTML = `
     <div class="horizon-card">
       <div>
         <div class="horizon-card-label">1-Day Portfolio Change (Today)</div>
         <div class="horizon-card-val num-mono privacy-blur" style="color:${isDayUp ? '#6ee7b7' : '#fca5a5'};">
-          ${isDayUp ? '+' : ''}${formatVal(metrics.totalDayChange)}
+          ${isDayUp ? '+' : ''}${formatVal(metrics.totalDayChange || 0)}
         </div>
         <div class="horizon-card-sub num-mono" style="color:${isDayUp ? '#6ee7b7' : '#fca5a5'};">
-          ${isDayUp ? '▲' : '▼'} ${isDayUp ? '+' : ''}${metrics.totalDayChangePct}% Today's Movement
+          ${isDayUp ? '▲ +' : '▼ -'}${dayPct}% Today's Movement
         </div>
       </div>
       <div style="text-align:right; font-size:9.5px; opacity:0.65;">
-        <div>MF: ${metrics.mfDayChange >= 0 ? '+' : ''}${formatVal(metrics.mfDayChange)}</div>
-        <div>Stocks: ${metrics.stDayChange >= 0 ? '+' : ''}${formatVal(metrics.stDayChange)}</div>
+        <div>MF: ${(metrics.mfDayChange || 0) >= 0 ? '+' : ''}${formatVal(metrics.mfDayChange || 0)}</div>
+        <div>Stocks: ${(metrics.stDayChange || 0) >= 0 ? '+' : ''}${formatVal(metrics.stDayChange || 0)}</div>
       </div>
     </div>
 
@@ -5863,15 +5877,15 @@ function renderTimeHorizonDeck(metrics) {
       <div>
         <div class="horizon-card-label">1-Month Portfolio Change (30 Days)</div>
         <div class="horizon-card-val num-mono privacy-blur" style="color:${isMonthUp ? '#6ee7b7' : '#fca5a5'};">
-          ${isMonthUp ? '+' : ''}${formatVal(metrics.totalMonthChange)}
+          ${isMonthUp ? '+' : ''}${formatVal(metrics.totalMonthChange || 0)}
         </div>
         <div class="horizon-card-sub num-mono" style="color:${isMonthUp ? '#6ee7b7' : '#fca5a5'};">
-          ${isMonthUp ? '▲' : '▼'} ${isMonthUp ? '+' : ''}${metrics.totalMonthChangePct}% Last 30 Days
+          ${isMonthUp ? '▲ +' : '▼ -'}${monthPct}% Last 30 Days
         </div>
       </div>
       <div style="text-align:right; font-size:9.5px; opacity:0.65;">
-        <div>MF: ${metrics.mfMonthChange >= 0 ? '+' : ''}${formatVal(metrics.mfMonthChange)}</div>
-        <div>Stocks: ${metrics.stMonthChange >= 0 ? '+' : ''}${formatVal(metrics.stMonthChange)}</div>
+        <div>MF: ${(metrics.mfMonthChange || 0) >= 0 ? '+' : ''}${formatVal(metrics.mfMonthChange || 0)}</div>
+        <div>Stocks: ${(metrics.stMonthChange || 0) >= 0 ? '+' : ''}${formatVal(metrics.stMonthChange || 0)}</div>
       </div>
     </div>
 
@@ -5879,15 +5893,15 @@ function renderTimeHorizonDeck(metrics) {
       <div>
         <div class="horizon-card-label">1-Year Portfolio Change (365 Days)</div>
         <div class="horizon-card-val num-mono privacy-blur" style="color:${isYearUp ? '#6ee7b7' : '#fca5a5'};">
-          ${isYearUp ? '+' : ''}${formatVal(metrics.totalYearChange)}
+          ${isYearUp ? '+' : ''}${formatVal(metrics.totalYearChange || 0)}
         </div>
         <div class="horizon-card-sub num-mono" style="color:${isYearUp ? '#6ee7b7' : '#fca5a5'};">
-          ${isYearUp ? '▲' : '▼'} ${isYearUp ? '+' : ''}${metrics.totalYearChangePct}% Annual Trajectory
+          ${isYearUp ? '▲ +' : '▼ -'}${yearPct}% Annual Trajectory
         </div>
       </div>
       <div style="text-align:right; font-size:9.5px; opacity:0.65;">
-        <div>MF: ${metrics.mfYearChange >= 0 ? '+' : ''}${formatVal(metrics.mfYearChange)}</div>
-        <div>Stocks: ${metrics.stYearChange >= 0 ? '+' : ''}${formatVal(metrics.stYearChange)}</div>
+        <div>MF: ${(metrics.mfYearChange || 0) >= 0 ? '+' : ''}${formatVal(metrics.mfYearChange || 0)}</div>
+        <div>Stocks: ${(metrics.stYearChange || 0) >= 0 ? '+' : ''}${formatVal(metrics.stYearChange || 0)}</div>
       </div>
     </div>
   `;
