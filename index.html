@@ -37,8 +37,9 @@
   --color-blue: #1E4BD7;
   --color-green: #0C7866;
   --color-purple: #581E70;
-  --color-red: #D71E1E;
-  --color-noir: #181E29;
+  --color-red: #B91C1C;
+  --color-amber: #0E7490;
+  --color-noir: #0E7490;
 
   --bg-dark: #07090E;
   --text-pure: #FDFAF7;
@@ -1649,6 +1650,61 @@ svg.lucide, i[data-lucide], svg {
   border-radius: 4px;
 }
 
+/* Company Look-Through Overlap Row */
+.overlap-row {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 5px;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+.overlap-row:hover {
+  border-color: rgba(96, 165, 250, 0.4);
+  transform: translateY(-1px);
+}
+.overlap-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12.5px;
+}
+.overlap-title {
+  font-weight: 600;
+  color: #FDFAF7;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.overlap-val {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: #60a5fa;
+}
+.overlap-track {
+  height: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 100px;
+  overflow: hidden;
+  display: flex;
+}
+.overlap-seg-direct {
+  background: #60a5fa;
+  height: 100%;
+}
+.overlap-seg-indirect {
+  background: #a78bfa;
+  height: 100%;
+}
+.overlap-footer {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10.5px;
+  color: var(--text-dim);
+}
+
 
 
 
@@ -1818,7 +1874,7 @@ svg.lucide, i[data-lucide], svg {
       </div>
 
       <!-- TAB 4 -->
-      <div class="tag-unit" data-tab="4" style="--tab-color: var(--color-noir);" onclick="activateFolder(4)">
+      <div class="tag-unit" data-tab="4" style="--tab-color: var(--color-amber);" onclick="activateFolder(4)">
         <svg class="tag__start" viewBox="0 0 62 44" preserveAspectRatio="none">
           <path d="M1.1449 -2.54901e-05L-521.145 -2.66006e-06C-531.065 -2.22644e-06 -540.343 4.90374 -545.932 13.0999L-558.55 31.6066C-563.837 39.3607 -572.615 44 -582 44L62 44C52.6151 44 43.8369 39.3607 38.5499 31.6066L25.9318 13.0999C20.3434 4.90373 11.0649 -2.59237e-05 1.1449 -2.54901e-05Z" fill="currentColor"></path>
         </svg>
@@ -2015,6 +2071,57 @@ svg.lucide, i[data-lucide], svg {
               <div class="num-mono" style="font-size: 1.25rem; font-weight: 700; color: #c084fc; margin-top: 2px;" id="alphaVsFD">--</div>
               <div style="font-size: 9px; color: var(--text-dim); margin-top: 2px;">Risk-Free Hurdle Alpha</div>
             </div>
+          </div>
+        </div>
+
+        <!-- PASSIVE CASHFLOW & DIVIDEND ACCRETION STREAM -->
+        <div class="dossier-kpi-card" style="margin-bottom: 1.5rem; padding: 1.25rem; border: 1px solid rgba(110,231,183,0.25); background: linear-gradient(135deg, rgba(16,185,129,0.04) 0%, rgba(20,24,33,0.9) 100%);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <div style="width: 28px; height: 28px; border-radius: 6px; background: rgba(16,185,129,0.15); display: flex; align-items: center; justify-content: center; color: #6ee7b7;">
+                <i style="width: 15px; height: 15px;" data-lucide="coins"></i>
+              </div>
+              <div>
+                <span class="dossier-kpi-label" style="margin-bottom: 0; font-size: 0.95rem; font-weight: 600; color: #fff;">Annual Passive Cashflow &amp; Dividend Accretion Stream</span>
+                <div style="font-size: 10px; color: var(--text-dim);">Consolidated annual passive payout run-rate from equity dividends and sovereign compounding:</div>
+              </div>
+            </div>
+            <span class="badge-capsule" id="passiveCashflowYieldBadge" style="color: #6ee7b7; background: rgba(16,185,129,0.12); border-color: rgba(16,185,129,0.3);">● ACTIVE CASHFLOW YIELD</span>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px;">
+            <div style="background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.08); border-radius: 4px; padding: 12px;">
+              <div style="font-size: 10px; opacity: 0.7; text-transform: uppercase;">Total Annual Passive Stream</div>
+              <div class="num-mono privacy-blur" style="font-family: var(--font-serif); font-size: 1.55rem; font-weight: 700; color: #6ee7b7; margin-top: 4px;" id="totalPassiveAnnualVal">₹0 / yr</div>
+              <div style="font-size: 11px; opacity: 0.8; margin-top: 4px;" id="totalPassiveYieldPct">Effective Yield: 0.0%</div>
+            </div>
+
+            <div style="background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.08); border-radius: 4px; padding: 12px;">
+              <div style="font-size: 10px; opacity: 0.7; text-transform: uppercase;">Monthly Passive Run-Rate</div>
+              <div class="num-mono privacy-blur" style="font-size: 1.4rem; font-weight: 700; color: #fde047; margin-top: 4px;" id="monthlyPassiveRunRate">₹0 / mo</div>
+              <div style="font-size: 11px; opacity: 0.8; margin-top: 4px;">Passive Inflow Run-Rate</div>
+            </div>
+
+            <div style="background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.08); border-radius: 4px; padding: 12px;">
+              <div style="font-size: 10px; opacity: 0.7; text-transform: uppercase;">Direct Equities Dividend Yield</div>
+              <div class="num-mono privacy-blur" style="font-size: 1.4rem; font-weight: 700; color: #60a5fa; margin-top: 4px;" id="stockDividendsAnnual">₹0 / yr</div>
+              <div style="font-size: 11px; opacity: 0.8; margin-top: 4px;" id="stockDivYieldSub">From 13 Operating Companies</div>
+            </div>
+
+            <div style="background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.08); border-radius: 4px; padding: 12px;">
+              <div style="font-size: 10px; opacity: 0.7; text-transform: uppercase;">Sovereign 7.1% EEE Accretion</div>
+              <div class="num-mono privacy-blur" style="font-size: 1.4rem; font-weight: 700; color: #c084fc; margin-top: 4px;" id="ppfPassiveYieldVal">₹0 / yr</div>
+              <div style="font-size: 11px; opacity: 0.8; margin-top: 4px;">100% Tax-Free Sovereign Growth</div>
+            </div>
+          </div>
+
+          <!-- Payout Stream Breakdown -->
+          <div style="margin-top: 14px; padding-top: 10px; border-top: 1px dashed rgba(255,255,255,0.1);">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+              <span style="font-size: 10px; text-transform: uppercase; color: var(--text-dim); font-family: var(--font-mono);">Top Dividend Yield Contributors</span>
+              <span style="font-size: 10px; color: #6ee7b7;" id="topDividendSummaryText">BEL • CDSL • HDFCBANK • IRCTC • NHPC</span>
+            </div>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;" id="dividendContributorsPills"></div>
           </div>
         </div>
 
@@ -4227,7 +4334,7 @@ const FOLDER_COLORS = [
   'var(--color-green)',
   'var(--color-purple)',
   'var(--color-red)',
-  'var(--color-noir)'
+  'var(--color-amber)'
 ];
 
 const DEMO_STATE = {
@@ -5637,14 +5744,94 @@ function renderCompleteDossiers() {
   // Pane 4: FIRE & Projections
   renderSimulatorSection(metrics);
 
-  // Cashflow & Alpha
+  // Cashflow & Alpha & Yield Stream
   updateUpcomingSipWidget();
   updateBenchmarkAlphaCards();
+  renderPassiveCashflowStream(metrics);
 
   if (AppState.user.privacy) document.body.classList.add('privacy-active');
   else document.body.classList.remove('privacy-active');
 
   if (typeof renderAllLucideIcons === 'function') renderAllLucideIcons();
+}
+
+/* ==========================================================================
+   FEATURE 2: ANNUAL PASSIVE CASHFLOW & DIVIDEND ACCRETION STREAM
+   ========================================================================== */
+const EQUITY_DIVIDEND_YIELDS = {
+  'HDFCBANK': { yieldPct: 1.15, dps: 19.5, name: 'HDFC Bank' },
+  'BEL': { yieldPct: 0.85, dps: 2.2, name: 'Bharat Electronics' },
+  'CDSL': { yieldPct: 1.25, dps: 22.0, name: 'CDSL India' },
+  'IRCTC': { yieldPct: 1.45, dps: 6.5, name: 'IRCTC' },
+  'NHPC': { yieldPct: 3.85, dps: 1.9, name: 'NHPC Ltd' },
+  'IREDA': { yieldPct: 0.90, dps: 1.4, name: 'IREDA' },
+  'PREMIERENE': { yieldPct: 0.40, dps: 1.5, name: 'Premier Energies' },
+  'SUZLON': { yieldPct: 0.20, dps: 0.15, name: 'Suzlon Energy' },
+  'JIOFIN': { yieldPct: 0.30, dps: 0.8, name: 'Jio Financial' },
+  'ACMESOLAR': { yieldPct: 0.35, dps: 0.9, name: 'Acme Solar' },
+  'LGEINDIA': { yieldPct: 0.50, dps: 1.2, name: 'LG Electronics India' },
+  'TMCV': { yieldPct: 0.60, dps: 3.0, name: 'Tata Motors CV' },
+  'TMPV': { yieldPct: 0.60, dps: 3.0, name: 'Tata Motors PV' },
+  'MOSBY.DEF': { yieldPct: 1.40, dps: 4.5, name: 'Mosby Defense' },
+  'QUANTUM.AI': { yieldPct: 0.60, dps: 3.0, name: 'Quantum AI' },
+  'NEO.ENERGY': { yieldPct: 2.10, dps: 5.0, name: 'Neo Energy' }
+};
+
+function renderPassiveCashflowStream(metrics) {
+  const pureStocks = (AppState.stocks || []).filter(s => !isGoldEtf(s));
+  
+  let totalStockDividends = 0;
+  const contributors = [];
+
+  pureStocks.forEach(s => {
+    const tickerKey = String(s.ticker || s.symbol || s.name || '').toUpperCase().replace(/[^A-Z0-9\.]/g, '');
+    const meta = EQUITY_DIVIDEND_YIELDS[tickerKey] || { yieldPct: 0.6, name: s.name };
+    const curVal = s.currentValue !== undefined ? s.currentValue : (s.qty * s.cmp);
+    const estimatedDiv = Math.round(curVal * (meta.yieldPct / 100));
+    
+    totalStockDividends += estimatedDiv;
+    if (estimatedDiv > 0) {
+      contributors.push({
+        name: s.name || meta.name,
+        ticker: s.ticker || tickerKey,
+        dividendVal: estimatedDiv,
+        yieldPct: meta.yieldPct
+      });
+    }
+  });
+
+  const ppfInterestAnnual = Math.round(metrics.ppfCur * 0.071);
+  const totalPassiveAnnual = totalStockDividends + ppfInterestAnnual;
+  const monthlyRunRate = Math.round(totalPassiveAnnual / 12);
+  const effectiveYieldPct = metrics.totalNetWorth > 0 ? ((totalPassiveAnnual / metrics.totalNetWorth) * 100).toFixed(2) : '0.00';
+
+  const totEl = document.getElementById('totalPassiveAnnualVal');
+  const yldEl = document.getElementById('totalPassiveYieldPct');
+  const moEl = document.getElementById('monthlyPassiveRunRate');
+  const stkEl = document.getElementById('stockDividendsAnnual');
+  const ppfEl = document.getElementById('ppfPassiveYieldVal');
+  const stkSub = document.getElementById('stockDivYieldSub');
+
+  if (totEl) totEl.innerText = `${formatVal(totalPassiveAnnual)} / yr`;
+  if (yldEl) yldEl.innerText = `Portfolio Yield: ${effectiveYieldPct}% / yr`;
+  if (moEl) moEl.innerText = `${formatVal(monthlyRunRate)} / mo`;
+  if (stkEl) stkEl.innerText = `${formatVal(totalStockDividends)} / yr`;
+  if (ppfEl) ppfEl.innerText = `${formatVal(ppfInterestAnnual)} / yr`;
+  if (stkSub) stkSub.innerText = `From ${pureStocks.length} Operating Equities`;
+
+  // Contributors pill list
+  const pillsContainer = document.getElementById('dividendContributorsPills');
+  if (pillsContainer) {
+    contributors.sort((a, b) => b.dividendVal - a.dividendVal);
+    pillsContainer.innerHTML = contributors.slice(0, 6).map(c => `
+      <div class="dividend-pill-badge">
+        <span>●</span>
+        <strong>${c.name}</strong>
+        <span style="opacity:0.8;">(${c.yieldPct}%)</span>:
+        <span class="privacy-blur" style="font-weight:700;">+${formatVal(c.dividendVal)}/yr</span>
+      </div>
+    `).join("");
+  }
 }
 
 function renderTimeHorizonDeck(metrics) {
