@@ -5180,6 +5180,11 @@ function calculateTotals() {
       const mC = parseNum(s.monthlyChange);
       const yC = parseNum(s.yearChange);
 
+      // Demat exchange-traded changes (includes Direct Stocks + Gold ETF so it matches your Google Sheet)
+      stDayChange += dC;
+      stMonthChange += mC;
+      stYearChange += yC;
+
       if (isGoldEtf(s)) {
         goldInv += inv;
         goldCur += cur;
@@ -5189,9 +5194,6 @@ function calculateTotals() {
       } else {
         stInv += inv;
         stCur += cur;
-        stDayChange += dC;
-        stMonthChange += mC;
-        stYearChange += yC;
       }
     });
   }
@@ -5223,15 +5225,15 @@ function calculateTotals() {
   const dashSummary = normalizeDashboardSummary(AppState.rawPayload || {});
   const totalDayChange = (dashSummary.totalDayChange !== null && dashSummary.totalDayChange !== 0) 
     ? dashSummary.totalDayChange 
-    : (mfDayChange + stDayChange + goldDayChange);
+    : (mfDayChange + stDayChange);
     
   const totalMonthChange = (dashSummary.totalMonthChange !== null && dashSummary.totalMonthChange !== 0) 
     ? dashSummary.totalMonthChange 
-    : (mfMonthChange + stMonthChange + goldMonthChange);
+    : (mfMonthChange + stMonthChange);
 
   const totalYearChange = (dashSummary.totalYearChange !== null && dashSummary.totalYearChange !== 0) 
     ? dashSummary.totalYearChange 
-    : (mfYearChange + stYearChange + goldYearChange);
+    : (mfYearChange + stYearChange);
     
   const prevDayNW = totalNetWorth - totalDayChange;
   const totalDayChangePct = prevDayNW > 0 ? ((totalDayChange / prevDayNW) * 100).toFixed(2) : '0.00';
